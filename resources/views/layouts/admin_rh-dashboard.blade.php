@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
+      <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
@@ -29,6 +30,112 @@
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+      <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+        background-color: #f8f9fa; /* Light background for the page */
+    }
+    .card-body h5 {
+        color: #007bff; /* Primary color for job titles */
+    }
+    /* Modal specific styles for HR form */
+    .modal-header-custom {
+        background-color: #007bff; /* Primary blue for modal header */
+        color: white;
+        border-bottom: none;
+    }
+    .modal-header-custom .modal-title {
+        color: white;
+    }
+    .modal-header-custom .btn-close {
+        filter: invert(1); /* Makes the close button white */
+    }
+    .form-check-input.is-invalid ~ .form-check-label {
+        color: #dc3545;
+    }
+     .card-hover {
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.125);
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+      border-color: var(--bs-primary);
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+       .step-indicator {
+      counter-reset: step;
+    }
+    .step-indicator .step {
+      counter-increment: step;
+      position: relative;
+    }
+    .step-indicator .step::before {
+      content: counter(step);
+      position: absolute;
+      left: -2rem;
+      top: 0.2rem;
+      background: var(--bs-primary);
+      color: white;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .file-drop-zone {
+      border: 2px dashed #dee2e6;
+      transition: all 0.3s ease;
+    }
+    .file-drop-zone:hover,
+    .file-drop-zone.drag-over {
+      border-color: var(--bs-primary);
+      background-color: var(--bs-primary-bg-subtle);
+    }
+    .progress-step {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #dee2e6;
+      transition: all 0.3s ease;
+    }
+    .progress-step.active {
+      background: var(--bs-primary);
+      transform: scale(1.2);
+    }
+     @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .badge-status {
+      font-size: 0.75rem;
+      padding: 0.35em 0.6em;
+      border-radius: 0.5rem;
+      font-weight: bold;
+    }
+    .badge-en_attente { background-color: #ffc107; color: #000; } /* Jaune pour En attente */
+    .badge-accepte { background-color: #28a745; color: #fff; } /* Vert pour Accepté */
+    .badge-rejete { background-color: #dc3545; color: #fff; } /* Rouge pour Rejeté */
+    .modal-body strong {
+        color: #343a40;
+    }
+    .modal-body p {
+        margin-bottom: 0.5rem;
+    }
+    </style>
 
 </head>
 
@@ -540,15 +647,18 @@
                             </div>
                         </li>
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Projets</span></li>
+                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Candidature</span></li>
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
-                                <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Projets</span>
+                                <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Candidature</span>
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarProjects">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link" data-key="t-alerts">Liste des projets</a>
+                                        <a href="{{ route('offres.index') }}" class="nav-link" data-key="t-alerts">Offres Publiées</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('candidatures.index') }}" class="nav-link" data-key="t-alerts">Suivi des Candidatures</a>
                                     </li>
                                 </ul>
                             </div>

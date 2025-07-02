@@ -9,10 +9,31 @@ use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route; 
 use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\EmployeeDocumentController;
+use App\Http\Controllers\JobOfferController; 
+use App\Http\Controllers\CandidatureController;
+
+
 
 
 
 Route::get('/', function () {
+   if (Auth::check()) {
+        // L'utilisateur est connecté
+        $user = Auth::user();
+        
+        // Vérifie le rôle de l'utilisateur et redirige
+        if ($user->role == 'super_admin') {
+            return redirect('superadmin');
+        } elseif ($user->role == 'admin') {
+            return redirect('admin_simple');
+        }
+        elseif($user->role == 'rh') {
+            return redirect('rh_dashboard');
+        }
+        // Ajoute d'autres rôles si nécessaire
+    }
+
+    // Sinon, afficher la page d'accueil
     return view('welcome');
 });
 
@@ -74,6 +95,45 @@ Route::middleware(['auth','role:rh'])->group(function(){
 Route::get('/users/{id}', [EmployeeDetailController::class, 'show'])->name('users.show');
 Route::post('/employee-details', [EmployeeDetailController::class, 'store'])->name('employee-details.store');
 Route::post('/employee/document/store', [EmployeeDocumentController::class, 'storeDocument'])->name('employee.document.store');
+Route::get('/rh-dashboard/offres', [JobOfferController::class, 'index'])->name('offres.index');
+
+Route::post('/offres', [JobOfferController::class, 'store'])->name('offres.store');
+Route::get('/offres/{offre}/edit', [JobOfferController::class, 'edit'])->name('offres.edit');
+
+Route::put('/offres/{offre}', [JobOfferController::class, 'update'])->name('offres.update');
+
+Route::patch('/offres/{offre}/update-status', [JobOfferController::class, 'updateStatus'])->name('offres.updateStatus');
+
+Route::delete('/offres/{offre}', [JobOfferController::class, 'destroy'])->name('offres.destroy');
+
+Route::get('/rh/candidature/candidat/list', [JobOfferController::class, 'list_offer'])->name('offres_candidat.index');
+
+Route::get('/job-offers/{id}/details', [JobOfferController::class, 'showDetails']);
+
+Route::get('/rh/candidature/candidat/{id}/depot', [JobOfferController::class, 'depotform'])->name('offres.depot');
+
+Route::post('/candidature/{jobOffer}/store', [CandidatureController::class, 'store'])->name('candidatures.store');
+
+Route::get('/rh/candidature/candidat/list-depot', [CandidatureController::class, 'index'])->name('candidatures.index');
+
+Route::get('/rh/candidatures/{candidature}', [CandidatureController::class, 'show'])->name('rh.candidatures.show');
+
+
+Route::post('/rh/candidatures/{candidature}/accepter', [CandidatureController::class, 'accept'])->name('rh.candidatures.accept');
+Route::post('/rh/candidatures/{candidature}/rejeter', [CandidatureController::class, 'reject'])->name('rh.candidatures.reject');
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 
