@@ -51,7 +51,6 @@ class EmployeeDetailController extends Controller
         'date_debut' => $validated['date_debut'],
         'date_fin' => $validated['date_fin'],
         'adresse' => $validated['adresse'],
-        'telephone' => $validated['telephone'],
     ]);
 
     // Retour avec message de succès

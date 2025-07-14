@@ -499,7 +499,7 @@
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ route('admin_simple') }}"  role="button" aria-expanded="false">
+                            <a class="nav-link menu-link" href="{{ route('superadmin') }}"  role="button" aria-expanded="false">
                                 <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Tableau de Bord</span>
                             </a>
                         </li> <!-- end Dashboard Menu -->
@@ -508,31 +508,19 @@
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
-                                <i class="ri-account-circle-line"></i> <span data-key="t-icons">Utilisateurs</span>
+                                <i class="ri-account-circle-line"></i> <span data-key="t-icons">Administrateurs</span>
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarIcons">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{ route('entreprise.employes') }}" class="nav-link" data-key="t-line-awesome">Liste des utilisateurs</a>
+                                        <a href="{{ route("list_admin") }}" class="nav-link" data-key="t-line-awesome">Liste des Administrateurs</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('employe.create') }}" class="nav-link"> <span data-key="t-crypto-svg">Ajouter un nouvel utilisateur</span></a>
+                                        <a href="add_admin" class="nav-link"> <span data-key="t-crypto-svg">Ajouter un nouvel admin</span></a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
-
-                      <a class="nav-link menu-link" href="#sidebarCompanies" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCompanies">
-    <i class="ri-account-circle-line"></i> <span data-key="t-icons">Entreprises</span>
-</a>
-<div class="collapse menu-dropdown" id="sidebarCompanies">
-    <ul class="nav nav-sm flex-column">
-        <li class="nav-item">
-            <a href="{{ route('entreprise.redirect') }}" class="nav-link" data-key="t-line-awesome">Configuration</a>
-        </li>
-    </ul>
-</div>
-
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Equipes</span></li>
                         <li class="nav-item">
@@ -560,7 +548,7 @@
                             <div class="collapse menu-dropdown" id="sidebarProjects">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link" data-key="t-alerts">Liste des projets</a>
+                                        <a href="{{ route('projects.index') }}" class="nav-link" data-key="t-alerts">Liste des projets</a>
                                     </li>
                                 </ul>
                             </div>

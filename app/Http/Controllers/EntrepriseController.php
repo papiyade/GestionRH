@@ -6,35 +6,43 @@ use Illuminate\Http\Request;
 use App\Models\Entreprise;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+
 
 
 
 class EntrepriseController extends Controller
 {
     //
-    public function store(Request $request)
+
+public function store(Request $request)
 {
     $validated = $request->validate([
         'logo_path' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         'entreprise_name' => 'required|string|max:255',
-        'adresse' => 'required|string|max:255',
+        'adresse' => 'nullable|string|max:255',
         'email' => 'required|email|max:255',
-        'description' => 'required|string',
+        'description' => 'nullable|string',
     ]);
-
-    $validated['id_user'] = auth()->id(); // <-- user connecté
 
     if ($request->hasFile('logo_path')) {
         $path = $request->file('logo_path')->store('logos', 'public');
         $validated['logo_path'] = $path;
     }
 
-    Entreprise::create($validated);
+    DB::transaction(function () use ($validated) {
+        $validated['id_user'] = auth()->id();
 
-     return redirect()
+        $entreprise = Entreprise::create($validated);
+
+        auth()->user()->update(['entreprise_id' => $entreprise->id]);
+    });
+
+    return redirect()
         ->route('admin_simple')
         ->with('success', '✅ Entreprise créée avec succès !');
 }
+
 
 public function edit()
 {
@@ -100,6 +108,27 @@ public function getEmployesPremiereEntreprise()
 
     return view('admin.users.index', compact('employes'));
 }
+
+    public function toggleStatus(Entreprise $entreprise)
+    {
+
+        $entreprise->is_actif = !$entreprise->is_actif;
+        $entreprise->save();
+
+        $statusMessage = $entreprise->is_actif ? 'dérestreinte (active)' : 'restreinte (inactive)';
+
+        return redirect()->back()->with('success', "L'entreprise '{$entreprise->entreprise_name}' a été {$statusMessage} avec succès.");
+    }
+
+    public function show(Entreprise $entreprise)
+    {
+       
+        $adminUser = User::find($entreprise->id_user);
+
+        return view('superadmin.entreprise.show', compact('entreprise', 'adminUser'));
+    }
+
+
 
 
 }

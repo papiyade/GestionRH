@@ -67,7 +67,11 @@
                                     <td>
                                         <div class="d-flex gap-2">
                                             <div class="edit">
-                                                <a class="btn btn-sm btn-success edit-item-btn" href="#">Voir</a>
+@if($admin->entreprise_id)
+    <a class="btn btn-sm btn-success edit-item-btn" href="{{ route('entreprise.show', $admin->entreprise_id) }}">Voir</a>
+@else
+    <span class="text-muted">Aucune entreprise</span>
+@endif
                                             </div>
                                             <div class="remove">
                                                 <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Supprimer</button>

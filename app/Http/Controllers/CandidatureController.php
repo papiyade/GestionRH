@@ -7,45 +7,57 @@ use App\Models\Candidature;
 use App\Models\JobOffer;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use App\Mail\CandidatureAccuse;
+use Illuminate\Support\Facades\Mail;
 
 class CandidatureController extends Controller
 {
-    public function store(Request $request, $jobOfferId)
-    {
-        $request->validate([
-            'prenom' => 'required|string|max:255',
-            'nom' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'telephone' => 'required|string|max:20',
-            'cv' => 'required|file|mimes:pdf,doc,docx|max:5120',
-            'lettre' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
-            'linkedin' => 'nullable',
-            'message' => 'nullable|string',
-            'disponibilite' => 'nullable|string|max:50',
-            'pretention' => 'nullable|string|max:100',
-        ]);
+public function store(Request $request, $jobOfferId)
+{
+    $request->validate([
+        'prenom' => 'required|string|max:255',
+        'nom' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'telephone' => 'required|string|max:20',
+        'cv' => 'required|file|mimes:pdf,doc,docx|max:5120',
+        'lettre' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+        'linkedin' => 'nullable',
+        'message' => 'nullable|string',
+        'disponibilite' => 'nullable|string|max:50',
+        'pretention' => 'nullable|string|max:100',
+    ]);
 
-        $cvPath = $request->file('cv')->store('cvs', 'public');
-        $lettrePath = $request->hasFile('lettre') ? $request->file('lettre')->store('lettres', 'public') : null;
+    $cvPath = $request->file('cv')->store('cvs', 'public');
+    $lettrePath = $request->hasFile('lettre') ? $request->file('lettre')->store('lettres', 'public') : null;
 
-        Candidature::create([
-            'job_offer_id' => $jobOfferId,
-            'prenom' => $request->prenom,
-            'nom' => $request->nom,
-            'email' => $request->email,
-            'telephone' => $request->telephone,
-            'linkedin' => $request->linkedin,
-            'cv_path' => $cvPath,
-            'lettre_path' => $lettrePath,
-            'message' => $request->message,
-            'disponibilite' => $request->disponibilite,
-            'pretention' => $request->pretention,
-            'status_demande' => 'En attente',
-        ]);
+    // Enregistrement de la candidature
+    Candidature::create([
+        'job_offer_id' => $jobOfferId,
+        'prenom' => $request->prenom,
+        'nom' => $request->nom,
+        'email' => $request->email,
+        'telephone' => $request->telephone,
+        'linkedin' => $request->linkedin,
+        'cv_path' => $cvPath,
+        'lettre_path' => $lettrePath,
+        'message' => $request->message,
+        'disponibilite' => $request->disponibilite,
+        'pretention' => $request->pretention,
+        'status_demande' => 'En attente',
+    ]);
 
-        return redirect()->back()->with('success', 'Votre candidature a bien été envoyée.');
-    }
+    // Récupère le titre de l'offre
+    $jobOffer = JobOffer::find($jobOfferId);
 
+    // Envoi de l’accusé de réception
+    Mail::to($request->email)->send(new CandidatureAccuse(
+        $request->prenom,
+        $request->nom,
+        $jobOffer?->titre ?? 'Offre d\'emploi'
+    ));
+
+    return redirect()->back()->with('success', 'Votre candidature a bien été envoyée.');
+}
     public function index(Request $request)
     {
         // Get filter values from the request

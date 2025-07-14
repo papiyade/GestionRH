@@ -45,6 +45,7 @@ class AuthenticatedSessionController extends Controller
         'admin' => redirect()->route('admin_simple'),
         'super_admin' => redirect()->route('superadmin'),
         'rh' => redirect()->route('rh_dashboard'),
+        'chef_projet' => redirect()->route('chef_projet.dashboard'),
         default => redirect()->route('dashboard'),
     };
 }

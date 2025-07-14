@@ -9,7 +9,7 @@
                 <div class="position-relative">
                     <div class="creation-icon mb-3">
                         <i class="fas fa-building display-4 text-primary"></i>
-                        <div class="icon-pulse"></div>
+                        <div class="icon-pulse"></div> {{-- Animation visuelle --}}
                     </div>
                     <h1 class="display-5 fw-bold text-gradient mb-2">Création de votre entreprise</h1>
                     <p class="lead text-muted">Construisons ensemble votre présence professionnelle</p>
@@ -45,7 +45,7 @@
 
             {{-- Card principale avec glassmorphism --}}
             <div class="form-card">
-                <div class="card-glow"></div>
+                <div class="card-glow"></div> {{-- Effet visuel --}}
 
                 {{-- Affichage des erreurs avec style moderne --}}
                 @if ($errors->any())
@@ -138,7 +138,7 @@
                             <div class="input-group-modern">
                                 <input type="text" class="form-control-modern" id="adresse" 
                                        name="adresse" value="{{ old('adresse') }}" 
-                                       placeholder="123 Rue de la Paix, 75001 Paris" required>
+                                       placeholder="123 Rue de la Paix, 75001 Paris" >
                                 <div class="input-focus-ring"></div>
                             </div>
                         </div>
@@ -172,12 +172,12 @@
                             <label for="description" class="form-label-modern">
                                 <i class="fas fa-align-left me-2"></i>
                                 Description de l'entreprise
-                                <span class="required">*</span>
+                                <span class=""></span>
                             </label>
                             <div class="input-group-modern">
                                 <textarea class="form-control-modern textarea-modern" id="description" 
-                                          name="description" rows="6" required 
-                                          placeholder="Décrivez votre entreprise, ses activités, sa mission...">{{ old('description') }}</textarea>
+                                          name="description" rows="6"
+                                          placeholder="Décrivez votre entreprise, ses activités, sa mission..." >{{ old('description') }}</textarea>
                                 <div class="input-focus-ring"></div>
                             </div>
                             <div class="char-counter">
@@ -192,7 +192,7 @@
                             <i class="fas fa-arrow-left me-2"></i>
                             Précédent
                         </button>
-                        <button type="submit" class="btn-navigation btn-next" id="nextBtn">
+                        <button type="button" class="btn-navigation btn-next" id="nextBtn">
                             <span class="btn-text">
                                 Suivant
                                 <i class="fas fa-arrow-right ms-2"></i>
@@ -201,564 +201,452 @@
                         </button>
                     </div>
                 </form>
-
-                {{-- Effet de confetti pour la validation --}}
-                <div class="confetti-container" id="confetti-container"></div>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Styles CSS modernes --}}
 <style>
-    :root {
-        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        --card-bg: rgba(255, 255, 255, 0.95);
-        --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.05);
-        --shadow-hover: 0 30px 80px rgba(0, 0, 0, 0.1);
-        --border-radius: 20px;
-        --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Styles pour la card principale */
+    .form-card {
+        background-color: rgba(255, 255, 255, 0.8); /* Effet glassmorphism */
+        backdrop-filter: blur(10px); /* Pour le flou derrière */
+        border-radius: 1.5rem; /* Coins plus arrondis */
+        padding: 3rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.6s ease-out; /* Animation d'entrée */
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    .card-glow { /* Effet de lueur subtile */
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba(102, 126, 234, 0.3), transparent 70%);
+        border-radius: 50%;
+        filter: blur(30px);
+        animation: glow-move 8s infinite alternate;
+        z-index: -1;
+    }
+    @keyframes glow-move {
+        0% { transform: translate(0, 0); }
+        50% { transform: translate(calc(100% + 50px), calc(100% + 50px)); }
+        100% { transform: translate(0, 0); }
     }
 
-    body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-
-    /* Header Animation */
+    /* Styles pour le header avec animation */
     .creation-icon {
         position: relative;
         display: inline-block;
     }
-
+    .creation-icon .fa-building {
+        color: #667eea; /* Couleur principale */
+    }
     .icon-pulse {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80px;
-        height: 80px;
-        border: 2px solid #667eea;
+        width: 100%;
+        height: 100%;
+        background-color: #667eea;
         border-radius: 50%;
-        animation: pulse 2s infinite;
-        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        animation: pulse 2s infinite ease-out;
+        z-index: -1;
     }
-
     @keyframes pulse {
-        0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
-        50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.7; }
         100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
     }
-
     .text-gradient {
-        background: var(--primary-gradient);
+        background: linear-gradient(45deg, #667eea, #764ba2);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
     }
 
-    /* Progress Bar Moderne */
+    /* Progress bar moderne */
     .progress-container {
-        position: relative;
-        max-width: 500px;
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 3rem;
     }
-
     .progress-track {
-        height: 4px;
-        background: rgba(102, 126, 234, 0.1);
-        border-radius: 2px;
-        position: relative;
+        width: 90%; /* Légèrement plus court */
+        height: 6px;
+        background-color: #e0e0e0;
+        border-radius: 3px;
         overflow: hidden;
+        position: relative;
     }
-
     .progress-fill {
         height: 100%;
-        background: var(--primary-gradient);
-        border-radius: 2px;
-        width: 33.33%;
-        transition: var(--transition);
-        position: relative;
+        width: 0%;
+        background: linear-gradient(to right, #667eea, #764ba2); /* Dégradé de couleur */
+        border-radius: 3px;
+        transition: width 0.4s ease-in-out;
     }
-
-    .progress-fill::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-        animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-
     .progress-steps {
         display: flex;
         justify-content: space-between;
-        margin-top: 20px;
+        width: 100%;
+        margin-top: -1.5rem; /* Remonte les cercles sur la barre */
     }
-
     .progress-step {
         display: flex;
         flex-direction: column;
         align-items: center;
+        flex: 1;
         position: relative;
+        z-index: 1;
+        cursor: pointer; /* Indique que les étapes sont cliquables (si on voulait ajouter cette fonction) */
     }
-
     .step-circle {
-        width: 50px;
-        height: 50px;
+        width: 38px;
+        height: 38px;
+        background-color: #e0e0e0;
         border-radius: 50%;
-        background: rgba(102, 126, 234, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #667eea;
-        font-size: 18px;
-        transition: var(--transition);
-        border: 2px solid transparent;
-    }
-
-    .progress-step.active .step-circle {
-        background: var(--primary-gradient);
-        color: white;
-        transform: scale(1.1);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-    }
-
-    .progress-step.completed .step-circle {
-        background: var(--success-gradient);
-        color: white;
-    }
-
-    .step-label {
-        font-size: 12px;
-        font-weight: 600;
-        margin-top: 8px;
         color: #6c757d;
-        transition: var(--transition);
+        font-size: 1rem;
+        border: 3px solid #fff; /* Bordure blanche pour le contraste */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transition plus douce */
     }
-
+    .step-label {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        color: #6c757d;
+        text-align: center;
+        transition: color 0.3s ease;
+        white-space: nowrap; /* Empêche le retour à la ligne */
+    }
+    .progress-step.active .step-circle {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border-color: #fff;
+        color: #fff;
+        transform: scale(1.15);
+        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+    }
     .progress-step.active .step-label {
         color: #667eea;
-        font-weight: 700;
+        font-weight: bold;
+    }
+    .progress-step.completed .step-circle {
+        background: #28a745; /* Vert pour complété */
+        border-color: #fff;
+        color: #fff;
+        box-shadow: 0 2px 5px rgba(40, 167, 69, 0.4);
+    }
+    .progress-step.completed .step-label {
+        color: #28a745;
     }
 
-    /* Card avec Glassmorphism */
-    .form-card {
-        position: relative;
-        background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: var(--border-radius);
-        padding: 3rem;
-        box-shadow: var(--shadow-soft);
-        transition: var(--transition);
-    }
-
-    .form-card:hover {
-        box-shadow: var(--shadow-hover);
-        transform: translateY(-5px);
-    }
-
-    .card-glow {
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        right: -2px;
-        bottom: -2px;
-        background: var(--primary-gradient);
-        border-radius: var(--border-radius);
-        z-index: -1;
-        opacity: 0;
-        transition: var(--transition);
-    }
-
-    .form-card:hover .card-glow {
-        opacity: 0.1;
-    }
-
-    /* Steps */
+    /* Styles des étapes du formulaire */
     .step {
-        opacity: 0;
-        transform: translateX(50px);
-        transition: var(--transition);
         display: none;
+        animation: fadeIn 0.6s ease-out; /* Animation plus longue */
     }
-
-    .step-active {
-        opacity: 1;
-        transform: translateX(0);
+    .step.step-active {
         display: block;
-        animation: slideIn 0.6s ease-out;
     }
-
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateX(30px); }
-        to { opacity: 1; transform: translateX(0); }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-
     .step-header {
         text-align: center;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        margin-bottom: 2.5rem;
     }
-
     .step-title {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         font-weight: 700;
-        color: #2d3748;
-        margin-bottom: 0.5rem;
+        color: #343a40;
     }
-
     .step-subtitle {
-        color: #6c757d;
         font-size: 1rem;
-        margin: 0;
+        color: #6c757d;
     }
 
-    /* Labels modernes */
+    /* Labels et Inputs modernes */
     .form-label-modern {
+        display: block;
+        margin-bottom: 0.8rem;
         font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
+        color: #495057;
         font-size: 0.95rem;
     }
-
-    .required {
+    .form-label-modern .required {
         color: #e53e3e;
-        margin-left: 4px;
+        font-size: 1.1em;
     }
-
-    .optional {
-        color: #6c757d;
-        font-weight: 400;
-        font-size: 0.85rem;
-        margin-left: 8px;
+    .form-label-modern .optional {
+        color: #999;
+        font-size: 0.8em;
+        font-weight: normal;
     }
-
-    /* Inputs modernes */
     .input-group-modern {
         position: relative;
+        margin-bottom: 1.5rem; /* Ajoute de l'espace */
     }
-
     .form-control-modern {
+        display: block;
         width: 100%;
-        padding: 1rem 1.25rem;
-        border: 2px solid rgba(102, 126, 234, 0.1);
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.8);
+        padding: 0.75rem 1rem;
         font-size: 1rem;
-        transition: var(--transition);
-        backdrop-filter: blur(10px);
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.5rem;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
     }
-
+    .form-control-modern::placeholder {
+        color: #adb5bd;
+        opacity: 1;
+    }
     .form-control-modern:focus {
-        outline: none;
-        border-color: #667eea;
-        background: rgba(255, 255, 255, 0.95);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        color: #495057;
+        background-color: #fff;
+        border-color: #80bdff; /* Couleur de focus Bootstrap */
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
     }
-
+    /* Style pour textarea */
     .textarea-modern {
-        resize: vertical;
-        min-height: 120px;
+        min-height: 120px; /* Hauteur minimale */
+        resize: vertical; /* Permet uniquement le redimensionnement vertical */
+    }
+    /* Style pour inputs invalides */
+    .form-control-modern.is-invalid {
+        border-color: #e53e3e;
+    }
+    .form-control-modern.is-valid {
+        border-color: #28a745;
     }
 
-    .input-focus-ring {
+    /* File Upload moderne */
+    .file-upload-wrapper {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    .file-input {
+        opacity: 0;
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 12px;
-        border: 2px solid transparent;
-        pointer-events: none;
-        transition: var(--transition);
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
-
-    .form-control-modern:focus + .input-focus-ring {
+    .file-upload-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #a0aec0;
+        border-radius: 0.75rem;
+        padding: 2.5rem;
+        text-align: center;
+        cursor: pointer;
+        background-color: #f7fafc;
+        transition: all 0.3s ease;
+    }
+    .file-upload-area:hover {
         border-color: #667eea;
-        animation: focusRing 0.3s ease-out;
+        background-color: #edf2f7;
+    }
+    .file-upload-area.drag-over {
+        border-color: #667eea;
+        background-color: #e2e8f0;
+    }
+    .upload-icon {
+        font-size: 3rem;
+        color: #667eea;
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+    .file-upload-area:hover .upload-icon {
+        transform: scale(1.1);
+        color: #5a67d8;
+    }
+    .upload-text .upload-main {
+        display: block;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.25rem;
+    }
+    .upload-text .upload-sub {
+        font-size: 0.9rem;
+        color: #718096;
+    }
+    .file-preview {
+        position: relative;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        background-color: #f7fafc;
+        display: flex; /* S'assure que l'image remplit */
+        justify-content: center;
+        align-items: center;
+        min-height: 180px; /* Hauteur minimale pour l'aperçu */
+    }
+    .file-preview img {
+        max-width: 100%;
+        max-height: 180px; /* Limite la hauteur de l'image */
+        display: block;
+        object-fit: contain; /* S'assure que l'image est contenue */
+        padding: 10px; /* Petit padding autour de l'image */
+    }
+    .btn-remove-file {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: rgba(239, 68, 68, 0.8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    .btn-remove-file:hover {
+        background-color: #ef4444;
     }
 
-    @keyframes focusRing {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.02); }
-        100% { transform: scale(1); }
-    }
-
+    /* Compteur de caractères */
     .char-counter {
         text-align: right;
         font-size: 0.85rem;
         color: #6c757d;
         margin-top: 0.5rem;
     }
-
-    /* File Upload */
-    .file-upload-wrapper {
-        position: relative;
+    .char-counter #char-count {
+        font-weight: bold;
     }
 
-    .file-input {
-        position: absolute;
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-        z-index: 2;
-    }
-
-    .file-upload-area {
-        border: 2px dashed rgba(102, 126, 234, 0.3);
-        border-radius: 12px;
-        padding: 2rem;
-        text-align: center;
-        background: rgba(102, 126, 234, 0.02);
-        transition: var(--transition);
-        cursor: pointer;
-    }
-
-    .file-upload-area:hover {
-        border-color: #667eea;
-        background: rgba(102, 126, 234, 0.05);
-        transform: translateY(-2px);
-    }
-
-    .upload-icon i {
-        font-size: 2.5rem;
-        color: #667eea;
-        margin-bottom: 1rem;
-    }
-
-    .upload-main {
-        display: block;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 0.25rem;
-    }
-
-    .upload-sub {
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
-
-    .file-preview {
-        position: relative;
-        border-radius: 12px;
-        overflow: hidden;
-        max-width: 200px;
-        margin: 0 auto;
-    }
-
-    .file-preview img {
-        width: 100%;
-        height: auto;
-        border-radius: 12px;
-    }
-
-    .btn-remove-file {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background: rgba(229, 62, 62, 0.9);
-        color: white;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: var(--transition);
-    }
-
-    .btn-remove-file:hover {
-        background: #e53e3e;
-        transform: scale(1.1);
-    }
-
-    /* Navigation */
+    /* Navigation moderne (boutons) */
     .form-navigation {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid rgba(102, 126, 234, 0.1);
     }
-
     .btn-navigation {
-        padding: 1rem 2rem;
-        border: none;
-        border-radius: 12px;
-        font-weight: 600;
+        padding: 0.8rem 2rem;
+        border-radius: 0.75rem;
         font-size: 1rem;
+        font-weight: 600;
         cursor: pointer;
-        transition: var(--transition);
+        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
-        display: flex;
-        align-items: center;
+        border: none;
+        outline: none;
     }
-
     .btn-prev {
-        background: rgba(108, 117, 125, 0.1);
-        color: #6c757d;
+        background-color: #e2e8f0;
+        color: #4a5568;
     }
-
     .btn-prev:hover:not(:disabled) {
-        background: rgba(108, 117, 125, 0.2);
-        transform: translateX(-5px);
+        background-color: #cbd5e0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
     .btn-prev:disabled {
-        opacity: 0.5;
+        opacity: 0.6;
         cursor: not-allowed;
     }
-
     .btn-next {
-        background: var(--primary-gradient);
+        background: linear-gradient(45deg, #667eea, #764ba2);
         color: white;
-        min-width: 150px;
-        justify-content: center;
+        box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
     }
-
-    .btn-next:hover {
+    .btn-next:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 7px 20px rgba(118, 75, 162, 0.4);
+        filter: brightness(1.1); /* Légèrement plus lumineux au survol */
     }
-
-    .btn-ripple {
+    .btn-next.btn-success { /* Style quand il devient le bouton de soumission */
+        background: linear-gradient(45deg, #28a745, #218838);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    }
+    .btn-next.btn-success:hover:not(:disabled) {
+        box-shadow: 0 7px 20px rgba(40, 167, 69, 0.4);
+    }
+    .btn-ripple { /* Effet d'ondulation */
         position: absolute;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.3);
         transform: scale(0);
         animation: ripple 0.6s linear;
-        pointer-events: none;
     }
-
     @keyframes ripple {
         to {
-            transform: scale(4);
+            transform: scale(2.5);
             opacity: 0;
         }
     }
 
-    /* Alert moderne */
+    /* Alerts modernes */
     .alert-modern {
-        border: none;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
         display: flex;
         align-items: flex-start;
-        background: rgba(229, 62, 62, 0.05);
-        border-left: 4px solid #e53e3e;
+        padding: 1.25rem 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 2rem;
+        border-left: 5px solid;
     }
-
-    .alert-icon {
+    .alert-modern .alert-icon {
+        font-size: 1.8rem;
         margin-right: 1rem;
-        font-size: 1.25rem;
-        color: #e53e3e;
+        margin-top: 0.2rem;
     }
-
-    .alert-content {
-        flex: 1;
+    .alert-modern .alert-content {
+        flex-grow: 1;
     }
-
-    .alert-title {
-        font-weight: 600;
-        color: #e53e3e;
-        margin: 0;
+    .alert-modern .alert-title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
     }
-
-    .alert-content ul {
+    .alert-modern ul {
         list-style: none;
         padding: 0;
+        margin: 0;
+        font-size: 0.95rem;
     }
-
-    .alert-content li {
-        position: relative;
-        padding-left: 1.5rem;
-        margin-bottom: 0.5rem;
+    .alert-modern li {
+        margin-bottom: 0.25rem;
     }
-
-    .alert-content li::before {
-        content: '•';
-        position: absolute;
-        left: 0;
+    .alert-danger.alert-modern {
+        background-color: rgba(255, 99, 71, 0.1); /* Tomato red light */
+        border-color: #e53e3e; /* Red dark */
+        color: #c53030;
+    }
+    .alert-danger.alert-modern .alert-icon {
         color: #e53e3e;
-        font-weight: bold;
-    }
-
-    /* Confetti */
-    .confetti-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 9999;
-    }
-
-    .confetti-piece {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: #667eea;
-        animation: confetti-fall 3s linear infinite;
-    }
-
-    @keyframes confetti-fall {
-        0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .form-card {
-            padding: 2rem 1.5rem;
-            margin: 1rem;
-        }
-        
-        .progress-steps {
-            margin-top: 15px;
-        }
-        
-        .step-circle {
-            width: 40px;
-            height: 40px;
-            font-size: 14px;
-        }
-        
-        .step-label {
-            font-size: 11px;
-        }
-        
-        .form-navigation {
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .btn-navigation {
-            width: 100%;
-            justify-content: center;
-        }
     }
 </style>
 
-{{-- Script JavaScript amélioré --}}
 <script>
     let currentStep = 1;
     const totalSteps = 3;
@@ -767,16 +655,15 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const progressFill = document.getElementById('progress-fill');
-    const confettiContainer = document.getElementById('confetti-container');
 
-    // File upload handling
+    // File upload elements
     const fileInput = document.getElementById('logo_path');
     const fileUploadArea = document.getElementById('file-upload-area');
     const filePreview = document.getElementById('file-preview');
     const previewImage = document.getElementById('preview-image');
     const removeFileBtn = document.getElementById('remove-file');
 
-    // Character counter
+    // Character counter elements
     const descriptionTextarea = document.getElementById('description');
     const charCount = document.getElementById('char-count');
 
@@ -785,12 +672,12 @@
         steps.forEach(s => {
             s.classList.remove('step-active');
         });
-        
+
         // Show current step
         steps[step - 1].classList.add('step-active');
 
         // Update progress bar
-        const percentage = (step / totalSteps) * 100;
+        const percentage = ((step - 1) / (totalSteps - 1)) * 100;
         progressFill.style.width = `${percentage}%`;
 
         // Update progress steps
@@ -805,7 +692,7 @@
 
         // Update navigation buttons
         prevBtn.disabled = step === 1;
-        
+
         if (step === totalSteps) {
             nextBtn.innerHTML = `
                 <span class="btn-text">
@@ -814,6 +701,9 @@
                 </span>
                 <div class="btn-ripple"></div>
             `;
+            nextBtn.type = 'submit';
+            nextBtn.classList.remove('btn-primary');
+            nextBtn.classList.add('btn-success');
         } else {
             nextBtn.innerHTML = `
                 <span class="btn-text">
@@ -822,6 +712,9 @@
                 </span>
                 <div class="btn-ripple"></div>
             `;
+            nextBtn.type = 'button';
+            nextBtn.classList.remove('btn-success');
+            nextBtn.classList.add('btn-primary');
         }
     }
 
@@ -831,14 +724,13 @@
         let isValid = true;
 
         requiredInputs.forEach(input => {
+            input.classList.remove('is-invalid', 'is-valid'); // Clear previous states
+
             if (!input.value.trim()) {
-                input.style.borderColor = '#e53e3e';
-                input.classList.add('shake');
-                setTimeout(() => {
-                    input.classList.remove('shake');
-                    input.style.borderColor = '';
-                }, 500);
+                input.classList.add('is-invalid');
                 isValid = false;
+            } else {
+                input.classList.add('is-valid');
             }
         });
 
@@ -847,88 +739,91 @@
 
     function createRipple(event) {
         const button = event.currentTarget;
-        const ripple = button.querySelector('.btn-ripple');
+        let ripple = button.querySelector('.btn-ripple');
+        if (!ripple) { // Create ripple element if it doesn't exist
+            ripple = document.createElement('div');
+            ripple.classList.add('btn-ripple');
+            button.appendChild(ripple);
+        }
+
+        // Remove existing animation to allow new one
+        ripple.style.animation = 'none';
+        ripple.offsetHeight; // Trigger reflow
+        
         const rect = button.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         const x = event.clientX - rect.left - size / 2;
         const y = event.clientY - rect.top - size / 2;
-        
+
         ripple.style.width = ripple.style.height = size + 'px';
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
-        ripple.style.transform = 'scale(0)';
         ripple.style.animation = 'ripple 0.6s linear';
-    }
-
-    function createConfetti() {
-        const colors = ['#667eea', '#764ba2', '#11998e', '#38ef7d', '#f093fb', '#f5576c'];
-        
-        for (let i = 0; i < 50; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti-piece';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 3 + 's';
-            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            confettiContainer.appendChild(confetti);
-            
-            setTimeout(() => {
-                confetti.remove();
-            }, 5000);
-        }
     }
 
     // Event listeners
     nextBtn.addEventListener('click', (e) => {
-        createRipple(e);
-        
+        createRipple(e); // Play ripple effect
+
         if (currentStep === totalSteps) {
-            // Validate final step and show confetti
-            if (validateStep(currentStep)) {
-                createConfetti();
-                // Add success message
-                const successMsg = document.createElement('div');
-                successMsg.className = 'alert alert-success alert-modern mt-3';
-                successMsg.innerHTML = `
-                    <div class="alert-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="alert-content">
-                        <h6 class="alert-title mb-0" style="color: #38a169;">Création en cours...</h6>
-                    </div>
-                `;
-                document.querySelector('.form-card').appendChild(successMsg);
-                return; // Let form submit
-            } else {
-                e.preventDefault();
+            if (!validateStep(currentStep)) {
+                e.preventDefault(); // Prevent submission if validation fails
             }
         } else {
-            // Validate current step before proceeding
             if (validateStep(currentStep)) {
-                e.preventDefault();
+                e.preventDefault(); // Prevent form submission
                 currentStep++;
                 showStep(currentStep);
             } else {
-                e.preventDefault();
+                e.preventDefault(); // Prevent submission if validation fails
             }
         }
     });
 
     prevBtn.addEventListener('click', (e) => {
-        createRipple(e);
+        e.preventDefault(); // Prevent default button behavior
+        createRipple(e); // Play ripple effect
+
         if (currentStep > 1) {
             currentStep--;
             showStep(currentStep);
         }
     });
 
-    // File upload handling
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
+    // File upload drag and drop and preview logic
+    fileUploadArea.addEventListener('click', () => fileInput.click());
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('drag-over');
+    });
+    fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.classList.remove('drag-over');
+    });
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            handleFileSelect();
+        }
+    });
+
+    fileInput.addEventListener('change', handleFileSelect);
+
+    removeFileBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent click from bubbling to fileUploadArea
+        fileInput.value = ''; // Clear the input
+        filePreview.classList.add('d-none');
+        fileUploadArea.classList.remove('d-none');
+        previewImage.src = '';
+    });
+
+    function handleFileSelect() {
+        const file = fileInput.files[0];
         if (file) {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = (e) => {
                     previewImage.src = e.target.result;
                     fileUploadArea.classList.add('d-none');
                     filePreview.classList.remove('d-none');
@@ -936,234 +831,54 @@
                 reader.readAsDataURL(file);
             } else {
                 alert('Veuillez sélectionner un fichier image valide.');
-                fileInput.value = '';
+                fileInput.value = ''; // Clear input if not an image
+                filePreview.classList.add('d-none'); // Hide preview
+                fileUploadArea.classList.remove('d-none'); // Show upload area
             }
+        } else {
+            filePreview.classList.add('d-none');
+            fileUploadArea.classList.remove('d-none');
+            previewImage.src = '';
         }
-    });
-
-    removeFileBtn.addEventListener('click', function() {
-        fileInput.value = '';
-        fileUploadArea.classList.remove('d-none');
-        filePreview.classList.add('d-none');
-    });
-
-    // Drag and drop for file upload
-    fileUploadArea.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '#667eea';
-        this.style.background = 'rgba(102, 126, 234, 0.1)';
-    });
-
-    fileUploadArea.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '';
-        this.style.background = '';
-    });
-
-    fileUploadArea.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '';
-        this.style.background = '';
-        
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            const file = files[0];
-            if (file.type.startsWith('image/')) {
-                fileInput.files = files;
-                const event = new Event('change', { bubbles: true });
-                fileInput.dispatchEvent(event);
-            } else {
-                alert('Veuillez déposer un fichier image valide.');
-            }
-        }
-    });
-
-    // Character counter for description
-    if (descriptionTextarea && charCount) {
-        descriptionTextarea.addEventListener('input', function() {
-            const length = this.value.length;
-            charCount.textContent = length;
-            
-            if (length > 500) {
-                charCount.style.color = '#e53e3e';
-            } else if (length > 400) {
-                charCount.style.color = '#f59e0b';
-            } else {
-                charCount.style.color = '#6c757d';
-            }
-        });
-        
-        // Initialize counter
-        charCount.textContent = descriptionTextarea.value.length;
     }
 
+    // Character counter for description
+    descriptionTextarea.addEventListener('input', () => {
+        const length = descriptionTextarea.value.length;
+        charCount.textContent = length;
+        
+        if (length > 500) {
+            charCount.style.color = '#e53e3e'; // Rouge
+        } else if (length > 400) {
+            charCount.style.color = '#f59e0b'; // Orange
+        } else {
+            charCount.style.color = '#6c757d'; // Gris par défaut
+        }
+    });
+
     // Smooth focus transitions for inputs
-    document.querySelectorAll('.form-control-modern').forEach(input => {
+    document.querySelectorAll('.form-control-modern, .textarea-modern').forEach(input => {
         input.addEventListener('focus', function() {
-            this.parentElement.classList.add('input-focused');
+            this.closest('.input-group-modern').classList.add('input-focused');
         });
         
         input.addEventListener('blur', function() {
-            this.parentElement.classList.remove('input-focused');
-            if (this.hasAttribute('required') && !this.value.trim()) {
-                this.style.borderColor = '#fbbf24';
-            } else {
-                this.style.borderColor = '';
-            }
-        });
-        
-        input.addEventListener('input', function() {
-            if (this.style.borderColor === 'rgb(229, 62, 62)') {
-                this.style.borderColor = '';
-            }
+            this.closest('.input-group-modern').classList.remove('input-focused');
         });
     });
 
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && e.ctrlKey) {
-            if (currentStep < totalSteps) {
-                if (validateStep(currentStep)) {
-                    currentStep++;
-                    showStep(currentStep);
-                }
-            }
-        } else if (e.key === 'Escape') {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
+    // Initialize the first step and char counter when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        showStep(currentStep);
+        // Trigger character count on load if there's old input
+        if (descriptionTextarea) {
+            const event = new Event('input');
+            descriptionTextarea.dispatchEvent(event);
         }
-    });
 
-    // Add shake animation for validation errors
-    const style = document.createElement('style');
-    style.textContent = `
-        .shake {
-            animation: shake 0.5s ease-in-out;
-        }
-        
-        @keyframes shake {
-            0%, 20%, 40%, 60%, 80% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        }
-        
-        .input-focused .input-focus-ring {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .alert-success.alert-modern {
-            background: rgba(56, 161, 105, 0.05);
-            border-left-color: #38a169;
-        }
-        
-        .alert-success .alert-icon {
-            color: #38a169;
-        }
-        
-        /* Loading animation for submit */
-        .btn-loading {
-            position: relative;
-            color: transparent !important;
-        }
-        
-        .btn-loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid transparent;
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Enhanced hover effects */
-        .form-control-modern:hover {
-            border-color: rgba(102, 126, 234, 0.3);
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .file-upload-area:hover .upload-icon i {
-            transform: scale(1.1);
-            color: #5a67d8;
-        }
-        
-        /* Progress step hover effects */
-        .progress-step:hover .step-circle {
-            transform: scale(1.05);
-        }
-        
-        .progress-step:hover .step-label {
-            color: #667eea;
-        }
-        
-        /* Tooltip for steps */
-        .progress-step {
-            position: relative;
-        }
-        
-        .progress-step:hover::before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 5px 10px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            border-radius: 6px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 1000;
-            opacity: 0;
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Add tooltips to progress steps
-    progressSteps[0].setAttribute('data-tooltip', 'Logo et nom de l\'entreprise');
-    progressSteps[1].setAttribute('data-tooltip', 'Adresse et email de contact');
-    progressSteps[2].setAttribute('data-tooltip', 'Description de l\'activité');
-
-    // Form submission enhancement
-    document.getElementById('step-form').addEventListener('submit', function(e) {
-        if (currentStep === totalSteps) {
-            nextBtn.classList.add('btn-loading');
-            nextBtn.disabled = true;
-            
-            // Simulate loading (remove this in production)
-            setTimeout(() => {
-                // The form will actually submit, this is just for demo
-            }, 1000);
-        }
-    });
-
-    // Initialize the form
-    showStep(currentStep);
-
-    // Add entrance animation
-    setTimeout(() => {
+        // Set initial card animation visibility
         document.querySelector('.form-card').style.opacity = '1';
         document.querySelector('.form-card').style.transform = 'translateY(0)';
-    }, 100);
-
-    // Set initial card animation
-    document.querySelector('.form-card').style.opacity = '0';
-    document.querySelector('.form-card').style.transform = 'translateY(20px)';
-    document.querySelector('.form-card').style.transition = 'all 0.6s ease-out';
+    });
 </script>
 @endsection

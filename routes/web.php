@@ -11,6 +11,11 @@ use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\EmployeeDocumentController;
 use App\Http\Controllers\JobOfferController; 
 use App\Http\Controllers\CandidatureController;
+use App\Http\Controllers\ProjectController;
+
+use App\Http\Controllers\ChefProjetcontroller;
+
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -18,28 +23,36 @@ use App\Http\Controllers\CandidatureController;
 
 Route::get('/', function () {
    if (Auth::check()) {
-        // L'utilisateur est connecté
+       
         $user = Auth::user();
         
-        // Vérifie le rôle de l'utilisateur et redirige
+     
         if ($user->role == 'super_admin') {
-            return redirect('superadmin');
+            return redirect('/admin/dashboard');
         } elseif ($user->role == 'admin') {
             return redirect('admin_simple');
         }
         elseif($user->role == 'rh') {
             return redirect('rh_dashboard');
         }
-        // Ajoute d'autres rôles si nécessaire
+         elseif($user->role == 'chef_projet') {
+            return redirect('/chef-projet/dashboard');
+        }
     }
+    
 
-    // Sinon, afficher la page d'accueil
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/test-mail', function () {
+    Mail::raw('Ceci est un mail de test.', function ($message) {
+        $message->to('malickwane26@gmail.com')
+                ->subject('Test d\'envoi mail Laravel');
+    });
+
+    return 'Mail envoyé (ou erreur si ça coince)';
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -54,6 +67,8 @@ Route::middleware('auth')->group(function () {
 
 
     // Route::get('/admin/company/dashboard', [AdminController::class, 'index'])->name('admin_simple');
+        Route::get('/status', [SuperadminController::class, 'status'])->name('status');
+
 
     
 
@@ -65,6 +80,9 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/admin/add', [SuperadminController::class, 'addAdmin'])->name('add_admin_view');
     Route::post('/admin/add-admin', [SuperadminController::class, 'createUsers'])->name('add_admin');
     Route::get('/admin/list-admin', [SuperadminController::class, 'adminList'])->name('list_admin');
+  Route::post('/entreprises/{entreprise}/toggle-status', [EntrepriseController::class, 'toggleStatus'])->name('entreprise.toggleStatus');
+         Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->name('entreprise.show');
+
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -122,29 +140,44 @@ Route::get('/rh/candidatures/{candidature}', [CandidatureController::class, 'sho
 Route::post('/rh/candidatures/{candidature}/accepter', [CandidatureController::class, 'accept'])->name('rh.candidatures.accept');
 Route::post('/rh/candidatures/{candidature}/rejeter', [CandidatureController::class, 'reject'])->name('rh.candidatures.reject');
 
+});
 
+ 
 
+Route::middleware(['auth','role:chef_projet'])->group(function(){
 
-
-
-
-
-
-
-
-
-
-
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::delete('/projects/{project}/update-members', [ProjectController::class, 'updateMembers'])->name('projects.updateMembers');
+    Route::get('/chef-projet/dashboard', [ChefProjetcontroller::class, 'index'])->name('chef_projet.dashboard');
     
+// Route pour ajouter un commentaire
+Route::post('/projects/{project}/comments', [ProjectController::class, 'storeComment'])->name('comments.store');
+// Route pour ajouter un fichier
+Route::post('projects/{project}/files', [ProjectController::class, 'storeFile'])->name('files.store');
+Route::post('/projects/{project}/tasks', [ProjectController::class, 'storeTask'])->name('tasks.store');
+Route::patch('/tasks/{task}', [ProjectController::class, 'updateTask'])->name('tasks.update');
+Route::post('/tasks/{task}/assign', [ProjectController::class, 'assignTask'])->name('tasks.assign');
+Route::delete('/tasks/{task}', [ProjectController::class, 'deleteTask'])->name('tasks.delete');
+Route::get('/my-tasks', [ProjectController::class, 'myTasks'])->name('tasks.myTasks');
+Route::delete('/files/{file}', [ProjectController::class, 'destroyFile'])->name('files.delete');
+
+Route::get('/tasks/{task}', [ProjectController::class, 'showTask'])->name('tasks.show');
+Route::post('/tasks/{task}/comments', [ProjectController::class, 'storeTaskComment'])->name('tasks.comments.store');
+Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.delete');
+Route::post('/projects/{project}/members/{user}', [ProjectController::class, 'addMember'])->name('projects.addMember');
+Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember'])->name('projects.removeMember');
+Route::patch('/projects/{project}/members/{user}/toggle-lead', [ProjectController::class, 'toggleLead'])->name('projects.toggleLead');
 
 
-    
 
-
-
-    
+  
 
 });
+
+   
 
 
 require __DIR__.'/auth.php';

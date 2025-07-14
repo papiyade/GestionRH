@@ -54,30 +54,36 @@
 
                                 <div class="table-responsive table-card">
                                     <table class="table table-borderless mb-4">
-                                        <tbody>
-                                            <tr>
-                                                <td class="fw-medium" scope="row">Type de Contrat</td>
-                                                <td class="overview-industryType">{{ $user->employeeDetail->type_contrat }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="fw-medium" scope="row">Email</td>
-                                                <td class="overview-email">{{ $user->email }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="fw-medium" scope="row">Adresse</td>
-                                                <td class="overview-company_location">{{ $user->employeeDetail->adresse }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="fw-medium" scope="row">Salaire</td>
-                                                <td><span class="overview-rating">{{ $user->employeeDetail->salaire}}</span> <i class="ri-star-fill text-warning align-bottom"></i></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="fw-medium" scope="row">Description</td>
-                                                <td>
-                                                    <span  class="overview-website">{{ $user->employeeDetail->description_poste }}</span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                       <tbody>
+    <tr>
+        <td class="fw-medium" scope="row">Type de Contrat</td>
+        <td class="overview-industryType">{{ $user->employeeDetail?->type_contrat ?? 'Pas encore défini' }}</td>
+    </tr>
+    <tr>
+        <td class="fw-medium" scope="row">Email</td>
+        <td class="overview-email">{{ $user->email ?? 'Pas encore défini' }}</td>
+    </tr>
+    <tr>
+        <td class="fw-medium" scope="row">Adresse</td>
+        <td class="overview-company_location">{{ $user->employeeDetail?->adresse ?? 'Pas encore défini' }}</td>
+    </tr>
+    <tr>
+        <td class="fw-medium" scope="row">Salaire</td>
+        <td>
+            <span class="overview-rating">
+                {{ $user->employeeDetail?->salaire ? number_format($user->employeeDetail->salaire, 0, ',', ' ') . ' FCFA' : 'Pas encore défini' }}
+            </span>
+            <i class="ri-star-fill text-warning align-bottom"></i>
+        </td>
+    </tr>
+    <tr>
+        <td class="fw-medium" scope="row">Description</td>
+        <td>
+            <span class="overview-website">{{ $user->employeeDetail?->description_poste ?? 'Pas encore défini' }}</span>
+        </td>
+    </tr>
+</tbody>
+
                                     </table>
                                 </div>
 

@@ -88,115 +88,164 @@
         </div>
     </div>
 </div>
-
-{{-- Modal Création/Édition Offre (reste le même) --}}
+{{-- Modal Création/Édition Offre --}}
 <div class="modal fade" id="createJobOfferModal" tabindex="-1" aria-labelledby="createJobOfferModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header modal-header-custom">
-                <h5 class="modal-title" id="createJobOfferModalLabel"><i class="ri-briefcase-line me-2"></i>  Offre d'Emploi</h5>
+                <h5 class="modal-title" id="createJobOfferModalLabel"><i class="ri-briefcase-line me-2"></i> Offre d'Emploi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body p-4">
+                {{-- Global Error Display (Optional, but good for summary) --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                        <strong>Oups!</strong> Il y a eu des problèmes avec votre soumission.
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 <form id="createJobOfferForm" class="needs-validation" method="POST" action="{{ route('offres.store') }}" novalidate>
                     @csrf
                     {{-- Champs du formulaire --}}
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label for="jobTitle" class="form-label fw-semibold">Titre du Poste <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="jobTitle" name="titre" required placeholder="Ex: Développeur Full Stack Senior">
+                            <input type="text" class="form-control @error('jobTitle') is-invalid @enderror" id="jobTitle" name="jobTitle" value="{{ old('jobTitle') }}" required placeholder="Ex: Développeur Full Stack Senior">
                             <div class="invalid-feedback">Veuillez saisir le titre du poste.</div>
+                            {{-- Specific Error Message for jobTitle --}}
+                            @error('jobTitle')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="jobTeam" class="form-label fw-semibold">Équipe / Département <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="jobTeam" name="equipe" required placeholder="Ex: Web, RH, Marketing...">
+                            <input type="text" class="form-control @error('jobTeam') is-invalid @enderror" id="jobTeam" name="jobTeam" value="{{ old('jobTeam') }}" required placeholder="Ex: Web, RH, Marketing...">
                             <div class="invalid-feedback">Veuillez saisir l'équipe/département.</div>
+                            @error('jobTeam')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="jobSector" class="form-label fw-semibold">Secteur d'Activité</label>
-                            <select class="form-select" id="jobSector" name="secteur">
+                            <select class="form-select @error('jobSector') is-invalid @enderror" id="jobSector" name="jobSector">
                                 <option value="">Sélectionner un secteur...</option>
-                                <option value="Informatique">Informatique</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Droit">Droit</option>
-                                <option value="Bâtiment">Bâtiment</option>
-                                <option value="Sport">Sport</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="Communication">Communication</option>
+                                <option value="Informatique" {{ old('jobSector') == 'Informatique' ? 'selected' : '' }}>Informatique</option>
+                                <option value="Finance" {{ old('jobSector') == 'Finance' ? 'selected' : '' }}>Finance</option>
+                                <option value="Droit" {{ old('jobSector') == 'Droit' ? 'selected' : '' }}>Droit</option>
+                                <option value="Bâtiment" {{ old('jobSector') == 'Bâtiment' ? 'selected' : '' }}>Bâtiment</option>
+                                <option value="Sport" {{ old('jobSector') == 'Sport' ? 'selected' : '' }}>Sport</option>
+                                <option value="Marketing" {{ old('jobSector') == 'Marketing' ? 'selected' : '' }}>Marketing</option>
+                                <option value="Communication" {{ old('jobSector') == 'Communication' ? 'selected' : '' }}>Communication</option>
                             </select>
+                            @error('jobSector')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-12">
                             <label for="jobDescription" class="form-label fw-semibold">Description du Poste <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="jobDescription" name="description" rows="5" required placeholder="Détails des responsabilités, missions, compétences requises..."></textarea>
+                            <textarea class="form-control @error('jobDescription') is-invalid @enderror" id="jobDescription" name="jobDescription" rows="5" required placeholder="Détails des responsabilités, missions, compétences requises...">{{ old('jobDescription') }}</textarea>
                             <div class="invalid-feedback">Veuillez saisir une description du poste.</div>
+                            @error('jobDescription')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="contractType" class="form-label fw-semibold">Type de Contrat <span class="text-danger">*</span></label>
-                            <select class="form-select" id="contractType" name="type_contrat" required>
+                            <select class="form-select @error('contractType') is-invalid @enderror" id="contractType" name="contractType" required>
                                 <option value="">Sélectionner...</option>
-                                <option value="CDI">CDI (Contrat à Durée Indéterminée)</option>
-                                <option value="CDD">CDD (Contrat à Durée Déterminée)</option>
-                                <option value="Stage">Stage</option>
-                                <option value="Alternance">Alternance</option>
-                                <option value="Freelance">Freelance</option>
+                                <option value="CDI" {{ old('contractType') == 'CDI' ? 'selected' : '' }}>CDI (Contrat à Durée Indéterminée)</option>
+                                <option value="CDD" {{ old('contractType') == 'CDD' ? 'selected' : '' }}>CDD (Contrat à Durée Déterminée)</option>
+                                <option value="Stage" {{ old('contractType') == 'Stage' ? 'selected' : '' }}>Stage</option>
+                                <option value="Alternance" {{ old('contractType') == 'Alternance' ? 'selected' : '' }}>Alternance</option>
+                                <option value="Freelance" {{ old('contractType') == 'Freelance' ? 'selected' : '' }}>Freelance</option>
                             </select>
                             <div class="invalid-feedback">Veuillez sélectionner un type de contrat.</div>
+                            @error('contractType')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="applicationDeadline" class="form-label fw-semibold">Date Limite de Candidature <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="applicationDeadline" name="date_limite" required>
+                            <input type="date" class="form-control @error('applicationDeadline') is-invalid @enderror" id="applicationDeadline" name="applicationDeadline" value="{{ old('applicationDeadline') }}" required>
                             <div class="invalid-feedback">Veuillez saisir la date limite.</div>
+                            @error('applicationDeadline')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-4">
                             <label for="salaryAmount" class="form-label fw-semibold">Salaire (Optionnel)</label>
-                            <input type="number" class="form-control" id="salaryAmount" name="salaire" placeholder="Ex: 500000">
+                            <input type="number" class="form-control @error('salaryAmount') is-invalid @enderror" id="salaryAmount" name="salaryAmount" value="{{ old('salaryAmount') }}" placeholder="Ex: 500000">
+                            @error('salaryAmount')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-4">
                             <label for="salaryCurrency" class="form-label fw-semibold">Devise</label>
-                            <select class="form-select" id="salaryCurrency" name="devise">
-                                <option value="XOF">XOF (CFA)</option>
-                                <option value="EUR">EUR (€)</option>
-                                <option value="USD">USD ($)</option>
-                                <option value="CAD">CAD (C$)</option>
-                                <option value="GBP">GBP (£)</option>
-                                <option value="">Non spécifié</option>
+                            <select class="form-select @error('salaryCurrency') is-invalid @enderror" id="salaryCurrency" name="salaryCurrency">
+                                <option value="XOF" {{ old('salaryCurrency') == 'XOF' ? 'selected' : '' }}>XOF (CFA)</option>
+                                <option value="EUR" {{ old('salaryCurrency') == 'EUR' ? 'selected' : '' }}>EUR (€)</option>
+                                <option value="USD" {{ old('salaryCurrency') == 'USD' ? 'selected' : '' }}>USD ($)</option>
+                                <option value="CAD" {{ old('salaryCurrency') == 'CAD' ? 'selected' : '' }}>CAD (C$)</option>
+                                <option value="GBP" {{ old('salaryCurrency') == 'GBP' ? 'selected' : '' }}>GBP (£)</option>
+                                <option value="" {{ old('salaryCurrency') == '' ? 'selected' : '' }}>Non spécifié</option>
                             </select>
+                            @error('salaryCurrency')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-4">
                             <label for="salaryPeriod" class="form-label fw-semibold">Période Salariale</label>
-                            <select class="form-select" id="salaryPeriod" name="periode_salaire">
-                                <option value="monthly">Mensuel</option>
-                                <option value="annual">Annuel</option>
-                                <option value="">Non spécifié</option>
+                            <select class="form-select @error('salaryPeriod') is-invalid @enderror" id="salaryPeriod" name="salaryPeriod">
+                                <option value="monthly" {{ old('salaryPeriod') == 'monthly' ? 'selected' : '' }}>Mensuel</option>
+                                <option value="annual" {{ old('salaryPeriod') == 'annual' ? 'selected' : '' }}>Annuel</option>
+                                <option value="" {{ old('salaryPeriod') == '' ? 'selected' : '' }}>Non spécifié</option>
                             </select>
+                            @error('salaryPeriod')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="experienceRequired" class="form-label fw-semibold">Expérience Requise <span class="text-danger">*</span></label>
-                            <select class="form-select" id="experienceRequired" name="experience_requise" required>
+                            <select class="form-select @error('experienceRequired') is-invalid @enderror" id="experienceRequired" name="experienceRequired" required>
                                 <option value="">Sélectionner...</option>
-                                <option value="Non spécifiée">Non spécifiée</option>
-                                <option value="Moins de 1 an">Moins de 1 an</option>
-                                <option value="1-3 ans">1-3 ans</option>
-                                <option value="3-5 ans">3-5 ans</option>
-                                <option value="Plus de 5 ans">Plus de 5 ans</option>
+                                <option value="Non spécifiée" {{ old('experienceRequired') == 'Non spécifiée' ? 'selected' : '' }}>Non spécifiée</option>
+                                <option value="Moins de 1 an" {{ old('experienceRequired') == 'Moins de 1 an' ? 'selected' : '' }}>Moins de 1 an</option>
+                                <option value="1-3 ans" {{ old('experienceRequired') == '1-3 ans' ? 'selected' : '' }}>1-3 ans</option>
+                                <option value="3-5 ans" {{ old('experienceRequired') == '3-5 ans' ? 'selected' : '' }}>3-5 ans</option>
+                                <option value="Plus de 5 ans" {{ old('experienceRequired') == 'Plus de 5 ans' ? 'selected' : '' }}>Plus de 5 ans</option>
                             </select>
                             <div class="invalid-feedback">Veuillez spécifier l'expérience requise.</div>
+                            @error('experienceRequired')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="jobStatus" class="form-label fw-semibold">Statut de l'Offre <span class="text-danger">*</span></label>
-                            <select class="form-select" id="jobStatus" name="statut" required>
-                                <option value="En cours">En cours</option>
-                                <option value="Clôturé">Clôturé</option>
-                                <option value="Annulé">Annulé</option>
+                            <select class="form-select @error('jobStatus') is-invalid @enderror" id="jobStatus" name="jobStatus" required>
+                                <option value="En cours" {{ old('jobStatus') == 'En cours' ? 'selected' : '' }}>En cours</option>
+                                <option value="Clôturé" {{ old('jobStatus') == 'Clôturé' ? 'selected' : '' }}>Clôturé</option>
+                                <option value="Annulé" {{ old('jobStatus') == 'Annulé' ? 'selected' : '' }}>Annulé</option>
                             </select>
                             <div class="invalid-feedback">Veuillez sélectionner un statut.</div>
+                            @error('jobStatus')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="remoteOption" name="teletravail" value="1">
+                                <input class="form-check-input @error('remoteOption') is-invalid @enderror" type="checkbox" id="remoteOption" name="remoteOption" value="1" {{ old('remoteOption') ? 'checked' : '' }}>
                                 <label class="form-check-label" for="remoteOption">
                                     Télétravail possible
                                 </label>
+                                @error('remoteOption')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -208,6 +257,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    // This script ensures the modal stays open on validation error
+    @if ($errors->any())
+        var createJobOfferModal = new bootstrap.Modal(document.getElementById('createJobOfferModal'));
+        createJobOfferModal.show();
+    @endif
+
+    // Optional: Add a client-side validation handler to Bootstrap's native validation
+    (function () {
+        'use strict'
+        var form = document.getElementById('createJobOfferForm');
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    })()
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

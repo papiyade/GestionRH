@@ -21,7 +21,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('is_actif')->default(true);
             $table->timestamps();
-
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
 
         });

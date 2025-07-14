@@ -44,7 +44,6 @@
                                     <td>{{ $user->employeeDetail->date_naissance }}</td>
                                     <td>{{ $user->employeeDetail->date_debut }}</td>
                                     <td>{{ $user->employeeDetail->date_fin ?? '-' }}</td>
-                                {{-- <td>{{ $user->employeeDetail->telephone ?? '-' }}</td> --}}
                                     <td>{{ $user->employeeDetail->adresse ?? '-' }}</td>
                                     <td>{{ $user->employeeDetail->type_contrat ?? '-' }}</td>
                                     <td>{{ $user->employeeDetail->salaire ? number_format($user->employeeDetail->salaire, 0, ',', ' ') . ' FCFA' : '-' }}</td>

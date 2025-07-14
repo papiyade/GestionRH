@@ -11,8 +11,8 @@
                         <i class="fas fa-building display-4 text-primary"></i>
                         <div class="icon-pulse"></div>
                     </div>
-                    <h1 class="display-5 fw-bold text-gradient mb-2">mis a jour de votre entreprise</h1>
-                    <p class="lead text-muted">Construisons ensemble votre présence professionnelle</p>
+                    <h1 class="display-5 fw-bold text-gradient mb-2">Mise à jour de votre entreprise</h1>
+                    <p class="lead text-muted">Ajustons et améliorons votre présence professionnelle</p>
                 </div>
             </div>
 
@@ -64,157 +64,169 @@
                     </div>
                 @endif
 
-   <form id="step-form" action="{{ route('entreprise.update', $entreprise->id) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
+                <form id="step-form" action="{{ route('entreprise.update', $entreprise->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT') {{-- Indique que c'est une requête PUT pour la mise à jour --}}
 
-    {{-- Étape 1: Identité --}}
-    <div class="step step-active" id="step1">
-        <div class="step-header mb-4">
-            <h3 class="step-title">
-                <i class="fas fa-image text-primary me-2"></i>
-                Identité de votre entreprise
-            </h3>
-            <p class="step-subtitle">Commençons par l'essentiel : votre logo et votre nom</p>
-        </div>
+                    {{-- Étape 1: Identité --}}
+                    <div class="step step-active" id="step1">
+                        <div class="step-header mb-4">
+                            <h3 class="step-title">
+                                <i class="fas fa-image text-primary me-2"></i>
+                                Identité de votre entreprise
+                            </h3>
+                            <p class="step-subtitle">Ajustons votre logo et votre nom</p>
+                        </div>
 
-        <div class="mb-4">
-            <label class="form-label-modern">
-                <i class="fas fa-camera me-2"></i>
-                Logo de l'entreprise
-                <span class="optional">(optionnel)</span>
-            </label>
-            <div class="file-upload-wrapper">
-                <input type="file" class="file-input" id="logo_path" name="logo_path" accept="image/*">
+                        <div class="mb-4">
+                            <label class="form-label-modern">
+                                <i class="fas fa-camera me-2"></i>
+                                Logo de l'entreprise
+                                <span class="optional">(optionnel)</span>
+                            </label>
+                            <div class="file-upload-wrapper">
+                                <input type="file" class="file-input" id="logo_path" name="logo_path" accept="image/*">
 
-                @if ($entreprise->logo_path)
-                    <div class="file-preview" id="file-preview">
-                        <img id="preview-image" src="{{ asset('storage/' . $entreprise->logo_path) }}" alt="Logo actuel">
-                        <button type="button" class="btn-remove-file" id="remove-file">
-                            <i class="fas fa-times"></i>
+                                {{-- Condition pour afficher le logo existant ou la zone d'upload --}}
+                                @if ($entreprise->logo_path)
+                                    <div class="file-preview" id="file-preview">
+                                        <img id="preview-image" src="{{ asset('storage/' . $entreprise->logo_path) }}" alt="Logo actuel de l'entreprise">
+                                        <button type="button" class="btn-remove-file" id="remove-file">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        {{-- Champ caché pour indiquer la suppression du logo existant --}}
+                                        <input type="hidden" name="remove_logo" id="remove_logo_input" value="0">
+                                    </div>
+                                    <div class="file-upload-area d-none" id="file-upload-area"> {{-- Initialement caché --}}
+                                        <div class="upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <div class="upload-text">
+                                            <span class="upload-main">Glissez votre logo ici</span>
+                                            <span class="upload-sub">ou cliquez pour parcourir</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="file-upload-area" id="file-upload-area">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <div class="upload-text">
+                                            <span class="upload-main">Glissez votre logo ici</span>
+                                            <span class="upload-sub">ou cliquez pour parcourir</span>
+                                        </div>
+                                    </div>
+                                    <div class="file-preview d-none" id="file-preview"> {{-- Initialement caché --}}
+                                        <img id="preview-image" alt="Aperçu du nouveau logo">
+                                        <button type="button" class="btn-remove-file" id="remove-file">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        <input type="hidden" name="remove_logo" id="remove_logo_input" value="0">
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="entreprise_name" class="form-label-modern">
+                                <i class="fas fa-building me-2"></i>
+                                Nom de l'entreprise
+                                <span class="required">*</span>
+                            </label>
+                            <div class="input-group-modern">
+                                <input type="text" class="form-control-modern" id="entreprise_name"
+                                    name="entreprise_name"
+                                    value="{{ old('entreprise_name', $entreprise->entreprise_name) }}"
+                                    placeholder="Ex: Ma Super Entreprise" required>
+                                <div class="input-focus-ring"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Étape 2: Informations de contact --}}
+                    <div class="step" id="step2">
+                        <div class="step-header mb-4">
+                            <h3 class="step-title">
+                                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                Informations de contact
+                            </h3>
+                            <p class="step-subtitle">Mettez à jour vos coordonnées</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="adresse" class="form-label-modern">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                Adresse complète
+                                <span class="required">*</span>
+                            </label>
+                            <div class="input-group-modern">
+                                <input type="text" class="form-control-modern" id="adresse"
+                                    name="adresse"
+                                    value="{{ old('adresse', $entreprise->adresse) }}"
+                                    placeholder="123 Rue de la Paix, 75001 Paris" required>
+                                <div class="input-focus-ring"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="form-label-modern">
+                                <i class="fas fa-envelope me-2"></i>
+                                Adresse email professionnelle
+                                <span class="required">*</span>
+                            </label>
+                            <div class="input-group-modern">
+                                <input type="email" class="form-control-modern" id="email"
+                                    name="email"
+                                    value="{{ old('email', $entreprise->email) }}"
+                                    placeholder="contact@monentreprise.com" required>
+                                <div class="input-focus-ring"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Étape 3: Description --}}
+                    <div class="step" id="step3">
+                        <div class="step-header mb-4">
+                            <h3 class="step-title">
+                                <i class="fas fa-edit text-primary me-2"></i>
+                                Décrivez votre entreprise
+                            </h3>
+                            <p class="step-subtitle">Précisez votre activité et vos valeurs</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="form-label-modern">
+                                <i class="fas fa-align-left me-2"></i>
+                                Description de l'entreprise
+                                <span class="required">*</span>
+                            </label>
+                            <div class="input-group-modern">
+                                <textarea class="form-control-modern textarea-modern" id="description"
+                                    name="description" rows="6" required
+                                    placeholder="Décrivez votre entreprise, ses activités, sa mission...">{{ old('description', $entreprise->description) }}</textarea>
+                                <div class="input-focus-ring"></div>
+                            </div>
+                            <div class="char-counter">
+                                <span id="char-count">0</span> caractères
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Navigation --}}
+                    <div class="form-navigation">
+                        <button type="button" class="btn-navigation btn-prev" id="prevBtn">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Précédent
+                        </button>
+                        <button type="button" class="btn-navigation btn-next" id="nextBtn"> {{-- Type button initialement --}}
+                            <span class="btn-text">
+                                Suivant
+                                <i class="fas fa-arrow-right ms-2"></i>
+                            </span>
+                            <div class="btn-ripple"></div>
                         </button>
                     </div>
-                @else
-                    <div class="file-upload-area" id="file-upload-area">
-                        <div class="upload-icon">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <div class="upload-text">
-                            <span class="upload-main">Glissez votre logo ici</span>
-                            <span class="upload-sub">ou cliquez pour parcourir</span>
-                        </div>
-                    </div>
-                    <div class="file-preview d-none" id="file-preview">
-                        <img id="preview-image" alt="Aperçu du logo">
-                        <button type="button" class="btn-remove-file" id="remove-file">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="entreprise_name" class="form-label-modern">
-                <i class="fas fa-building me-2"></i>
-                Nom de l'entreprise
-                <span class="required">*</span>
-            </label>
-            <div class="input-group-modern">
-                <input type="text" class="form-control-modern" id="entreprise_name"
-                    name="entreprise_name"
-                    value="{{ old('entreprise_name', $entreprise->entreprise_name) }}"
-                    placeholder="Ex: Ma Super Entreprise" required>
-                <div class="input-focus-ring"></div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Étape 2: Informations de contact --}}
-    <div class="step" id="step2">
-        <div class="step-header mb-4">
-            <h3 class="step-title">
-                <i class="fas fa-map-marker-alt text-primary me-2"></i>
-                Informations de contact
-            </h3>
-            <p class="step-subtitle">Où peut-on vous trouver ?</p>
-        </div>
-
-        <div class="mb-4">
-            <label for="adresse" class="form-label-modern">
-                <i class="fas fa-map-marker-alt me-2"></i>
-                Adresse complète
-                <span class="required">*</span>
-            </label>
-            <div class="input-group-modern">
-                <input type="text" class="form-control-modern" id="adresse"
-                    name="adresse"
-                    value="{{ old('adresse', $entreprise->adresse) }}"
-                    placeholder="123 Rue de la Paix, 75001 Paris" required>
-                <div class="input-focus-ring"></div>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="email" class="form-label-modern">
-                <i class="fas fa-envelope me-2"></i>
-                Adresse email professionnelle
-                <span class="required">*</span>
-            </label>
-            <div class="input-group-modern">
-                <input type="email" class="form-control-modern" id="email"
-                    name="email"
-                    value="{{ old('email', $entreprise->email) }}"
-                    placeholder="contact@monentreprise.com" required>
-                <div class="input-focus-ring"></div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Étape 3: Description --}}
-    <div class="step" id="step3">
-        <div class="step-header mb-4">
-            <h3 class="step-title">
-                <i class="fas fa-edit text-primary me-2"></i>
-                Décrivez votre entreprise
-            </h3>
-            <p class="step-subtitle">Parlez-nous de votre activité et de vos valeurs</p>
-        </div>
-
-        <div class="mb-4">
-            <label for="description" class="form-label-modern">
-                <i class="fas fa-align-left me-2"></i>
-                Description de l'entreprise
-                <span class="required">*</span>
-            </label>
-            <div class="input-group-modern">
-                <textarea class="form-control-modern textarea-modern" id="description"
-                    name="description" rows="6" required
-                    placeholder="Décrivez votre entreprise, ses activités, sa mission...">{{ old('description', $entreprise->description) }}</textarea>
-                <div class="input-focus-ring"></div>
-            </div>
-            <div class="char-counter">
-                <span id="char-count">0</span> caractères
-            </div>
-        </div>
-    </div>
-
-    {{-- Navigation --}}
-    <div class="form-navigation">
-        <button type="button" class="btn-navigation btn-prev" id="prevBtn" >
-            <i class="fas fa-arrow-left me-2"></i>
-            Précédent
-        </button>
-        <button type="submit" class="btn-navigation btn-next" id="nextBtn">
-            <span class="btn-text">
-                Suivant
-                <i class="fas fa-arrow-right ms-2"></i>
-            </span>
-            <div class="btn-ripple"></div>
-        </button>
-    </div>
-</form>
-
+                </form>
 
                 {{-- Effet de confetti pour la validation --}}
                 <div class="confetti-container" id="confetti-container"></div>
@@ -223,7 +235,7 @@
     </div>
 </div>
 
-{{-- Styles CSS modernes --}}
+{{-- Styles CSS modernes (Identiques à ceux du formulaire de création) --}}
 <style>
     :root {
         --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -291,7 +303,7 @@
         height: 100%;
         background: var(--primary-gradient);
         border-radius: 2px;
-        width: 33.33%;
+        width: 33.33%; /* Initial width for step 1 */
         transition: var(--transition);
         position: relative;
     }
@@ -572,12 +584,22 @@
         overflow: hidden;
         max-width: 200px;
         margin: 0 auto;
+        border: 1px solid rgba(102, 126, 234, 0.1); /* Ajout d'une bordure subtile */
+        background-color: #f8f9fa; /* Couleur de fond */
+        display: flex; /* S'assure que l'image est centrée */
+        align-items: center;
+        justify-content: center;
+        min-height: 150px; /* Pour éviter l'affaissement si l'image est petite */
+        padding: 10px; /* Espace autour de l'image */
     }
 
     .file-preview img {
-        width: 100%;
-        height: auto;
-        border-radius: 12px;
+        width: auto; /* Ajustement automatique de la largeur */
+        max-width: 100%; /* Limite la largeur de l'image au conteneur */
+        height: auto; /* Ajustement automatique de la hauteur */
+        max-height: 180px; /* Limite la hauteur de l'image */
+        border-radius: 8px; /* Coins légèrement arrondis pour l'image */
+        object-fit: contain; /* S'assure que l'image est contenue sans être coupée */
     }
 
     .btn-remove-file {
@@ -594,6 +616,7 @@
         align-items: center;
         justify-content: center;
         transition: var(--transition);
+        z-index: 10; /* S'assure qu'il est au-dessus de l'image */
     }
 
     .btn-remove-file:hover {
@@ -652,6 +675,15 @@
         box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
     }
 
+    .btn-next.btn-submit-final { /* Nouvelle classe pour le bouton final de soumission */
+        background: var(--success-gradient);
+        box-shadow: 0 15px 35px rgba(56, 239, 125, 0.4);
+    }
+
+    .btn-next.btn-submit-final:hover {
+        filter: brightness(1.1);
+    }
+
     .btn-ripple {
         position: absolute;
         border-radius: 50%;
@@ -679,6 +711,16 @@
         background: rgba(229, 62, 62, 0.05);
         border-left: 4px solid #e53e3e;
     }
+     .alert-modern.alert-success { /* Style pour les alertes de succès */
+        background-color: rgba(56, 239, 125, 0.1);
+        border-left-color: #38a169;
+        color: #38a169;
+    }
+
+    .alert-modern.alert-success .alert-icon {
+        color: #38a169;
+    }
+
 
     .alert-icon {
         margin-right: 1rem;
@@ -770,6 +812,16 @@
             justify-content: center;
         }
     }
+
+    /* Shake animation for invalid inputs */
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        20% { transform: translateX(-5px); }
+        40% { transform: translateX(5px); }
+        60% { transform: translateX(-5px); }
+        80% { transform: translateX(5px); }
+        100% { transform: translateX(0); }
+    }
 </style>
 
 {{-- Script JavaScript amélioré --}}
@@ -782,6 +834,7 @@
     const nextBtn = document.getElementById('nextBtn');
     const progressFill = document.getElementById('progress-fill');
     const confettiContainer = document.getElementById('confetti-container');
+    const form = document.getElementById('step-form');
 
     // File upload handling
     const fileInput = document.getElementById('logo_path');
@@ -789,6 +842,7 @@
     const filePreview = document.getElementById('file-preview');
     const previewImage = document.getElementById('preview-image');
     const removeFileBtn = document.getElementById('remove-file');
+    const removeLogoInput = document.getElementById('remove_logo_input'); // Champ caché
 
     // Character counter
     const descriptionTextarea = document.getElementById('description');
@@ -804,7 +858,7 @@
         steps[step - 1].classList.add('step-active');
 
         // Update progress bar
-        const percentage = (step / totalSteps) * 100;
+        const percentage = ((step - 1) / (totalSteps - 1)) * 100; // Recalculé pour que la dernière étape soit 100%
         progressFill.style.width = `${percentage}%`;
 
         // Update progress steps
@@ -824,10 +878,13 @@
             nextBtn.innerHTML = `
                 <span class="btn-text">
                     <i class="fas fa-check me-2"></i>
-                    mettre a jour l'entreprise
+                    Mettre à jour l'entreprise
                 </span>
                 <div class="btn-ripple"></div>
             `;
+            nextBtn.type = 'submit'; // Le bouton devient de type submit
+            nextBtn.classList.remove('btn-primary'); // Supprime la classe par défaut si elle existe
+            nextBtn.classList.add('btn-submit-final'); // Ajoute la classe pour le style final
         } else {
             nextBtn.innerHTML = `
                 <span class="btn-text">
@@ -836,6 +893,9 @@
                 </span>
                 <div class="btn-ripple"></div>
             `;
+            nextBtn.type = 'button'; // Le bouton reste de type button
+            nextBtn.classList.remove('btn-submit-final'); // Supprime la classe de style final
+            nextBtn.classList.add('btn-primary'); // Remet la classe par défaut (si nécessaire)
         }
     }
 
@@ -845,14 +905,18 @@
         let isValid = true;
 
         requiredInputs.forEach(input => {
+            // Réinitialiser les styles d'erreur précédents
+            input.classList.remove('is-invalid', 'shake');
+            input.style.borderColor = ''; // Réinitialise la bordure si elle a été mise par JS
+
             if (!input.value.trim()) {
-                input.style.borderColor = '#e53e3e';
-                input.classList.add('shake');
-                setTimeout(() => {
-                    input.classList.remove('shake');
-                    input.style.borderColor = '';
-                }, 500);
+                input.classList.add('is-invalid', 'shake'); // Ajoute la classe Bootstrap et shake
+                input.style.borderColor = '#e53e3e'; // Force la couleur de bordure rouge
                 isValid = false;
+            } else {
+                input.classList.remove('is-invalid'); // S'assure que la classe est retirée si valide
+                input.classList.add('is-valid'); // Ajoute une classe Bootstrap pour le succès (optionnel)
+                input.style.borderColor = '#28a745'; // Bordure verte pour les champs valides
             }
         });
 
@@ -861,16 +925,25 @@
 
     function createRipple(event) {
         const button = event.currentTarget;
-        const ripple = button.querySelector('.btn-ripple');
+        let ripple = button.querySelector('.btn-ripple');
+        if (!ripple) { // Create ripple element if it doesn't exist
+            ripple = document.createElement('div');
+            ripple.classList.add('btn-ripple');
+            button.appendChild(ripple);
+        }
+
+        // Remove existing animation to allow new one
+        ripple.style.animation = 'none';
+        ripple.offsetHeight; // Trigger reflow
+        
         const rect = button.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         const x = event.clientX - rect.left - size / 2;
         const y = event.clientY - rect.top - size / 2;
-        
+
         ripple.style.width = ripple.style.height = size + 'px';
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
-        ripple.style.transform = 'scale(0)';
         ripple.style.animation = 'ripple 0.6s linear';
     }
 
@@ -897,100 +970,113 @@
         createRipple(e);
         
         if (currentStep === totalSteps) {
-            // Validate final step and show confetti
-            if (validateStep(currentStep)) {
-                createConfetti();
-                // Add success message
+            // Dernière étape : Valider et laisser le formulaire soumettre si valide
+            if (!validateStep(currentStep)) {
+                e.preventDefault(); // Empêcher la soumission si la validation échoue
+            } else {
+                // Si la validation passe, le formulaire sera soumis.
+                // On peut ajouter un feedback visuel ici avant la soumission réelle.
                 const successMsg = document.createElement('div');
-                successMsg.className = 'alert alert-success alert-modern mt-3';
+                successMsg.className = 'alert alert-success alert-modern mt-4';
                 successMsg.innerHTML = `
                     <div class="alert-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="alert-content">
-                        <h6 class="alert-title mb-0" style="color: #38a169;">Création en cours...</h6>
+                        <h6 class="alert-title mb-0" style="color: #38a169;">Mise à jour en cours...</h6>
                     </div>
                 `;
                 document.querySelector('.form-card').appendChild(successMsg);
-                return; // Let form submit
-            } else {
-                e.preventDefault();
+                createConfetti(); // Lance les confettis
             }
         } else {
-            // Validate current step before proceeding
+            // Étapes intermédiaires : Valider et passer à l'étape suivante si valide
             if (validateStep(currentStep)) {
-                e.preventDefault();
+                e.preventDefault(); // Empêcher la soumission du formulaire
                 currentStep++;
                 showStep(currentStep);
             } else {
-                e.preventDefault();
+                e.preventDefault(); // Empêcher la soumission si la validation échoue
             }
         }
     });
 
+    // Gestion du bouton "Précédent"
     prevBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Empêcher l'action par défaut du bouton
         createRipple(e);
+
         if (currentStep > 1) {
             currentStep--;
             showStep(currentStep);
         }
     });
 
-    // File upload handling
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
+    // File upload logic
+    fileUploadArea.addEventListener('click', () => fileInput.click());
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('drag-over');
+    });
+    fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.classList.remove('drag-over');
+    });
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            handleFileSelect();
+        }
+    });
+
+    fileInput.addEventListener('change', handleFileSelect);
+
+    removeFileBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent click from bubbling to fileUploadArea
+        fileInput.value = ''; // Clear the file input
+        previewImage.src = ''; // Clear image source
+        filePreview.classList.add('d-none'); // Hide preview
+        fileUploadArea.classList.remove('d-none'); // Show upload area
+        removeLogoInput.value = '1'; // Set hidden input to indicate logo removal
+    });
+
+    function handleFileSelect() {
+        const file = fileInput.files[0];
         if (file) {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = (e) => {
                     previewImage.src = e.target.result;
                     fileUploadArea.classList.add('d-none');
                     filePreview.classList.remove('d-none');
+                    removeLogoInput.value = '0'; // If new file uploaded, don't remove existing
                 };
                 reader.readAsDataURL(file);
             } else {
                 alert('Veuillez sélectionner un fichier image valide.');
-                fileInput.value = '';
+                fileInput.value = ''; // Clear input if not an image
+                filePreview.classList.add('d-none'); // Hide preview
+                fileUploadArea.classList.remove('d-none'); // Show upload area
+                removeLogoInput.value = '0'; // No file selected, so not removed
             }
-        }
-    });
-
-    removeFileBtn.addEventListener('click', function() {
-        fileInput.value = '';
-        fileUploadArea.classList.remove('d-none');
-        filePreview.classList.add('d-none');
-    });
-
-    // Drag and drop for file upload
-    fileUploadArea.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '#667eea';
-        this.style.background = 'rgba(102, 126, 234, 0.1)';
-    });
-
-    fileUploadArea.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '';
-        this.style.background = '';
-    });
-
-    fileUploadArea.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '';
-        this.style.background = '';
-        
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            const file = files[0];
-            if (file.type.startsWith('image/')) {
-                fileInput.files = files;
-                const event = new Event('change', { bubbles: true });
-                fileInput.dispatchEvent(event);
+        } else {
+            // No file selected (e.g., user opened dialog then cancelled)
+            // If there was an existing logo, we want to keep it displayed
+            if (previewImage.dataset.originalSrc) { // Check if original src was set
+                previewImage.src = previewImage.dataset.originalSrc;
+                fileUploadArea.classList.add('d-none');
+                filePreview.classList.remove('d-none');
+                removeLogoInput.value = '0';
             } else {
-                alert('Veuillez déposer un fichier image valide.');
+                filePreview.classList.add('d-none');
+                fileUploadArea.classList.remove('d-none');
+                previewImage.src = '';
+                removeLogoInput.value = '0';
             }
         }
-    });
+    }
+
 
     // Character counter for description
     if (descriptionTextarea && charCount) {
@@ -1009,175 +1095,25 @@
         
         // Initialize counter
         charCount.textContent = descriptionTextarea.value.length;
+        // Trigger initial color check
+        const event = new Event('input');
+        descriptionTextarea.dispatchEvent(event);
     }
 
-    // Smooth focus transitions for inputs
-    document.querySelectorAll('.form-control-modern').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.parentElement.classList.add('input-focused');
-        });
-        
-        input.addEventListener('blur', function() {
-            this.parentElement.classList.remove('input-focused');
-            if (this.hasAttribute('required') && !this.value.trim()) {
-                this.style.borderColor = '#fbbf24';
-            } else {
-                this.style.borderColor = '';
-            }
-        });
-        
-        input.addEventListener('input', function() {
-            if (this.style.borderColor === 'rgb(229, 62, 62)') {
-                this.style.borderColor = '';
-            }
-        });
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && e.ctrlKey) {
-            if (currentStep < totalSteps) {
-                if (validateStep(currentStep)) {
-                    currentStep++;
-                    showStep(currentStep);
-                }
-            }
-        } else if (e.key === 'Escape') {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
+    // Store original logo path for re-display if user cancels file selection
+    document.addEventListener('DOMContentLoaded', () => {
+        const existingLogoPath = previewImage.getAttribute('src');
+        if (existingLogoPath) {
+            previewImage.dataset.originalSrc = existingLogoPath; // Store original path
         }
     });
 
-    // Add shake animation for validation errors
-    const style = document.createElement('style');
-    style.textContent = `
-        .shake {
-            animation: shake 0.5s ease-in-out;
-        }
-        
-        @keyframes shake {
-            0%, 20%, 40%, 60%, 80% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        }
-        
-        .input-focused .input-focus-ring {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .alert-success.alert-modern {
-            background: rgba(56, 161, 105, 0.05);
-            border-left-color: #38a169;
-        }
-        
-        .alert-success .alert-icon {
-            color: #38a169;
-        }
-        
-        /* Loading animation for submit */
-        .btn-loading {
-            position: relative;
-            color: transparent !important;
-        }
-        
-        .btn-loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid transparent;
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Enhanced hover effects */
-        .form-control-modern:hover {
-            border-color: rgba(102, 126, 234, 0.3);
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .file-upload-area:hover .upload-icon i {
-            transform: scale(1.1);
-            color: #5a67d8;
-        }
-        
-        /* Progress step hover effects */
-        .progress-step:hover .step-circle {
-            transform: scale(1.05);
-        }
-        
-        .progress-step:hover .step-label {
-            color: #667eea;
-        }
-        
-        /* Tooltip for steps */
-        .progress-step {
-            position: relative;
-        }
-        
-        .progress-step:hover::before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 5px 10px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            border-radius: 6px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 1000;
-            opacity: 0;
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Add tooltips to progress steps
-    progressSteps[0].setAttribute('data-tooltip', 'Logo et nom de l\'entreprise');
-    progressSteps[1].setAttribute('data-tooltip', 'Adresse et email de contact');
-    progressSteps[2].setAttribute('data-tooltip', 'Description de l\'activité');
-
-    // Form submission enhancement
-    document.getElementById('step-form').addEventListener('submit', function(e) {
-        if (currentStep === totalSteps) {
-            nextBtn.classList.add('btn-loading');
-            nextBtn.disabled = true;
-            
-            // Simulate loading (remove this in production)
-            setTimeout(() => {
-                // The form will actually submit, this is just for demo
-            }, 1000);
-        }
-    });
-
-    // Initialize the form
-    showStep(currentStep);
-
-    // Add entrance animation
-    setTimeout(() => {
+    // Initialisation du formulaire à la première étape au chargement de la page
+    document.addEventListener('DOMContentLoaded', () => {
+        showStep(currentStep);
+        // Ensure form card is visible with animation
         document.querySelector('.form-card').style.opacity = '1';
         document.querySelector('.form-card').style.transform = 'translateY(0)';
-    }, 100);
-
-    // Set initial card animation
-    document.querySelector('.form-card').style.opacity = '0';
-    document.querySelector('.form-card').style.transform = 'translateY(20px)';
-    document.querySelector('.form-card').style.transition = 'all 0.6s ease-out';
+    });
 </script>
 @endsection
