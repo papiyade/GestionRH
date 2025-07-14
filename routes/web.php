@@ -43,6 +43,12 @@ Route::get('/', function () {
 
     return view('welcome');
 });
+Route::get('/import-db', function () {
+    $sql = file_get_contents(base_path('projet-rh.sql'));
+    DB::unprepared($sql);
+    return 'Import terminé !';
+});
+
 
 Route::get('/test-mail', function () {
     Mail::raw('Ceci est un mail de test.', function ($message) {
