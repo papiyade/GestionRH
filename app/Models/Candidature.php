@@ -30,4 +30,9 @@ class Candidature extends Model
     {
         return $this->belongsTo(JobOffer::class);
     }
+
+     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

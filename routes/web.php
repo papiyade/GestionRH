@@ -3,13 +3,13 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RhController;
-use App\Http\Controllers\SuperadminController; 
+use App\Http\Controllers\SuperadminController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\TeamController;
-use Illuminate\Support\Facades\Route; 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\EmployeeDocumentController;
-use App\Http\Controllers\JobOfferController; 
+use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\ProjectController;
 
@@ -23,10 +23,10 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
    if (Auth::check()) {
-       
+
         $user = Auth::user();
-        
-     
+
+
         if ($user->role == 'super_admin') {
             return redirect('/admin/dashboard');
         } elseif ($user->role == 'admin') {
@@ -39,7 +39,7 @@ Route::get('/', function () {
             return redirect('/chef-projet/dashboard');
         }
     }
-    
+
 
     return view('welcome');
 });
@@ -76,9 +76,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/status', [SuperadminController::class, 'status'])->name('status');
 
 
-    
 
-    
+
+
 });
 
 Route::middleware(['auth', 'role:super_admin'])->group(function () {
@@ -102,7 +102,7 @@ Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('
     Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
     Route::get('/employes/create', [AdminController::class, 'formView'])->name('employe.create');
     Route::post('/employes/createe', [AdminController::class, 'createEmploye'])->name('create.employe');
-    
+
 });
 Route::middleware(['auth','role:rh'])->group(function(){
     Route::get('/rh/dashboard',[RhController::class,'index'])->name('rh_dashboard');
@@ -113,12 +113,17 @@ Route::middleware(['auth','role:rh'])->group(function(){
     Route::post('/teams/{team}/description', [TeamController::class, 'updateDescription'])->name('teams.updateDescription');
     Route::post('/teams/{team}/add-member/{user}', [TeamController::class, 'addMember'])->name('teams.addMember');
     Route::post('/rh/users/create', [RhController::class, 'createUsers'])->name('rh.createUsers');
+    Route::get('/employe/{id}/edit', [EmployeeDetailController::class, 'edit'])->name('employee_detail.edit');
+Route::put('/employe/{id}', [EmployeeDetailController::class, 'update'])->name('employee_detail.update');
+
     Route::get('/rh/users/create', [RhController::class, 'createUserForm'])->name('rh.users.create');
     Route::delete('/teams/{team}/members/{user}', [TeamController::class, 'removeMember'])->name('teams.members.remove');
     Route::get('/employe/{id}', [RhController::class, 'show'])->name('employe.show');
 Route::get('/users/{id}', [EmployeeDetailController::class, 'show'])->name('users.show');
 Route::post('/employee-details', [EmployeeDetailController::class, 'store'])->name('employee-details.store');
 Route::post('/employee/document/store', [EmployeeDocumentController::class, 'storeDocument'])->name('employee.document.store');
+Route::delete('/employee-document/{id}', [EmployeeDocumentController::class, 'destroy'])->name('employee.document.destroy');
+
 Route::get('/rh-dashboard/offres', [JobOfferController::class, 'index'])->name('offres.index');
 
 Route::post('/offres', [JobOfferController::class, 'store'])->name('offres.store');
@@ -148,7 +153,7 @@ Route::post('/rh/candidatures/{candidature}/rejeter', [CandidatureController::cl
 
 });
 
- 
+
 
 Route::middleware(['auth','role:chef_projet'])->group(function(){
 
@@ -158,7 +163,7 @@ Route::middleware(['auth','role:chef_projet'])->group(function(){
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::delete('/projects/{project}/update-members', [ProjectController::class, 'updateMembers'])->name('projects.updateMembers');
     Route::get('/chef-projet/dashboard', [ChefProjetcontroller::class, 'index'])->name('chef_projet.dashboard');
-    
+
 // Route pour ajouter un commentaire
 Route::post('/projects/{project}/comments', [ProjectController::class, 'storeComment'])->name('comments.store');
 // Route pour ajouter un fichier
@@ -179,11 +184,11 @@ Route::patch('/projects/{project}/members/{user}/toggle-lead', [ProjectControlle
 
 
 
-  
+
 
 });
 
-   
+
 
 
 require __DIR__.'/auth.php';

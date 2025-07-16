@@ -56,4 +56,33 @@ class EmployeeDetailController extends Controller
     // Retour avec message de succès
     return redirect()->back()->with('success_detail', 'Détail RH ajouté avec succès.');
 }
+
+public function edit($id)
+{
+    $user = User::with(['employeeDetail'])->findOrFail($id);
+
+    return view('rh.employe.employe_detail_edit', compact('user'));
+}
+
+
+public function update(Request $request, $id)
+{
+    $employeeDetail = EmployeeDetail::where('user_id', $id)->firstOrFail();
+
+    $validated = $request->validate([
+        'matricule' => 'required|string|max:255|unique:employee_details,matricule,' . $employeeDetail->id,
+        'salaire' => 'nullable|numeric|min:0',
+        'type_contrat' => 'required|string|max:255',
+        'description_poste' => 'nullable|string',
+        'date_naissance' => 'required|date',
+        'date_debut' => 'required|date',
+        'date_fin' => 'nullable|date|after_or_equal:date_debut',
+        'adresse' => 'nullable|string|max:255',
+        'genre' => 'nullable|string|max:50',
+    ]);
+
+    $employeeDetail->update($validated);
+ return redirect()->back()->with('success_detail', 'Détail RH mis à jour avec succès.');
+}
+
 }

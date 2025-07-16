@@ -64,8 +64,8 @@
         <h2 class="text-2xl font-bold ml-4">Activités récentes</h2>
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <ul>
-                @if(Auth::user()->activities && Auth::user()->activities->isNotEmpty())
-                    @foreach(Auth::user()->activities as $activity)
+                @if (Auth::user()->activities && Auth::user()->activities->isNotEmpty())
+                    @foreach (Auth::user()->activities as $activity)
                         <li class="border-b border-gray-200 p-4 hover:bg-gray-100 transition duration-300">
                             <div class="flex items-center">
                                 <div class="mr-4">
@@ -96,8 +96,8 @@
         <h2 class="text-2xl font-bold ml-4">Notifications</h2>
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <ul>
-                @if(Auth::user()->notifications && Auth::user()->notifications->isNotEmpty())
-                    @foreach(Auth::user()->notifications as $notification)
+                @if (Auth::user()->notifications && Auth::user()->notifications->isNotEmpty())
+                    @foreach (Auth::user()->notifications as $notification)
                         <li class="border-b border-gray-200 p-4 hover:bg-gray-100 transition duration-300">
                             <div class="flex items-center">
                                 <div class="mr-4">
@@ -138,7 +138,9 @@
                                 <div class="row g-3 mb-0 align-items-center">
                                     <div class="col-sm-auto">
                                         <div class="input-group">
-                                            <input type="date" value="{{ now()->format('Y-m-d') }}" class="form-control border-0 minimal-border dash-filter-picker shadow" data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y">
+                                            <input type="date" value="{{ now()->format('Y-m-d') }}"
+                                                class="form-control border-0 minimal-border dash-filter-picker shadow"
+                                                data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y">
                                             <div class="input-group-text bg-primary border-primary text-white">
                                                 <i class="ri-calendar-2-line"></i>
                                             </div>
@@ -146,11 +148,14 @@
                                     </div>
                                     <!--end col-->
                                     <div class="col-auto">
-                                        <button type="button" class="btn btn-soft-success material-shadow-none"><i class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
+                                        <button type="button" class="btn btn-soft-success material-shadow-none"><i
+                                                class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
                                     </div>
                                     <!--end col-->
                                     <div class="col-auto">
-                                        <button type="button" class="btn btn-soft-info btn-icon waves-effect material-shadow-none waves-light layout-rightside-btn"><i class="ri-pulse-line"></i></button>
+                                        <button type="button"
+                                            class="btn btn-soft-info btn-icon waves-effect material-shadow-none waves-light layout-rightside-btn"><i
+                                                class="ri-pulse-line"></i></button>
                                     </div>
                                     <!--end col-->
                                 </div>
@@ -177,8 +182,11 @@
                                         <div class="flex-grow-1 overflow-hidden ms-3">
                                             <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Projets</p>
                                             <div class="d-flex align-items-center mb-3">
-                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value" data-target="{{ $projectCount }}">0</span></h4>
-                                                <span class="badge bg-danger-subtle text-danger fs-12"><i class="ri-arrow-down-s-line fs-13 align-middle me-1"></i>5.02 %</span>
+                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value"
+                                                        data-target="{{ $projectCount }}">0</span></h4>
+                                                <span class="badge bg-danger-subtle text-danger fs-12"><i
+                                                        class="ri-arrow-down-s-line fs-13 align-middle me-1"></i>5.02
+                                                    %</span>
                                             </div>
                                             <p class="text-muted text-truncate mb-0">Nombre total des projets</p>
                                         </div>
@@ -199,8 +207,10 @@
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-uppercase fw-medium text-muted mb-3">Equipes</p>
                                             <div class="d-flex align-items-center mb-3">
-                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value" data-target="{{ $teamCount }}">0</span></h4>
-                                                <span class="badge bg-success-subtle text-success fs-12"><i class="ri-arrow-up-s-line fs-13 align-middle me-1"></i>3.58 %</span>
+                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value"
+                                                        data-target="{{ $teamCount }}">0</span></h4>
+                                                <span class="badge bg-success-subtle text-success fs-12"><i
+                                                        class="ri-arrow-up-s-line fs-13 align-middle me-1"></i>3.58 %</span>
                                             </div>
                                             <p class="text-muted mb-0">Nombre total des équipes</p>
                                         </div>
@@ -219,10 +229,14 @@
                                             </span>
                                         </div>
                                         <div class="flex-grow-1 overflow-hidden ms-3">
-                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Utilisateurs</p>
+                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Utilisateurs
+                                            </p>
                                             <div class="d-flex align-items-center mb-3">
-                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value" data-target="{{ $userCount }}">0</span></h4>
-                                                <span class="badge bg-danger-subtle text-danger fs-12"><i class="ri-arrow-down-s-line fs-13 align-middle me-1"></i>10.35 %</span>
+                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value"
+                                                        data-target="{{ $userCount }}">0</span></h4>
+                                                <span class="badge bg-danger-subtle text-danger fs-12"><i
+                                                        class="ri-arrow-down-s-line fs-13 align-middle me-1"></i>10.35
+                                                    %</span>
                                             </div>
                                             <p class="text-muted text-truncate mb-0">Nombre total d'utilisateurs</p>
                                         </div>
@@ -240,7 +254,8 @@
                         <div class="card-header d-flex align-items-center">
                             <h4 class="card-title flex-grow-1 mb-0">Overview des projets</h4>
                             <div class="flex-shrink-0">
-                                <a href="javascript:void(0);" class="btn btn-soft-info btn-sm material-shadow-none">Exporter</a>
+                                <a href="javascript:void(0);"
+                                    class="btn btn-soft-info btn-sm material-shadow-none">Exporter</a>
                             </div>
                         </div><!-- end cardheader -->
                         <div class="card-body">
@@ -259,63 +274,77 @@
 
                                     <tbody id="projectTableBody">
                                         @foreach ($projects as $project)
-                                        <tr class="project-row">
-                                            <td class="fw-medium">{{$project->title}}</td>
-                                            <td>
-                                                @if($project->lead)
-                                                    @if($project->lead->profile_photo_path)
-                                                        <img src="{{ asset('storage/' . $project->lead->profile_photo_path) }}"
-                                                             class="avatar-xxs rounded-circle me-1 material-shadow" alt="Lead"  data-bs-toggle="tooltip"  data-bs-original-title="{{$project->lead->name}}">
+                                            <tr class="project-row">
+                                                <td class="fw-medium">{{ $project->title }}</td>
+                                                <td>
+                                                    @if ($project->lead)
+                                                        @if ($project->lead->profile_photo_path)
+                                                            <img src="{{ asset('storage/' . $project->lead->profile_photo_path) }}"
+                                                                class="avatar-xxs rounded-circle me-1 material-shadow"
+                                                                alt="Lead" data-bs-toggle="tooltip"
+                                                                data-bs-original-title="{{ $project->lead->name }}">
+                                                        @else
+                                                            <div class="avatar-xs">
+                                                                <span
+                                                                    class="avatar-title rounded-circle bg-primary text-white font-size-16">
+                                                                    {{ strtoupper(substr($project->lead->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $project->lead->name)[1] ?? '', 0, 1)) }}
+                                                                </span>
+                                                            </div>
+                                                        @endif
                                                     @else
-                                                        <div class="avatar-xs">
-                                                            <span class="avatar-title rounded-circle bg-primary text-white font-size-16">
-                                                                {{ strtoupper(substr($project->lead->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $project->lead->name)[1] ?? '', 0, 1)) }}
-                                                            </span>
-                                                        </div>
+                                                        <span class="text-muted">Aucun lead</span>
                                                     @endif
-                                                @else
-                                                    <span class="text-muted">Aucun lead</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-1 text-muted fs-13">{{round($project->progress)}}%</div>
-                                                    <div class="progress progress-sm  flex-grow-1" style="width: 68%;">
-                                                        <div class="progress-bar bg-primary rounded" role="progressbar" style="width: {{$project->progress}}%" aria-valuenow="53" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group d-flex flex-nowrap">
-                                                    @foreach($project->members as $member)
-                                                        <div class="avatar-group-item position-relative">
-                                                            <a href="javascript:void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-original-title="{{ $member->name }}">
-                                                                @if ($member->profile_photo_path)
-                                                                    <img src="{{ asset('storage/' . $member->profile_photo_path) }}" alt="" class="rounded-circle avatar-xxs material-shadow border border-white">
-                                                                @else
-                                                                    <div class="avatar-xs bg-primary text-white rounded-circle d-flex align-items-center justify-content-center border border-white" style="width: 24px; height: 24px;">
-                                                                        <span class=" text-uppercase">
-                                                                            {{ strtoupper(substr($member->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $member->name)[1] ?? '', 0, 1)) }}
-                                                                        </span>
-                                                                    </div>
-                                                                @endif
-                                                            </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 me-1 text-muted fs-13">
+                                                            {{ round($project->progress) }}%</div>
+                                                        <div class="progress progress-sm  flex-grow-1"
+                                                            style="width: 68%;">
+                                                            <div class="progress-bar bg-primary rounded"
+                                                                role="progressbar"
+                                                                style="width: {{ $project->progress }}%"
+                                                                aria-valuenow="53" aria-valuemin="0" aria-valuemax="100">
+                                                            </div>
                                                         </div>
-                                                    @endforeach
-                                                </div>
-                                                
-                                            </td>
-                                            <td>
-                                                @if($project->status=='not_started')
-                                                <span class="badge bg-danger-subtle text-danger">Non débuté</span>
-                                                @elseif($project->status=='in_progress')
-                                                <span class="badge bg-warning-subtle text-warning">En cours</span>
-                                                @else
-                                                <span class="badge bg-success-subtle text-success">Terminé</span>
-                                                @endif
-                                            </td>
-                                            <td class="text-muted">{{$project->created_at->format('d, M Y')}}</td>
-                                        </tr>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="avatar-group d-flex flex-nowrap">
+                                                        @foreach ($project->members as $member)
+                                                            <div class="avatar-group-item position-relative">
+                                                                <a href="javascript:void(0);" class="d-inline-block"
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-original-title="{{ $member->name }}">
+                                                                    @if ($member->profile_photo_path)
+                                                                        <img src="{{ asset('storage/' . $member->profile_photo_path) }}"
+                                                                            alt=""
+                                                                            class="rounded-circle avatar-xxs material-shadow border border-white">
+                                                                    @else
+                                                                        <div class="avatar-xs bg-primary text-white rounded-circle d-flex align-items-center justify-content-center border border-white"
+                                                                            style="width: 24px; height: 24px;">
+                                                                            <span class=" text-uppercase">
+                                                                                {{ strtoupper(substr($member->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $member->name)[1] ?? '', 0, 1)) }}
+                                                                            </span>
+                                                                        </div>
+                                                                    @endif
+                                                                </a>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                </td>
+                                                <td>
+                                                    @if ($project->status == 'not_started')
+                                                        <span class="badge bg-danger-subtle text-danger">Non débuté</span>
+                                                    @elseif($project->status == 'in_progress')
+                                                        <span class="badge bg-warning-subtle text-warning">En cours</span>
+                                                    @else
+                                                        <span class="badge bg-success-subtle text-success">Terminé</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-muted">{{ $project->created_at->format('d, M Y') }}</td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
 
@@ -324,7 +353,8 @@
 
                             <div class="align-items-center mt-xl-3 mt-4 justify-content-between d-flex">
                                 <div class="flex-shrink-0">
-                                    <div class="text-muted">Affichage de <span id="currentRange">1-4</span> sur <span id="totalResults"></span> résultats</div>
+                                    <div class="text-muted">Affichage de <span id="currentRange">1-4</span> sur <span
+                                            id="totalResults"></span> résultats</div>
                                 </div>
                                 <ul class="pagination pagination-separated pagination-sm mb-0" id="pagination">
                                     <li class="page-item disabled" id="prevPage">
@@ -348,7 +378,8 @@
                             <h4 class="card-title mb-0 flex-grow-1 py-1">Overview des taches</h4>
                             <div class="flex-shrink-0">
                                 <div class="dropdown card-header-dropdown">
-                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
                                         <span class="text-muted">Tout <i class="mdi mdi-chevron-down ms-1"></i></span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
@@ -374,27 +405,31 @@
 
                                     <tbody>
                                         @forelse($projects as $project)
-                                            @foreach($project->tasks as $task)
+                                            @foreach ($project->tasks as $task)
                                                 <tr>
                                                     <td>{{ $task->title }}</td>
-                                                    <td>{{ $task->deadline ? \Carbon\Carbon::parse($task->deadline)->format('d, M Y') : 'Aucune' }}</td>
+                                                    <td>{{ $task->deadline ? \Carbon\Carbon::parse($task->deadline)->format('d, M Y') : 'Aucune' }}
+                                                    </td>
                                                     <td>
-                                                        @if($task->status == 'completed')
+                                                        @if ($task->status == 'completed')
                                                             <span class="badge bg-success">Complétée</span>
                                                         @elseif($task->status == 'in_progress')
-                                                            <span class="badge bg-warning-subtle text-warning">En cours</span>
+                                                            <span class="badge bg-warning-subtle text-warning">En
+                                                                cours</span>
                                                         @else
                                                             <span class="badge bg-secondary">Non débutée</span>
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        @if($task->user)
+                                                        @if ($task->user)
                                                             <div class="d-flex align-items-center">
-                                                                @if($task->user->profile_photo_path)
+                                                                @if ($task->user->profile_photo_path)
                                                                     <img src="{{ asset('storage/' . $task->user->profile_photo_path) }}"
-                                                                         class="avatar-xxs rounded-circle me-1 material-shadow" alt="Assigné à">
+                                                                        class="avatar-xxs rounded-circle me-1 material-shadow"
+                                                                        alt="Assigné à">
                                                                 @else
-                                                                    <span class="avatar-title rounded-circle bg-primary text-white">
+                                                                    <span
+                                                                        class="avatar-title rounded-circle bg-primary text-white">
                                                                         {{ strtoupper(substr($task->user->name, 0, 1)) }}
                                                                     </span>
                                                                 @endif
@@ -409,9 +444,11 @@
                                         @empty
                                             <tr>
                                                 <td colspan="4" class="text-center">
-                                                    <img src="{{ asset('assets/images/illustrator/task.svg') }}" alt="" class="img-fluid" style="max-width: 220px;">
+                                                    <img src="{{ asset('assets/images/illustrator/task.svg') }}"
+                                                        alt="" class="img-fluid" style="max-width: 220px;">
                                                     <h4 class="mt-4">Aucune tâche à afficher</h4>
-                                                    <p class="text-muted">Il n'y a pas de tâche à afficher pour le moment.</p>
+                                                    <p class="text-muted">Il n'y a pas de tâche à afficher pour le moment.
+                                                    </p>
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -431,7 +468,7 @@
     </div> <!-- end col -->
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const rowsPerPage = 4;
             let currentPage = 1;
 
@@ -476,4 +513,4 @@
     </script>
 
 
-    @endsection
+@endsection

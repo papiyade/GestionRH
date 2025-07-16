@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Entreprise;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountCreated;
-
+use Carbon\Carbon;
+use App\Models\JobOffer;
+use App\Models\Candidature;
 
 
 use Illuminate\Http\Request;
@@ -16,20 +18,65 @@ use Illuminate\Http\Request;
 class RhController extends Controller
 {
     //
- public function index()
-    {
-        $userId = Auth::id();
+    public function index()
+{
+    $userId = Auth::id();
+    $entrepriseId = Auth::user()->entreprise_id;
+    $entreprise = Entreprise::find($entrepriseId);
 
-       
-        $entreprise = Entreprise::where('id_user', $userId)->first();
-
-        if ($entreprise && !$entreprise->is_actif) {
-
-            return redirect()->route('status');
-        }
-
-        return view('rh.dashboard');
+    if ($entreprise && !$entreprise->is_actif) {
+        return redirect()->route('status');
     }
+
+    $totalEmployes = User::where('entreprise_id', $entrepriseId)->count();
+
+    $offresEmploiActives = JobOffer::where('statut', 'En cours')
+        ->where('entreprise_id', $entrepriseId)
+        ->count();
+
+    $candidaturesEnAttente = Candidature::where('status_demande', 'pending')
+        ->whereHas('jobOffer', fn($q) => $q->where('entreprise_id', $entrepriseId))
+        ->count();
+
+    $candidaturesCeMois = Candidature::whereHas('jobOffer', fn($q) => $q->where('entreprise_id', $entrepriseId))
+        ->whereMonth('created_at', now()->month)
+        ->whereYear('created_at', now()->year)
+        ->count();
+
+    $totalEquipes = Team::where('entreprise_id', $entrepriseId)->count();
+
+    $employesRecents = User::where('entreprise_id', $entrepriseId)
+        ->orderBy('created_at', 'desc')
+        ->limit(5)
+        ->get();
+
+    $candidaturesRecentes = Candidature::whereHas('jobOffer', fn($q) => $q->where('entreprise_id', $entrepriseId))
+        ->orderBy('created_at', 'desc')
+        ->limit(5)
+        ->with(['jobOffer', 'user'])
+        ->get();
+
+    $candidaturesApprouvees = Candidature::where('status_demande', 'approved')
+        ->whereHas('jobOffer', fn($q) => $q->where('entreprise_id', $entrepriseId))
+        ->count();
+
+    $candidaturesRejetees = Candidature::where('status_demande', 'rejected')
+        ->whereHas('jobOffer', fn($q) => $q->where('entreprise_id', $entrepriseId))
+        ->count();
+
+    return view('rh.dashboard', compact(
+        'totalEmployes',
+        'offresEmploiActives',
+        'candidaturesEnAttente',
+        'totalEquipes',
+        'employesRecents',
+        'candidaturesRecentes',
+        'candidaturesApprouvees',
+        'candidaturesRejetees',
+        'entreprise',
+        'candidaturesCeMois'
+    ));
+}
 
     public function employeView(){
     // Récupérer les utilisateurs de la même entreprise que l'utilisateur connecté

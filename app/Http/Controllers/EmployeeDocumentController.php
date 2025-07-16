@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\EmployeeDocument;
 
@@ -30,5 +30,22 @@ class EmployeeDocumentController extends Controller
     ]);
 
     return redirect()->back()->with('success_document', 'Document employé ajouté avec succès.');
+}
+
+ function destroy($id)
+{
+    // Récupérer le document
+    $document = EmployeeDocument::findOrFail($id);
+
+    // Supprimer le fichier physique du disque
+    if (Storage::disk('public')->exists($document->file_path)) {
+        Storage::disk('public')->delete($document->file_path);
+    }
+
+    // Supprimer l'enregistrement de la base de données
+    $document->delete();
+
+    // Retour avec message de succès
+    return redirect()->back()->with('success_document', 'Document supprimé avec succès.');
 }
 }

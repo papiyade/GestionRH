@@ -35,6 +35,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papS3oyVnEwZzdh2s0jWUxPMfgFtx1sfsGPFSKp9gLg4zY1A7yIEVtO2s0VX3uYJ9uKz9RlCk8/6AGcf+5c5mA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
     body {
         background-color: #f8f9fa; /* Light background for the page */
@@ -136,6 +138,9 @@
         margin-bottom: 0.5rem;
     }
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papS3oyVnEwZzdh2s0jWUxPMfgFtx1sfsGPFSKp9gLg4zY1A7yIEVtO2s0VX3uYJ9uKz9RlCk8/6AGcf+5c5mA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
 </head>
 
@@ -507,7 +512,7 @@
                         <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
                         <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Aide</span></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Paramètres</span></a>
+                        <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end"></span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Paramètres</span></a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item">
@@ -663,10 +668,11 @@
                                 </ul>
                             </div>
                         </li>
+                        {{-- 
 
                         <li class="menu-title"><i class="ri-more-fill"></i><span data-key="t-components">Divers & Autres</span></li>
 
-                        {{-- Boites à idées --}}
+                     boite a ideee
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
                                 <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Divers/Autres</span>
@@ -679,6 +685,7 @@
                                 </ul>
                             </div>
                         </li>
+                         --}}
 
                     </ul>
                 </div>
@@ -745,15 +752,15 @@
             </div>
         </div>
     </div>
-
+<!--
     <div class="customizer-setting d-none d-md-block">
         <div class="btn-info rounded-pill shadow-lg btn btn-icon btn-lg p-2" data-bs-toggle="offcanvas" data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
             <i class='mdi mdi-spin mdi-cog-outline fs-22'></i>
         </div>
-    </div>
+    </div> -->
 
     <!-- Theme Settings -->
-    <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
+   {{--  <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
             <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
 
@@ -1687,7 +1694,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>  --}}
 
     <!-- JAVASCRIPT -->
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

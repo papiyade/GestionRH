@@ -20,6 +20,7 @@ class ChefProjetcontroller extends Controller
         $teamCount = Team::where('entreprise_id', $entrepriseId)->count();   
         $userCount = User::where('entreprise_id' , $entrepriseId)->count();
     
+        
         // Charger toutes les relations nécessaires en une seule requête
 $projects = Project::with(['users', 'tasks'])
     ->where('entreprise_id', $entrepriseId)
