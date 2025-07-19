@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+       Schema::table('users', function (Blueprint $table) {
+        $table->unsignedBigInteger('entreprise_id')->nullable()->after('id');
+
+        $table->foreign('entreprise_id')
+              ->references('id')
+              ->on('entreprises')
+              ->onDelete('set null');
+    });
+
     }
 
     /**
