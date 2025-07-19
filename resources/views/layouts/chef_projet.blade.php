@@ -559,12 +559,23 @@
                         {{-- Boites à idées --}}
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
-                                <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Divers/Autres</span>
-                            </a>
+    <i class="ri-layout-4-fill"></i> 
+    <span data-key="t-projects">Divers/Autres</span>
+
+    {{-- Badge ici --}}
+    <span id="chat-badge-main" class="badge bg-danger ms-2" style="display:none;"></span>
+</a>
+
                             <div class="collapse menu-dropdown" id="sidebarProjects">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link" data-key="t-alerts">Boite à idées</a>
+                                       <a href="{{ route('chatify') }}" class="nav-link" data-key="t-alerts">
+    Messagerie
+    
+    {{-- Badge ici aussi --}}
+    <span id="chat-badge-sub" class="badge bg-danger ms-2" style="display:none;"></span>
+</a>
+
                                     </li>
                                 </ul>
                             </div>
@@ -1602,6 +1613,37 @@
 
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
+
+  <script>
+    function updateUnreadMessages() {
+        fetch('{{ route('messages.unread.count') }}')
+            .then(response => response.json())
+            .then(data => {
+                const mainBadge = document.getElementById('chat-badge-main');
+                const subBadge = document.getElementById('chat-badge-sub');
+
+                if (data.count > 0) {
+                    mainBadge.textContent = data.count;
+                    subBadge.textContent = data.count;
+
+                    mainBadge.style.display = 'inline-block';
+                    subBadge.style.display = 'inline-block';
+                } else {
+                    mainBadge.style.display = 'none';
+                    subBadge.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Erreur fetch:', error));
+    }
+
+    // Appel initial
+    updateUnreadMessages();
+
+    // Mettre à jour toutes les 10 secondes
+    setInterval(updateUnreadMessages, 10000);
+</script>
+
+
 </body>
 
 

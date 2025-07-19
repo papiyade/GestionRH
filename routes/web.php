@@ -12,7 +12,7 @@ use App\Http\Controllers\EmployeeDocumentController;
 use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\ProjectController;
-
+use App\Http\Controllers\CustomMessagesController;
 use App\Http\Controllers\ChefProjetcontroller;
 
 use Illuminate\Support\Facades\Mail;
@@ -152,6 +152,8 @@ Route::post('/rh/candidatures/{candidature}/accepter', [CandidatureController::c
 Route::post('/rh/candidatures/{candidature}/rejeter', [CandidatureController::class, 'reject'])->name('rh.candidatures.reject');
 
 });
+
+Route::get('/unread-messages-count', [CustomMessagesController::class, 'unreadCount'])->name('messages.unread.count');
 
 
 
