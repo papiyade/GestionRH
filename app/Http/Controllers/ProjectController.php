@@ -52,77 +52,83 @@ public function store(Request $request)
         return redirect()->route('projects.index')->with('success', 'Projet créé avec succès.');
     }
 
-   public function show(Project $project)
-    {
-       
-        $entrepriseId = Auth::user()->entreprise_id;
-        $members = User::where('entreprise_id', $entrepriseId)->get();
-        $Teammembers = $project->members;
-        $comments = $project->comments;
-        $files = $project->files;
-        $tasks = $project->tasks; // Assurez-vous que la relation tasks() est définie dans Project
+ public function show(Project $project)
+{
+    $entrepriseId = Auth::user()->entreprise_id;
+    $members = User::where('entreprise_id', $entrepriseId)->get();
+    $Teammembers = $project->members;
+    $comments = $project->comments;
+    $files = $project->files;
+    $tasks = $project->tasks;
 
-        $totalTasks = $tasks->count();
-        $completedTasks = $tasks->where('status', 'completed')->count();
-        $progress = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
+    $totalTasks = $tasks->count();
 
-        // Retourner la vue avec toutes les données
-        return view('projects.show', compact('project', 'Teammembers', 'comments', 'files', 'members', 'tasks', 'progress', 'totalTasks'));
-    }
+   
+ $completedTasks = $tasks->where('status', 'completed')->count();
+
+$progress = $totalTasks > 0 
+    ? ($completedTasks / $totalTasks) * 100 
+    : 0;
+
+
+    return view('projects.show', compact('project', 'Teammembers', 'comments', 'files', 'members', 'tasks', 'progress', 'totalTasks'));
+}
+
 
 
 public function storeComment(Request $request, Project $project)
 {
-    // Validation
+    // Validation du champ content
     $request->validate([
         'content' => 'required|string|max:1000',
     ]);
 
-    // Créer et associer le commentaire au projet
-    $comment = new Comment();
-    $comment->content = $request->content;
-    $comment->user_id = Auth::id();  // Associez l'utilisateur connecté
-    $comment->project_id = $project->id;  // Associez le projet
+    // Création du commentaire via la relation avec le projet
+    $project->comments()->create([
+        'content' => $request->content,
+        'user_id' => Auth::id(),
+        'task_id' => $request->input('task_id'), // Peut être null
+    ]);
 
-    // Vérifiez si une tâche est liée au commentaire
-    if ($request->has('task_id')) {
-        $comment->task_id = $request->task_id;
-    }
-
-    // Sauvegarder le commentaire
-    $project->comments()->save($comment);
-
-    return redirect()->route('projects.show', $project)->with('success', 'Commentaire ajouté avec succès!');
+    return redirect()
+        ->route('projects.show', $project)
+        ->with('success', 'Commentaire ajouté avec succès!');
 }
 
-   public function storeTask(Request $request, Project $project)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'priority' => 'required|in:low,medium,high',
-            'deadline' => 'nullable|date',
-            'user_id' => 'nullable|exists:users,id', // Optionnel si la tâche peut être non assignée
-        ]);
-    
-        // Vérifier si un utilisateur est assigné et s'assurer qu'il est membre du projet
-        if ($request->filled('user_id')) {
-            $user = User::find($request->user_id);
-            if (!$project->members->contains($user)) {
-                return redirect()->back()->withErrors('L\'utilisateur sélectionné n\'est pas membre du projet.');
-            }
-        }
-    
-        $task = $project->tasks()->create($validated);
-    
-        // Assigner l'utilisateur si présent
-        if ($request->filled('user_id')) {
-            $task->users()->attach($request->user_id);
-        }
-    
-        return redirect()->route('projects.show', $project)->with('success', 'Tâche ajoutée avec succès.');
+ public function storeTask(Request $request, Project $project)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'priority' => 'required|in:low,medium,high',
+        'status' => 'nullable|in:not_started,in_progress,completed',
+        'deadline' => 'nullable|date',
+        'user_id' => 'nullable|exists:users,id',
+    ]);
+
+    // Si status non défini (null ou vide), on met 'not_started'
+    if (empty($validated['status'])) {
+        $validated['status'] = 'not_started';
     }
-    
+
+    // Vérifier si un utilisateur est assigné et s'assurer qu'il est membre du projet
+    if ($request->filled('user_id')) {
+        $user = User::find($request->user_id);
+        if (!$project->members->contains($user)) {
+            return redirect()->back()->withErrors('L\'utilisateur sélectionné n\'est pas membre du projet.');
+        }
+    }
+
+    $task = $project->tasks()->create($validated);
+
+    // Assigner l'utilisateur si présent
+    if ($request->filled('user_id')) {
+        $task->users()->attach($request->user_id);
+    }
+
+    return redirect()->back()->with('success', 'Tâche ajoutée avec succès.');
+}
+
 
 public function updateTask(Request $request, Task $task)
 {
@@ -170,7 +176,7 @@ public function myTasks()
 public function showTask(Task $task)
 {
     $project = $task->project;
-    $comments = $task->comments;
+    $comments = $task->comments()->with('user')->latest()->get(); // avec auteur
     $users = $task->users;
 
     return view('tasks.show', compact('task', 'project', 'comments', 'users'));

@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\Comment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class EmployeController extends Controller
+{
+    public function mesProjets(Request $request)
+    {
+        $user = Auth::user();
+
+        // Start with all projects the user is associated with
+        $projets = $user->projects();
+
+        // Apply search filter if 'search' parameter is present
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $projets->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                      ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply status filter if 'status_filter' parameter is present
+        if ($request->filled('status_filter')) {
+            $projets->where('status', $request->input('status_filter'));
+        }
+
+        // Get the filtered projects
+        // Eager load tasks, comments, files, entreprise, and team to avoid N+1 query issues
+        $projets = $projets->with(['tasks.users', 'comments', 'files', 'entreprise', 'team', 'users'])->get();
+
+        return view('employe.projects.index', compact('projets'));
+    }
+
+    public function voirProjet(Project $project)
+    {
+        $user = Auth::user();
+
+        if (!$project->members->contains($user->id)) {
+            return redirect()->route('employe.projects.index')->with('error', 'Vous n\'êtes pas autorisé à voir ce projet.');
+        }
+
+        $isLead = $project->isLead($user);
+
+        if ($isLead) {
+            $tasks = $project->tasks()->with('users', 'comments.user')->get();
+            $projectMembers = $project->members()->get();
+            return view('employe.projects.show_lead_kanban', compact('project', 'tasks', 'isLead', 'projectMembers'));
+        } else {
+            $tasks = $project->tasks()
+                             ->whereHas('users', fn ($q) => $q->where('user_id', $user->id))
+                             ->with('users', 'comments.user')
+                             ->get();
+            return view('employe.projects.show_employee_tasks', compact('project', 'tasks', 'isLead'));
+        }
+    }
+    public function changerStatut(Request $request, Task $task)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'status' => 'required|in:not_started,in_progress,completed',
+        ]);
+
+        // Vérifie que la tâche lui appartient
+        if (!$task->users->contains($user)) {
+            abort(403);
+        }
+
+        $task->update(['status' => $request->status]);
+
+        return back()->with('success', 'Statut mis à jour.');
+    }
+
+    public function ajouterCommentaire(Request $request, Task $task)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        // Vérifie que la tâche est bien assignée à l'utilisateur
+        if (!$task->users->contains($user)) {
+            abort(403);
+        }
+
+        Comment::create([
+            'content' => $request->content,
+            'user_id' => $user->id,
+            'task_id' => $task->id,
+            'project_id' => $task->project_id,
+        ]);
+
+        return back()->with('success', 'Commentaire ajouté.');
+    }
+}
+
+
+

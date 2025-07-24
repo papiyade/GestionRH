@@ -55,7 +55,16 @@ public function lead()
                 ->withPivot('is_lead');
 }
 
-        
+ public function isLead(User $user = null)
+    {
+        $user = $user ?? auth()->user();
+        if (!$user) {
+            return false;
+        }
+        return $this->members()->where('user_id', $user->id)->wherePivot('is_lead', true)->exists();
+    }
+
+  
 
         
     public function tasks()

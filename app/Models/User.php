@@ -60,6 +60,10 @@ public function employeeDocuments()
         return $this->belongsToMany(Task::class);
     }
 
+public function projects()
+{
+    return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id');
+}
 
 
 

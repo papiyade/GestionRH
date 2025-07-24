@@ -14,6 +14,11 @@ use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\CustomMessagesController;
 use App\Http\Controllers\ChefProjetcontroller;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TacheController;
+use App\Http\Controllers\EmployeController;
+
+
 
 use Illuminate\Support\Facades\Mail;
 
@@ -176,18 +181,39 @@ Route::post('/tasks/{task}/assign', [ProjectController::class, 'assignTask'])->n
 Route::delete('/tasks/{task}', [ProjectController::class, 'deleteTask'])->name('tasks.delete');
 Route::get('/my-tasks', [ProjectController::class, 'myTasks'])->name('tasks.myTasks');
 Route::delete('/files/{file}', [ProjectController::class, 'destroyFile'])->name('files.delete');
-
+Route::patch('/projects/{project}/members/{user}/toggle-lead', [ProjectController::class, 'toggleLead'])->name('projects.toggleLead');
 Route::get('/tasks/{task}', [ProjectController::class, 'showTask'])->name('tasks.show');
 Route::post('/tasks/{task}/comments', [ProjectController::class, 'storeTaskComment'])->name('tasks.comments.store');
 Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.delete');
 Route::post('/projects/{project}/members/{user}', [ProjectController::class, 'addMember'])->name('projects.addMember');
 Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember'])->name('projects.removeMember');
-Route::patch('/projects/{project}/members/{user}/toggle-lead', [ProjectController::class, 'toggleLead'])->name('projects.toggleLead');
 
 
 
 
+Route::prefix('projets/{projet}')->group(function () {
+    Route::get('/taches', [TacheController::class, 'showTachesParProjet'])->name('projets.taches');
+    Route::post('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
+    Route::post('/taches/{tache}/commentaire', [TacheController::class, 'ajouterCommentaire'])->name('projets.taches.ajouterCommentaire');
+Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorite');
 
+});
+
+
+
+
+});
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mes-projets', [App\Http\Controllers\EmployeController::class, 'mesProjets'])->name('employe.projects');
+    Route::get('/mes-projets/{project}', [App\Http\Controllers\EmployeController::class, 'voirProjet'])->name('employe.projects.show');
+    Route::patch('/mes-projets/taches/{task}/statut', [App\Http\Controllers\EmployeController::class, 'changerStatut'])->name('employe.tasks.changerStatut');
+    Route::post('/mes-projets/taches/{task}/commentaire', [App\Http\Controllers\EmployeController::class, 'ajouterCommentaire'])->name('employe.tasks.commenter');
+    
+});
+Route::middleware('auth')->group(function () {
+    Route::patch('/projets/{project}/taches/{tache}/changer-priorite', [EmployeController::class, 'changerPrioriteTache'])->name('projets.taches.changerPriorite');
+    Route::post('/projets/{project}/taches', [EmployeController::class, 'storeTask'])->name('tasks.store');
+    
 });
 
 
