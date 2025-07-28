@@ -168,7 +168,7 @@
                                     <!-- Actions de modification -->
                                     <div class="row g-2 mb-3">
                                         <div class="col-6">
-                                            <form action="{{ route('projets.taches.changerPriorite', ['projet' => $projet, 'tache' => $tache]) }}" method="POST">
+                                            <form action="{{ route('projets.taches.changerPriorite', ['project' => $projet, 'tache' => $tache]) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
                                                 <select name="priority" class="form-select form-select-sm" onchange="this.form.submit()" title="Modifier priorité">

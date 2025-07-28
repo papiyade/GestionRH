@@ -615,7 +615,29 @@
                                 <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Tableau de Bord</span>
                             </a>
                         </li> <!-- end Dashboard Menu -->
+                         <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
+    <i class="ri-layout-4-fill"></i> 
+    <span data-key="t-projects">Divers/Autres</span>
 
+    {{-- Badge ici --}}
+    <span id="chat-badge-main" class="badge bg-danger ms-2" style="display:none;"></span>
+</a>
+
+                            <div class="collapse menu-dropdown" id="sidebarProjects">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                       <a href="{{ route('chatify') }}" class="nav-link" data-key="t-alerts">
+    Messagerie
+    
+    {{-- Badge ici aussi --}}
+    <span id="chat-badge-sub" class="badge bg-danger ms-2" style="display:none;"></span>
+</a>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="menu-title"><span data-key="t-menu">système</span></li>
 
                         <li class="nav-item">
@@ -652,22 +674,38 @@
                             </div>
                         </li>
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Candidature</span></li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
-                                <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Candidature</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarProjects">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('offres.index') }}" class="nav-link" data-key="t-alerts">Offres Publiées</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('candidatures.index') }}" class="nav-link" data-key="t-alerts">Suivi des Candidatures</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                       <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Candidature</span></li>
+<li class="nav-item">
+    <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
+        <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Candidature</span>
+    </a>
+    <div class="collapse menu-dropdown" id="sidebarProjects">
+        <ul class="nav nav-sm flex-column">
+            <li class="nav-item">
+                <a href="{{ route('offres.index') }}" class="nav-link" data-key="t-alerts">Offres Publiées</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('candidatures.index') }}" class="nav-link" data-key="t-alerts">Suivi des Candidatures</a>
+            </li>
+
+         
+
+        </ul>
+    </div>
+</li>
+
+<script>
+    function copyPublicOfferLink() {
+        const input = document.getElementById("publicLinkInput");
+        input.classList.remove("d-none");
+        input.select();
+        input.setSelectionRange(0, 99999); // Pour mobile
+        document.execCommand("copy");
+        input.classList.add("d-none");
+        alert("Lien copié dans le presse-papiers !");
+    }
+</script>
+
                         {{-- 
 
                         <li class="menu-title"><i class="ri-more-fill"></i><span data-key="t-components">Divers & Autres</span></li>
@@ -1719,6 +1757,37 @@
 
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
+
+    
+  <script>
+    function updateUnreadMessages() {
+        fetch('{{ route('messages.unread.count') }}')
+            .then(response => response.json())
+            .then(data => {
+                const mainBadge = document.getElementById('chat-badge-main');
+                const subBadge = document.getElementById('chat-badge-sub');
+
+                if (data.count > 0) {
+                    mainBadge.textContent = data.count;
+                    subBadge.textContent = data.count;
+
+                    mainBadge.style.display = 'inline-block';
+                    subBadge.style.display = 'inline-block';
+                } else {
+                    mainBadge.style.display = 'none';
+                    subBadge.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Erreur fetch:', error));
+    }
+
+    // Appel initial
+    updateUnreadMessages();
+
+    // Mettre à jour toutes les 10 secondes
+    setInterval(updateUnreadMessages, 10000);
+</script>
+
 </body>
 
 

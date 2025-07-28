@@ -17,6 +17,8 @@ use App\Http\Controllers\ChefProjetcontroller;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TacheController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\PublicJobOfferController;
+
 
 
 
@@ -140,13 +142,9 @@ Route::patch('/offres/{offre}/update-status', [JobOfferController::class, 'updat
 
 Route::delete('/offres/{offre}', [JobOfferController::class, 'destroy'])->name('offres.destroy');
 
-Route::get('/rh/candidature/candidat/list', [JobOfferController::class, 'list_offer'])->name('offres_candidat.index');
 
-Route::get('/job-offers/{id}/details', [JobOfferController::class, 'showDetails']);
 
-Route::get('/rh/candidature/candidat/{id}/depot', [JobOfferController::class, 'depotform'])->name('offres.depot');
 
-Route::post('/candidature/{jobOffer}/store', [CandidatureController::class, 'store'])->name('candidatures.store');
 
 Route::get('/rh/candidature/candidat/list-depot', [CandidatureController::class, 'index'])->name('candidatures.index');
 
@@ -195,7 +193,7 @@ Route::prefix('projets/{projet}')->group(function () {
     Route::get('/taches', [TacheController::class, 'showTachesParProjet'])->name('projets.taches');
     Route::post('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
     Route::post('/taches/{tache}/commentaire', [TacheController::class, 'ajouterCommentaire'])->name('projets.taches.ajouterCommentaire');
-Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorite');
+Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorites');
 
 });
 
@@ -216,7 +214,25 @@ Route::middleware('auth')->group(function () {
     
 });
 
+use App\Http\Controllers\MeetingController;
 
+Route::prefix('projets/{project}')->group(function () {
+    Route::get('/reunions', [MeetingController::class, 'index'])->name('meetings.index');
+    Route::get('/reunions/create', [MeetingController::class, 'create'])->name('meetings.create');
+});
+
+Route::post('/reunions', [MeetingController::class, 'store'])->name('meetings.store');
+Route::get('/reunions/{id}', [MeetingController::class, 'show'])->name('meetings.show');
+
+
+Route::get('/offres/{entreprise}', [PublicJobOfferController::class, 'listByEntreprise'])
+    ->name('public.offres.list');
+
+Route::get('/rh/candidature/candidat/list/{entreprise_id}', [JobOfferController::class, 'list_offer'])->name('offres_candidat.index');
+Route::get('/rh/candidature/candidat/{id}/depot', [JobOfferController::class, 'depotform'])->name('offres.depot');
+
+Route::post('/candidature/{jobOffer}/store', [CandidatureController::class, 'store'])->name('candidatures.store');
+Route::get('/job-offers/{id}/details', [JobOfferController::class, 'showDetails']);
 
 
 require __DIR__.'/auth.php';

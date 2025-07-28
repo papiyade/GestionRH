@@ -64,7 +64,11 @@ public function lead()
         return $this->members()->where('user_id', $user->id)->wherePivot('is_lead', true)->exists();
     }
 
-  
+  public function meetings()
+{
+    return $this->hasMany(Meeting::class);
+}
+    
 
         
     public function tasks()

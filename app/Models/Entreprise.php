@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
 
 class Entreprise extends Model
 {
@@ -15,6 +17,7 @@ class Entreprise extends Model
         'email',
         'description',
         'is_actif',
+        'slug',
         
     ];
 
@@ -39,6 +42,28 @@ public function projects()
 {
     return $this->hasMany(Project::class);
 }
+
+protected static function booted()
+{
+    static::creating(function ($entreprise) {
+        if (empty($entreprise->public_token)) {
+            $entreprise->public_token = Str::random(16);
+        }
+    });
+}
+
+    // Permet le Route Model Binding par le slug au lieu de l'ID
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+      public function jobOffers()
+    {
+        return $this->hasMany(JobOffer::class);
+    }
+
+    
 
 
 

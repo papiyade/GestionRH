@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Response;
+use App\Models\Entreprise;
 
 
 class JobOfferController extends Controller
@@ -106,7 +107,7 @@ public function update(Request $request, JobOffer $offre)
             return response()->json(['success' => true, 'message' => 'Offre mise à jour avec succès !']);
         }
 
-        return redirect()->route('offres.index')->with('success', 'Offre d\'emploi mise à jour avec succès !');
+return redirect()->back()->with('success', 'Offre d\'emploi mise à jour avec succès !');
     }
 
     /**
@@ -140,6 +141,55 @@ public function update(Request $request, JobOffer $offre)
     }
 
 
+        private function addDynamicOfferProperties(JobOffer $offre): void
+    {
+        $dateLimite = Carbon::parse($offre->date_limite)->startOfDay();
+        $aujourdHui = Carbon::now()->startOfDay();
+        $diff = $aujourdHui->diffInDays($dateLimite, false);
+        $joursRestants = max(0, $diff);
+
+        $offre->joursRestants = $joursRestants;
+
+        // Déterminer la classe d'urgence
+        if ($joursRestants <= 0) { // Si la date est passée ou aujourd'hui
+            $offre->urgenceClass = 'text-muted'; // Expiré
+        } elseif ($joursRestants <= 7) {
+            $offre->urgenceClass = 'text-danger'; // Urgence haute (moins de 7 jours)
+        } elseif ($joursRestants <= 14) {
+            $offre->urgenceClass = 'text-warning'; // Urgence moyenne (7 à 14 jours)
+        } else {
+            $offre->urgenceClass = 'text-success'; // Moins urgent (plus de 14 jours)
+        }
+
+
+        $offre->badgeClass = match ($offre->type_contrat) {
+            'CDI' => 'bg-success',
+            'CDD' => 'bg-warning text-dark',
+            'Stage' => 'bg-info',
+            'Alternance' => 'bg-primary',
+            'Freelance' => 'bg-secondary',
+            default => 'bg-secondary',
+        };
+
+        $offre->domaineIcon = match ($offre->secteur) {
+            'Informatique', 'Développement Web' => 'bi-code-slash',
+            'Ressources Humaines', 'RH' => 'bi-people',
+            'Communication' => 'bi-megaphone',
+            default => 'bi-briefcase',
+        };
+
+        $offre->salaireDisplay = 'Non spécifié';
+        if ($offre->salaire) {
+            $offre->salaireDisplay = number_format($offre->salaire, 0, ',', ' ') . ' ' . ($offre->devise ?? '');
+            if ($offre->periode_salaire) {
+                $offre->salaireDisplay .= ' / ' . $offre->periode_salaire;
+            }
+        }
+
+        $offre->formattedDateLimite = Carbon::parse($offre->date_limite)->format('d/m/Y');
+    }
+
+
    /**
      * Affiche la liste des offres d'emploi pour l'entreprise connectée.
      * Inclut un filtre de domaine basé sur le `secteur`.
@@ -147,16 +197,17 @@ public function update(Request $request, JobOffer $offre)
      * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function list_offer(Request $request): View|RedirectResponse
+ public function list_offer(Request $request, $entreprise_id): View|RedirectResponse
 {
+    // On commence la requête
     $query = JobOffer::query();
 
-    if (auth()->check() && auth()->user()->entreprise_id) {
-        $query->where('entreprise_id', auth()->user()->entreprise_id);
-    } else {
-        return redirect('/login')->with('error', 'Vous devez être connecté et associé à une entreprise.');
-    }
+    // Filtrer sur entreprise_id donné en paramètre
+    $query->where('entreprise_id', $entreprise_id);
+    $entreprise = Entreprise::findOrFail($entreprise_id);
 
+
+    // Filtre domaine si présent
     if ($request->has('domaine') && $request->input('domaine') !== 'all') {
         $domaine = $request->input('domaine');
         $mappedSecteur = match ($domaine) {
@@ -213,8 +264,9 @@ public function update(Request $request, JobOffer $offre)
 
     $currentDomaineFilter = $request->input('domaine', 'all');
 
-    return view('rh.candidature.candidat.list', compact('offres', 'currentDomaineFilter'));
+    return view('rh.candidature.candidat.list', compact('offres', 'currentDomaineFilter', 'entreprise_id', 'entreprise'));
 }
+
 public function showDetails($id)
 {
     $jobOffer = JobOffer::findOrFail($id);

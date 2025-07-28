@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Mail\CandidatureAccuse;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class CandidatureController extends Controller
 {
@@ -58,15 +59,21 @@ public function store(Request $request, $jobOfferId)
 
     return redirect()->back()->with('success', 'Votre candidature a bien été envoyée.');
 }
-    public function index(Request $request)
+   public function index(Request $request)
     {
+       
+        $entrepriseId = Auth::user()->entreprise_id;
+
         // Get filter values from the request
         $searchNom = $request->input('searchNom');
-        $filtrePoste = $request->input('filtrePoste'); // This will be job_offer_id or title
+        $filtrePoste = $request->input('filtrePoste');
         $filtreStatut = $request->input('filtreStatut');
 
-        // Start building the query
-        $query = Candidature::with('jobOffer'); // Eager load the related jobOffer
+        // Start building the query, eager load jobOffer and filter by company ID
+        $query = Candidature::with('jobOffer')
+            ->whereHas('jobOffer', function ($q) use ($entrepriseId) {
+                $q->where('entreprise_id', $entrepriseId);
+            });
 
         // Apply search by candidate name (prenom or nom)
         if ($searchNom) {
@@ -78,34 +85,34 @@ public function store(Request $request, $jobOfferId)
 
         // Apply filter by job offer (poste)
         if ($filtrePoste && $filtrePoste !== 'all') {
-            // Assuming filtrePoste will contain the actual job offer ID or title.
-            // If it's the title, you'll need to join or use whereHas.
-            // Let's assume the select option will pass the JobOffer ID for simplicity and efficiency.
-            $query->whereHas('jobOffer', function ($q) use ($filtrePoste) {
-                $q->where('id', $filtrePoste); // Filter by job_offer_id
-            });
+            // Since we're already filtering by 'entreprise_id' in the main query,
+            // we just need to add the specific job offer ID here.
+            $query->where('job_offer_id', $filtrePoste);
         }
 
         // Apply filter by application status
         if ($filtreStatut && $filtreStatut !== 'all') {
-            $query->where('status_demande', $filtreStatut); // Assuming your column is 'status_demande'
+            $query->where('status_demande', $filtreStatut);
         }
 
         // Order results, e.g., by latest application
         $candidatures = $query->latest()->get();
 
-        // Get all distinct job offers to populate the filter dropdown
-        $jobOffers = JobOffer::select('id', 'titre')->distinct()->get();
-
+        // Get all distinct job offers for the *current user's company* to populate the filter dropdown
+        $jobOffers = JobOffer::where('entreprise_id', $entrepriseId)
+                             ->select('id', 'titre')
+                             ->distinct()
+                             ->get();
 
         return view('rh.candidature.offre.list-candidature', [
             'candidatures' => $candidatures,
-            'jobOffers' => $jobOffers, // Pass job offers for the filter dropdown
+            'jobOffers' => $jobOffers,
             'currentSearchNom' => $searchNom,
             'currentFiltrePoste' => $filtrePoste,
             'currentFiltreStatut' => $filtreStatut,
         ]);
     }
+
 
     // This method will be used for the modal details
     public function show(Candidature $candidature)

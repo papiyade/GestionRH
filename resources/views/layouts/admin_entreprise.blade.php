@@ -490,104 +490,122 @@
                     <a class="dropdown-item" href="auth-logout-basic.html"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
                 </div>
             </div>
-            <div id="scrollbar">
-                <div class="container-fluid">
+           <div id="scrollbar">
+    <div class="container-fluid">
+        <div id="two-column-menu"></div>
 
+        <ul class="navbar-nav" id="navbar-nav">
+            <!-- Menu principal -->
+            <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
-                    <div id="two-column-menu">
-                    </div>
-                    <ul class="navbar-nav" id="navbar-nav">
-                        <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+            <!-- Tableau de Bord -->
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="{{ route('admin_simple') }}" role="button" aria-expanded="false">
+                    <i class="ri-dashboard-2-line"></i>
+                    <span data-key="t-dashboards">Tableau de Bord</span>
+                </a>
+            </li>
+
+            <!-- Système -->
+            <li class="menu-title"><span data-key="t-menu">Système</span></li>
+
+            <!-- Utilisateurs -->
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsers">
+                    <i class="ri-account-circle-line"></i>
+                    <span data-key="t-icons">Utilisateurs</span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarUsers">
+                    <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ route('admin_simple') }}"  role="button" aria-expanded="false">
-                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Tableau de Bord</span>
-                            </a>
-                        </li> <!-- end Dashboard Menu -->
-
-                        <li class="menu-title"><span data-key="t-menu">système</span></li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
-                                <i class="ri-account-circle-line"></i> <span data-key="t-icons">Utilisateurs</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarIcons">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('entreprise.employes') }}" class="nav-link" data-key="t-line-awesome">Liste des utilisateurs</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('employe.create') }}" class="nav-link"> <span data-key="t-crypto-svg">Ajouter un nouvel utilisateur</span></a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <a href="{{ route('entreprise.employes') }}" class="nav-link">Liste des utilisateurs</a>
                         </li>
-
-                      <a class="nav-link menu-link" href="#sidebarCompanies" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCompanies">
-    <i class="ri-account-circle-line"></i> <span data-key="t-icons">Entreprises</span>
-</a>
-<div class="collapse menu-dropdown" id="sidebarCompanies">
-    <ul class="nav nav-sm flex-column">
-        <li class="nav-item">
-            <a href="{{ route('entreprise.redirect') }}" class="nav-link" data-key="t-line-awesome">Configuration</a>
-        </li>
-    </ul>
-</div>
-
-
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Equipes</span></li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
-                                <i class=" ri-shield-star-line"></i> <span data-key="t-base-ui">Liste des équipes</span>
-                            </a>
-                            <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <ul class="nav nav-sm flex-column">
-                                            <li class="nav-item">
-                                                <a href="#" class="nav-link" data-key="t-alerts">Liste des équipes</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                            <a href="{{ route('employe.create') }}" class="nav-link">Ajouter un nouvel utilisateur</a>
                         </li>
-
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Projets</span></li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
-                                <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Projets</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarProjects">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link" data-key="t-alerts">Liste des projets</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="menu-title"><i class="ri-more-fill"></i><span data-key="t-components">Divers & Autres</span></li>
-
-                        {{-- Boites à idées --}}
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
-                                <i class="ri-layout-4-fill"></i> <span data-key="t-projects">Divers/Autres</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarProjects">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link" data-key="t-alerts">Boite à idées</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
                     </ul>
                 </div>
-                <!-- Sidebar -->
-            </div>
+            </li>
 
-            <div class="sidebar-background"></div>
+            <!-- Entreprises -->
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="#sidebarCompanies" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCompanies">
+                    <i class="ri-building-line"></i>
+                    <span data-key="t-icons">Entreprises</span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarCompanies">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ route('entreprise.redirect') }}" class="nav-link">Configuration</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Équipes -->
+            <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Équipes</span></li>
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="#sidebarTeams" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTeams">
+                    <i class="ri-shield-star-line"></i>
+                    <span data-key="t-base-ui">Liste des équipes</span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarTeams">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Liste des équipes</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Projets -->
+            <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Projets</span></li>
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
+                    <i class="ri-layout-4-fill"></i>
+                    <span data-key="t-projects">Projets</span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarProjects">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Liste des projets</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Divers & Autres -->
+            <li class="menu-title"><i class="ri-more-fill"></i><span data-key="t-components">Divers & Autres</span></li>
+
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="#sidebarDivers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDivers">
+                    <i class="ri-layout-4-fill"></i>
+                    <span data-key="t-projects">Divers/Autres</span>
+                    <span id="chat-badge-main" class="badge bg-danger ms-2" style="display:none;"></span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarDivers">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ route('chatify') }}" class="nav-link" data-key="t-alerts">
+                                Messagerie
+                                <span id="chat-badge-sub" class="badge bg-danger ms-2" style="display:none;"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-key="t-alerts">Boite à idées</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<div class="sidebar-background"></div>
+
+
+          
         </div>
         <!-- Left Sidebar End -->
         <!-- Vertical Overlay-->
@@ -1614,6 +1632,37 @@
 
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
+
+    
+  <script>
+    function updateUnreadMessages() {
+        fetch('{{ route('messages.unread.count') }}')
+            .then(response => response.json())
+            .then(data => {
+                const mainBadge = document.getElementById('chat-badge-main');
+                const subBadge = document.getElementById('chat-badge-sub');
+
+                if (data.count > 0) {
+                    mainBadge.textContent = data.count;
+                    subBadge.textContent = data.count;
+
+                    mainBadge.style.display = 'inline-block';
+                    subBadge.style.display = 'inline-block';
+                } else {
+                    mainBadge.style.display = 'none';
+                    subBadge.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Erreur fetch:', error));
+    }
+
+    // Appel initial
+    updateUnreadMessages();
+
+    // Mettre à jour toutes les 10 secondes
+    setInterval(updateUnreadMessages, 10000);
+</script>
+
 </body>
 
 
