@@ -1,4 +1,7 @@
-@extends('layouts.admin_rh-dashboard')
+@extends('layout.admin_rh')
+
+@section('title', 'Tableau de Bord RH')
+@section('page-title', 'Liste employe')
 
 @section('content')
 @if(session('success'))
@@ -13,7 +16,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title mb-0">Liste des utilisateurs</h4>
+                <h4 class="card-title mb-0">Liste des employes</h4>
             </div><!-- end card header -->
 
             <div class="card-body">

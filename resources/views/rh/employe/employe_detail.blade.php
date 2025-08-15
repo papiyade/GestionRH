@@ -1,4 +1,7 @@
-@extends('layouts.admin_rh-dashboard')
+@extends('layout.admin_rh')
+
+@section('title', 'RH')
+@section('page-title', 'Detail')
 
 @section('content')
     <div class="row">
