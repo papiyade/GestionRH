@@ -1,5 +1,7 @@
-@extends('layouts.admin_rh-dashboard')
+@extends('layout.admin_rh')
 
+@section('title', 'RH - Offre d emploi')
+@section('page-title', 'Gestion des offres')
 @section('content')
 
 <style>

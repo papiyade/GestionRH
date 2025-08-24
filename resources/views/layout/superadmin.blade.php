@@ -427,76 +427,87 @@
 <!-- Sidebar -->
 <aside class="sidebar">
     <div class="sidebar-header">
-        <a href="{{ route('rh_dashboard') }}" class="brand-link">
+        <a href="{{ route('superadmin') }}" class="brand-link">
             <div class="brand-icon">F</div>
             <span>Farlu</span>
         </a>
     </div>
 
     <nav class="sidebar-nav">
-        <!-- Menu principal -->
         <div class="nav-section">
-            <div class="nav-section-title">Workspace</div>
+            <div class="nav-section-title">Menu</div>
             <div class="nav-item">
-                <a class="nav-link active" href="{{ route('rh_dashboard') }}">
+                <a class="nav-link" href="{{ route('superadmin') }}">
                     <i class="nav-icon ri-dashboard-2-line"></i>
                     <span>Tableau de Bord</span>
                 </a>
             </div>
         </div>
-
-        <!-- Système -->
+        
         <div class="nav-section">
-            <div class="nav-section-title">Gestion RH</div>
+            <div class="nav-section-title">Système</div>
+            
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#employeesMenu" aria-expanded="false">
+                <a class="nav-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
                     <i class="nav-icon ri-account-circle-line"></i>
-                    <span>Employés</span>
+                    <span>Administrateurs</span>
                     <i class="nav-arrow ri-arrow-right-s-line"></i>
                 </a>
-                <div class="collapse submenu" id="employeesMenu">
-                    <a href="{{ route('employeList') }}" class="nav-link">
-                        <span>Liste des employés</span>
+                <div class="collapse submenu" id="sidebarIcons">
+                    <a href="{{ route("list_admin") }}" class="nav-link">
+                        <span>Liste des Administrateurs</span>
                     </a>
-                    <a href="{{ route('rh.users.create') }}" class="nav-link">
-                        <span>Ajouter un employé</span>
+                    <a href="{{ route('add_admin_view') }}" class="nav-link">
+                        <span>Ajouter un nouvel admin</span>
                     </a>
                 </div>
             </div>
-            
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Équipes</div>
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#teamsMenu" aria-expanded="false">
+                <a class="nav-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
                     <i class="nav-icon ri-shield-star-line"></i>
-                    <span>Équipes</span>
+                    <span>Liste des équipes</span>
                     <i class="nav-arrow ri-arrow-right-s-line"></i>
                 </a>
-                <div class="collapse submenu" id="teamsMenu">
-                    <a href="{{ route('teams') }}" class="nav-link">
+                <div class="collapse submenu" id="sidebarUI">
+                    <a href="#" class="nav-link">
                         <span>Liste des équipes</span>
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Recrutement -->
         <div class="nav-section">
-            <div class="nav-section-title">Recrutement</div>
+            <div class="nav-section-title">Projets</div>
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#recruitmentMenu" aria-expanded="false">
+                <a class="nav-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
                     <i class="nav-icon ri-layout-4-fill"></i>
-                    <span>Candidatures</span>
+                    <span>Projets</span>
                     <i class="nav-arrow ri-arrow-right-s-line"></i>
                 </a>
-                <div class="collapse submenu" id="recruitmentMenu">
-                    <a href="{{ route('offres.index') }}" class="nav-link">
-                        <span>Offres publiées</span>
+                <div class="collapse submenu" id="sidebarProjects">
+                    <a href="#" class="nav-link">
+                        <span>Liste des projets</span>
                     </a>
-                    <a href="{{ route('candidatures.index') }}" class="nav-link">
-                        <span>Suivi des candidatures</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Divers & Autres</div>
+            <div class="nav-item">
+                <a class="nav-link" href="#sidebarDivers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDivers">
+                    <i class="nav-icon ri-layout-4-fill"></i>
+                    <span>Divers/Autres</span>
+                    <i class="nav-arrow ri-arrow-right-s-line"></i>
+                </a>
+                <div class="collapse submenu" id="sidebarDivers">
+                    <a href="#" class="nav-link">
+                        <span>Boite à idées</span>
                     </a>
-                     <a href="javascript:void(0);" class="nav-link" id="copy-link-btn" data-entreprise="{{ auth()->user()->entreprise_id }}">
-    <span id="copy-link-text">Copier le lien de candidature</span>
-</a>
                 </div>
             </div>
         </div>

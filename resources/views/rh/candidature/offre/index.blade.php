@@ -1,6 +1,7 @@
+@extends('layout.admin_rh')
 
-@extends('layouts.admin_rh-dashboard')
-
+@section('title', 'RH - Offre d emploi')
+@section('page-title', 'Gestion des offres')
 @section('content')
 
 <div id="layout-wrapper" class="container my-4">
@@ -13,8 +14,6 @@
                 <i class="ri-add-line align-bottom me-1"></i> Créer une Offre
             </button>
         </div>
-        {{-- Suppression des éléments de filtre et recherche si non gérés par PHP --}}
-        {{-- Si vous voulez ajouter des filtres/recherche PHP plus tard, réactivez la section <form> ici --}}
     </div>
 
     @if(session('success'))
@@ -35,9 +34,8 @@
     @endif
 
     <div class="row gy-2 mb-2" id="job-offer-list">
-        {{-- Boucle PHP pour afficher chaque offre --}}
         @forelse($offres as $offre)
-            <div class="col-12" id="job-card-{{ $offre->id }}"> {{-- Ajoutez un ID à la carte pour manipulation JS --}}
+            <div class="col-12" id="job-card-{{ $offre->id }}">
                 <div class="card shadow-sm">
                     <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
                         <div>
@@ -54,13 +52,11 @@
                             } }}">{{ $offre->type_contrat }}</span>
                         </div>
                         <div class="d-flex align-items-center gap-2 mt-3 mt-md-0">
-                            {{-- Le select appelle une fonction JS pour la mise à jour AJAX --}}
                             <select class="form-select form-select-sm" onchange="updateJobStatus({{ $offre->id }}, this.value)">
                                 <option value="En cours" {{ $offre->statut === "En cours" ? "selected" : "" }}>En cours</option>
                                 <option value="Clôturé" {{ $offre->statut === "Clôturé" ? "selected" : "" }}>Clôturé</option>
                                 <option value="Annulé" {{ $offre->statut === "Annulé" ? "selected" : "" }}>Annulé</option>
                             </select>
-                            {{-- Les boutons appellent des fonctions JS pour les actions AJAX --}}
                             <button class="btn btn-outline-info btn-sm" onclick="editJobOffer({{ $offre->id }})">✏️</button>
                             <button class="btn btn-outline-danger btn-sm" onclick="deleteJobOffer({{ $offre->id }})">🗑️</button>
                         </div>
@@ -74,21 +70,15 @@
         @endforelse
     </div>
 
-    {{-- Pas de pagination si on ne gère pas la pagination en PHP --}}
-    {{-- Si vous aviez paginate() dans le contrôleur, vous mettriez ici : {{ $offres->links('pagination::bootstrap-5') }} --}}
     <div class="row g-0 justify-content-end mb-4" id="pagination-element">
         <div class="col-sm-6">
             <nav>
-                {{-- Si vous utilisez $offres->paginate(X) dans votre contrôleur, décommentez ceci: --}}
-                {{-- {{ $offres->links('pagination::bootstrap-5') }} --}}
                 <ul class="pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
-                    {{-- Si vous ne paginez pas en PHP, cette section n'est pas nécessaire. --}}
                 </ul>
             </nav>
         </div>
     </div>
 </div>
-{{-- Modal Création/Édition Offre --}}
 <div class="modal fade" id="createJobOfferModal" tabindex="-1" aria-labelledby="createJobOfferModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -97,7 +87,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body p-4">
-                {{-- Global Error Display (Optional, but good for summary) --}}
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
                         <strong>Oups!</strong> Il y a eu des problèmes avec votre soumission.
@@ -112,13 +101,11 @@
 
                 <form id="createJobOfferForm" class="needs-validation" method="POST" action="{{ route('offres.store') }}" novalidate>
                     @csrf
-                    {{-- Champs du formulaire --}}
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label for="jobTitle" class="form-label fw-semibold">Titre du Poste <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('jobTitle') is-invalid @enderror" id="jobTitle" name="jobTitle" value="{{ old('jobTitle') }}" required placeholder="Ex: Développeur Full Stack Senior">
                             <div class="invalid-feedback">Veuillez saisir le titre du poste.</div>
-                            {{-- Specific Error Message for jobTitle --}}
                             @error('jobTitle')
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
@@ -259,13 +246,11 @@
 </div>
 
 <script>
-    // This script ensures the modal stays open on validation error
     @if ($errors->any())
         var createJobOfferModal = new bootstrap.Modal(document.getElementById('createJobOfferModal'));
         createJobOfferModal.show();
     @endif
 
-    // Optional: Add a client-side validation handler to Bootstrap's native validation
     (function () {
         'use strict'
         var form = document.getElementById('createJobOfferForm');
@@ -282,16 +267,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // --- Initialisation du modal de Création/Édition d'Offre d'Emploi ---
     const createJobOfferModal = new bootstrap.Modal(document.getElementById('createJobOfferModal'));
     const createJobOfferForm = document.getElementById('createJobOfferForm');
 
-    // Fonction pour réinitialiser le formulaire
     function resetCreateJobOfferForm() {
         createJobOfferForm.reset();
         createJobOfferForm.classList.remove('was-validated');
         
-        // Définit le statut par défaut et la date limite par défaut
         document.getElementById('jobStatus').value = "En cours";
         const defaultDate = new Date();
         defaultDate.setMonth(defaultDate.getMonth() + 1);
@@ -300,38 +282,26 @@
         const day = String(defaultDate.getDate()).padStart(2, '0');
         document.getElementById('applicationDeadline').value = `${year}-${month}-${day}`;
 
-        // Réinitialise le titre du modal et les champs cachés d'édition
         document.getElementById('createJobOfferModalLabel').innerHTML = '<i class="ri-briefcase-line me-2"></i> Créer une nouvelle Offre d\'Emploi';
         const hiddenIdInput = document.getElementById('editJobId');
         if (hiddenIdInput) hiddenIdInput.remove();
         const methodInput = document.getElementById('methodInput');
         if (methodInput) methodInput.remove();
 
-        // Réinitialise l'action et la méthode du formulaire pour la création
         createJobOfferForm.action = "{{ route('offres.store') }}";
         createJobOfferForm.method = "POST";
     }
 
-  //  document.getElementById('createJobOfferModal').addEventListener('show.bs.modal', resetCreateJobOfferForm);
+    document.getElementById('addJobOfferBtn').addEventListener('click', resetCreateJobOfferForm);
     document.getElementById('createJobOfferModal').addEventListener('hidden.bs.modal', resetCreateJobOfferForm);
 
-
-    // --- Fonctions CRUD via AJAX ---
-
-    /**
-     * Met à jour le statut d'une offre via AJAX.
-     * @param {number} id L'ID de l'offre à mettre à jour.
-     * @param {string} newStatus Le nouveau statut (En cours, Clôturé, Annulé).
-     */
     function updateJobStatus(id, newStatus) {
         if (!confirm(`Voulez-vous vraiment changer le statut de cette offre à "${newStatus}" ?`)) {
-            // Si l'utilisateur annule, restaure la valeur précédente du select
-            // Note: `event.target` est disponible car la fonction est appelée `onchange`
-            event.target.value = event.target.dataset.originalStatus || 'En cours'; // Utilisez une valeur par défaut ou l'attribut data-original-status
+            event.target.value = event.target.dataset.originalStatus || 'En cours';
             return;
         }
 
-        fetch(`/offres/${id}/update-status`, { // Utilisez la route PATCH pour le statut
+        fetch(`/offres/${id}/update-status`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -341,7 +311,6 @@
         })
         .then(response => {
             if (!response.ok) {
-                // Si la réponse n'est pas OK (par exemple 4xx ou 5xx), lancez une erreur
                 return response.json().then(err => { throw new Error(err.message || 'Erreur serveur'); });
             }
             return response.json();
@@ -349,10 +318,7 @@
         .then(data => {
             if (data.success) {
                 alert('Statut mis à jour avec succès !');
-                // Optionnel: Mettre à jour l'interface utilisateur sans recharger
-                // Pour une simplicité, un rechargement complet est souvent plus simple après un update visuel
-                // mais pour un simple changement de statut, c'est souvent suffisant.
-                // window.location.reload(); // Décommentez si vous voulez un rechargement complet après updateStatus
+                window.location.reload();
             } else {
                 alert('Erreur lors de la mise à jour du statut : ' + (data.message || ''));
             }
@@ -363,13 +329,8 @@
         });
     }
 
-    /**
-     * Récupère les données d'une offre et remplit le formulaire d'édition.
-     * @param {number} id L'ID de l'offre à éditer.
-     */
     function editJobOffer(id) {
-        // Faire une requête AJAX pour obtenir les détails de l'offre
-        fetch(`/offres/${id}/edit`) // Assurez-vous que cette route existe dans web.php
+        fetch(`/offres/${id}/edit`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Offre non trouvée ou erreur serveur.');
@@ -377,15 +338,13 @@
                 return response.json();
             })
             .then(jobToEdit => {
-                // Mettre à jour le titre du modal
                 document.getElementById('createJobOfferModalLabel').innerHTML = '<i class="ri-briefcase-line me-2"></i> Modifier l\'Offre d\'Emploi';
 
-                // Remplir les champs du formulaire avec les données de l'offre
                 document.getElementById('jobTitle').value = jobToEdit.titre;
                 document.getElementById('jobTeam').value = jobToEdit.equipe;
                 document.getElementById('jobDescription').value = jobToEdit.description;
                 document.getElementById('contractType').value = jobToEdit.type_contrat;
-                document.getElementById('applicationDeadline').value = jobToEdit.date_limite; // Laravel renvoie déjà au format YYYY-MM-DD
+                document.getElementById('applicationDeadline').value = jobToEdit.date_limite;
                 document.getElementById('salaryAmount').value = jobToEdit.salaire;
                 document.getElementById('salaryCurrency').value = jobToEdit.devise || '';
                 document.getElementById('salaryPeriod').value = jobToEdit.periode_salaire || '';
@@ -394,13 +353,12 @@
                 document.getElementById('jobStatus').value = jobToEdit.statut;
                 document.getElementById('remoteOption').checked = jobToEdit.teletravail;
 
-                // Ajouter les champs cachés pour l'ID et la méthode PUT
                 let hiddenIdInput = document.getElementById('editJobId');
                 if (!hiddenIdInput) {
                     hiddenIdInput = document.createElement('input');
                     hiddenIdInput.type = 'hidden';
                     hiddenIdInput.id = 'editJobId';
-                    hiddenIdInput.name = 'id'; // Nécessaire pour le Model Binding de Laravel si vous ne mettez pas l'ID dans l'action
+                    hiddenIdInput.name = 'id';
                     createJobOfferForm.appendChild(hiddenIdInput);
                 }
                 hiddenIdInput.value = jobToEdit.id;
@@ -415,11 +373,10 @@
                 }
                 methodInput.value = 'PUT';
 
-                // Modifier l'action du formulaire pour pointer vers la route de mise à jour
                 createJobOfferForm.action = `/offres/${jobToEdit.id}`;
-                createJobOfferForm.method = 'POST'; // Toujours POST pour simuler PUT/PATCH avec _method
+                createJobOfferForm.method = 'POST';
 
-                createJobOfferModal.show(); // Afficher le modal
+                createJobOfferModal.show();
             })
             .catch(error => {
                 console.error('Erreur lors de la récupération des données de l\'offre pour édition:', error);
@@ -427,14 +384,10 @@
             });
     }
 
-    /**
-     * Supprime une offre via AJAX.
-     * @param {number} id L'ID de l'offre à supprimer.
-     */
     function deleteJobOffer(id) {
         if (confirm('Êtes-vous sûr de vouloir supprimer cette offre d\'emploi ? Cette action est irréversible.')) {
-            fetch(`/offres/${id}`, { // Route DELETE
-                method: 'POST', // Simule DELETE avec _method
+            fetch(`/offres/${id}`, {
+                method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     'Content-Type': 'application/json'
@@ -450,7 +403,7 @@
             .then(data => {
                 if (data.success) {
                     alert('Offre supprimée avec succès ! La page va se recharger.');
-                    window.location.reload(); // Recharger la page après suppression pour refléter le changement
+                    window.location.reload();
                 } else {
                     alert('Erreur lors de la suppression de l\'offre : ' + (data.message || ''));
                 }

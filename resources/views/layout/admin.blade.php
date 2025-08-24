@@ -427,76 +427,105 @@
 <!-- Sidebar -->
 <aside class="sidebar">
     <div class="sidebar-header">
-        <a href="{{ route('rh_dashboard') }}" class="brand-link">
+        <a href="{{ route('admin_simple') }}" class="brand-link">
             <div class="brand-icon">F</div>
             <span>Farlu</span>
         </a>
     </div>
 
     <nav class="sidebar-nav">
-        <!-- Menu principal -->
         <div class="nav-section">
-            <div class="nav-section-title">Workspace</div>
+            <div class="nav-section-title">Menu</div>
             <div class="nav-item">
-                <a class="nav-link active" href="{{ route('rh_dashboard') }}">
+                <a class="nav-link" href="{{ route('admin_simple') }}">
                     <i class="nav-icon ri-dashboard-2-line"></i>
                     <span>Tableau de Bord</span>
                 </a>
             </div>
         </div>
 
-        <!-- Système -->
         <div class="nav-section">
-            <div class="nav-section-title">Gestion RH</div>
+            <div class="nav-section-title">Système</div>
+            
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#employeesMenu" aria-expanded="false">
+                <a class="nav-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsers">
                     <i class="nav-icon ri-account-circle-line"></i>
-                    <span>Employés</span>
+                    <span>Utilisateurs</span>
                     <i class="nav-arrow ri-arrow-right-s-line"></i>
                 </a>
-                <div class="collapse submenu" id="employeesMenu">
-                    <a href="{{ route('employeList') }}" class="nav-link">
-                        <span>Liste des employés</span>
+                <div class="collapse submenu" id="sidebarUsers">
+                    <a href="{{ route('entreprise.employes') }}" class="nav-link">
+                        <span>Liste des utilisateurs</span>
                     </a>
-                    <a href="{{ route('rh.users.create') }}" class="nav-link">
-                        <span>Ajouter un employé</span>
+                    <a href="{{ route('employe.create') }}" class="nav-link">
+                        <span>Ajouter un nouvel utilisateur</span>
                     </a>
                 </div>
             </div>
-            
+
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#teamsMenu" aria-expanded="false">
-                    <i class="nav-icon ri-shield-star-line"></i>
-                    <span>Équipes</span>
+                <a class="nav-link" href="#sidebarCompanies" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCompanies">
+                    <i class="nav-icon ri-building-line"></i>
+                    <span>Entreprises</span>
                     <i class="nav-arrow ri-arrow-right-s-line"></i>
                 </a>
-                <div class="collapse submenu" id="teamsMenu">
-                    <a href="{{ route('teams') }}" class="nav-link">
+                <div class="collapse submenu" id="sidebarCompanies">
+                    <a href="{{ route('entreprise.redirect') }}" class="nav-link">
+                        <span>Configuration</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Équipes</div>
+            <div class="nav-item">
+                <a class="nav-link" href="#sidebarTeams" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTeams">
+                    <i class="nav-icon ri-shield-star-line"></i>
+                    <span>Liste des équipes</span>
+                    <i class="nav-arrow ri-arrow-right-s-line"></i>
+                </a>
+                <div class="collapse submenu" id="sidebarTeams">
+                    <a href="{{ route('admin.team.show') }}" class="nav-link">
                         <span>Liste des équipes</span>
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Recrutement -->
         <div class="nav-section">
-            <div class="nav-section-title">Recrutement</div>
+            <div class="nav-section-title">Projets</div>
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#recruitmentMenu" aria-expanded="false">
+                <a class="nav-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
                     <i class="nav-icon ri-layout-4-fill"></i>
-                    <span>Candidatures</span>
+                    <span>Projets</span>
                     <i class="nav-arrow ri-arrow-right-s-line"></i>
                 </a>
-                <div class="collapse submenu" id="recruitmentMenu">
-                    <a href="{{ route('offres.index') }}" class="nav-link">
-                        <span>Offres publiées</span>
+                <div class="collapse submenu" id="sidebarProjects">
+                    <a href="{{ route('admin.project.show') }}" class="nav-link">
+                        <span>Liste des projets</span>
                     </a>
-                    <a href="{{ route('candidatures.index') }}" class="nav-link">
-                        <span>Suivi des candidatures</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Divers & Autres</div>
+            <div class="nav-item">
+                <a class="nav-link" href="#sidebarDivers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDivers">
+                    <i class="nav-icon ri-layout-4-fill"></i>
+                    <span>Divers/Autres</span>
+                    <span id="chat-badge-main" class="badge bg-danger ms-2" style="display:none;"></span>
+                    <i class="nav-arrow ri-arrow-right-s-line"></i>
+                </a>
+                <div class="collapse submenu" id="sidebarDivers">
+                    <a href="{{ route('chatify') }}" class="nav-link" data-key="t-alerts">
+                        <span>Messagerie</span>
+                        <span id="chat-badge-sub" class="badge bg-danger ms-2" style="display:none;"></span>
                     </a>
-                     <a href="javascript:void(0);" class="nav-link" id="copy-link-btn" data-entreprise="{{ auth()->user()->entreprise_id }}">
-    <span id="copy-link-text">Copier le lien de candidature</span>
-</a>
+                 <!--   <a href="#" class="nav-link" data-key="t-alerts">
+                        <span>Boite à idées</span>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -680,6 +709,53 @@
     });
 });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentStep = 1;
+        const totalSteps = 3;
 
+        const steps = document.querySelectorAll(".step");
+        const nextBtn = document.getElementById("nextBtn");
+        const prevBtn = document.getElementById("prevBtn");
+
+        function showStep(step) {
+            steps.forEach((el, index) => {
+                if (index + 1 === step) {
+                    el.classList.remove("d-none");
+                    el.classList.add("step-active");
+                } else {
+                    el.classList.add("d-none");
+                    el.classList.remove("step-active");
+                }
+            });
+
+            // Gérer affichage boutons
+            prevBtn.style.display = (step === 1) ? "none" : "inline-block";
+            nextBtn.innerHTML = (step === totalSteps)
+                ? 'Enregistrer <i class="ri-check-line ms-2"></i>'
+                : 'Suivant <i class="ri-arrow-right-line ms-2"></i>';
+        }
+
+        nextBtn.addEventListener("click", function () {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            } else {
+                // dernière étape -> submit form
+                document.getElementById("step-form").submit();
+            }
+        });
+
+        prevBtn.addEventListener("click", function () {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+
+        // init
+        showStep(currentStep);
+    });
+</script>
 </body>
 </html>

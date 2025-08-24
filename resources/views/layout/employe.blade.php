@@ -11,8 +11,26 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <style>
+        .btn-outline-black {
+    background-color: #fff; /* fond blanc */
+    color: #000;            /* texte noir */
+    border: 1px solid #000; /* bordure noire */
+    transition: all 0.2s ease;
+}
+
+.btn-outline-black:hover {
+    background-color: #000; /* fond noir au hover */
+    color: #fff;            /* texte blanc au hover */
+}
+
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f7f6f3;
@@ -427,77 +445,41 @@
 <!-- Sidebar -->
 <aside class="sidebar">
     <div class="sidebar-header">
-        <a href="{{ route('rh_dashboard') }}" class="brand-link">
+        <a href="{{ route('employe.dashboard') }}" class="brand-link">
             <div class="brand-icon">F</div>
             <span>Farlu</span>
         </a>
     </div>
 
     <nav class="sidebar-nav">
-        <!-- Menu principal -->
         <div class="nav-section">
-            <div class="nav-section-title">Workspace</div>
+            <div class="nav-section-title">Menu</div>
             <div class="nav-item">
-                <a class="nav-link active" href="{{ route('rh_dashboard') }}">
+                <a class="nav-link" href="{{ route('employe.dashboard') }}">
                     <i class="nav-icon ri-dashboard-2-line"></i>
                     <span>Tableau de Bord</span>
                 </a>
             </div>
         </div>
 
-        <!-- Système -->
         <div class="nav-section">
-            <div class="nav-section-title">Gestion RH</div>
+            <div class="nav-section-title">Projets</div>
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#employeesMenu" aria-expanded="false">
-                    <i class="nav-icon ri-account-circle-line"></i>
-                    <span>Employés</span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
+                <a class="nav-link" href="{{ route('employe.projects') }}">
+                    <i class="nav-icon ri-layout-4-fill"></i>
+                    <span>Mes Projets</span>
                 </a>
-                <div class="collapse submenu" id="employeesMenu">
-                    <a href="{{ route('employeList') }}" class="nav-link">
-                        <span>Liste des employés</span>
-                    </a>
-                    <a href="{{ route('rh.users.create') }}" class="nav-link">
-                        <span>Ajouter un employé</span>
-                    </a>
-                </div>
-            </div>
-            
-            <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#teamsMenu" aria-expanded="false">
-                    <i class="nav-icon ri-shield-star-line"></i>
-                    <span>Équipes</span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
-                </a>
-                <div class="collapse submenu" id="teamsMenu">
-                    <a href="{{ route('teams') }}" class="nav-link">
-                        <span>Liste des équipes</span>
-                    </a>
-                </div>
             </div>
         </div>
 
-        <!-- Recrutement -->
         <div class="nav-section">
-            <div class="nav-section-title">Recrutement</div>
+            <div class="nav-section-title">Communication</div>
             <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#recruitmentMenu" aria-expanded="false">
-                    <i class="nav-icon ri-layout-4-fill"></i>
-                    <span>Candidatures</span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
+                <a class="nav-link" href="{{ route('chatify') }}">
+                    <i class="nav-icon ri-chat-2-line"></i>
+                    <span>Messagerie</span>
+                    <span id="chat-badge-sub" class="badge bg-danger ms-2" style="display:none;"></span>
                 </a>
-                <div class="collapse submenu" id="recruitmentMenu">
-                    <a href="{{ route('offres.index') }}" class="nav-link">
-                        <span>Offres publiées</span>
-                    </a>
-                    <a href="{{ route('candidatures.index') }}" class="nav-link">
-                        <span>Suivi des candidatures</span>
-                    </a>
-                     <a href="javascript:void(0);" class="nav-link" id="copy-link-btn" data-entreprise="{{ auth()->user()->entreprise_id }}">
-    <span id="copy-link-text">Copier le lien de candidature</span>
-</a>
-                </div>
             </div>
         </div>
     </nav>

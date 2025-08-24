@@ -25,7 +25,9 @@
                         <div class="col-sm-auto">
                             <div>
                                 <a href="{{ route('rh.users.create') }}"  class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1"></i> Nouveau Employe</a>
-                                {{-- <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button> --}}
+                                <a href="{{ route('rh.export.personnel.registry') }}" class="btn btn-primary add-btn">
+                                    <i class="ri-download-line align-bottom me-1"></i> Télécharger le répertoire
+                                </a>
                             </div>
                         </div>
                         <div class="col-sm">

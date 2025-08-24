@@ -1,4 +1,6 @@
-@extends('layouts.admin_entreprise')
+@extends('layout.admin')
+@section('title', 'Liste employe')
+@section('page-title', 'admin')
 
 @section('content')
 @if(session('success'))
@@ -21,8 +23,7 @@
                     <div class="row g-4 mb-3">
                         <div class="col-sm-auto">
                             <div>
-                                <a href="{{ route("employe.create") }}"  class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1"></i> Nouvel Employe</a>
-                                {{-- <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button> --}}
+                                <a href="{{ route("employe.create") }}"  class="btn btn-dark btn-lg"><i class="ri-add-line align-bottom me-1"></i> Nouvel Employe</a>
                             </div>
                         </div>
                         <div class="col-sm">

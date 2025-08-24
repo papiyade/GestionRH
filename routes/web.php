@@ -18,11 +18,18 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TacheController;
 use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\PublicJobOfferController;
+use App\Http\Controllers\PersonnelController;
+use App\Http\Controllers\PersonnelExportController;
+
+
 
 
 
 
 use Illuminate\Support\Facades\Mail;
+
+use App\Http\Controllers\PayrollSlipController;
+
 
 
 
@@ -44,6 +51,9 @@ Route::get('/', function () {
         }
          elseif($user->role == 'chef_projet') {
             return redirect('/chef-projet/dashboard');
+        }
+        elseif($user->role == 'employe') {
+            return redirect('/my-dashboard');
         }
     }
 
@@ -94,10 +104,15 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::post('/admin/add-admin', [SuperadminController::class, 'createUsers'])->name('add_admin');
     Route::get('/admin/list-admin', [SuperadminController::class, 'adminList'])->name('list_admin');
   Route::post('/entreprises/{entreprise}/toggle-status', [EntrepriseController::class, 'toggleStatus'])->name('entreprise.toggleStatus');
-         Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->name('entreprise.show');
+Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->name('entreprise.show');
 
 });
+    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
+    Route::get('/admin/entreprise/project', [AdminController::class, 'showProjects'])->name('admin.project.show');
+ //       Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
+
+    Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/company/dashboard', [AdminController::class, 'index'])->name('admin_simple');
     Route::get('/admin/company', [AdminController::class, 'companyView'])->name('company');
@@ -106,9 +121,10 @@ Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('
     Route::put('/entreprise/update', [EntrepriseController::class, 'update'])->name('entreprise.update');
     Route::get('/entreprise/redirection', [EntrepriseController::class, 'redirectionEntreprise'])
     ->name('entreprise.redirect');
-    Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
+
     Route::get('/employes/create', [AdminController::class, 'formView'])->name('employe.create');
     Route::post('/employes/createe', [AdminController::class, 'createEmploye'])->name('create.employe');
+//    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show'); 
 
 });
 Route::middleware(['auth','role:rh'])->group(function(){
@@ -142,7 +158,11 @@ Route::patch('/offres/{offre}/update-status', [JobOfferController::class, 'updat
 
 Route::delete('/offres/{offre}', [JobOfferController::class, 'destroy'])->name('offres.destroy');
 
+Route::resource('payroll_slips', PayrollSlipController::class);
 
+Route::get('/personnel/export', [PersonnelController::class, 'exportPersonnel'])->name('personnel.export');
+ Route::get('/rh/export-personnel-registry', [PersonnelExportController::class, 'exportPersonnelRegistry'])
+        ->name('rh.export.personnel.registry');
 
 
 
@@ -203,6 +223,7 @@ Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriori
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/mes-projets', [App\Http\Controllers\EmployeController::class, 'mesProjets'])->name('employe.projects');
+    Route::get('/my-dashboard', [App\Http\Controllers\EmployeController::class, 'index'])->name('employe.dashboard');
     Route::get('/mes-projets/{project}', [App\Http\Controllers\EmployeController::class, 'voirProjet'])->name('employe.projects.show');
     Route::patch('/mes-projets/taches/{task}/statut', [App\Http\Controllers\EmployeController::class, 'changerStatut'])->name('employe.tasks.changerStatut');
     Route::post('/mes-projets/taches/{task}/commentaire', [App\Http\Controllers\EmployeController::class, 'ajouterCommentaire'])->name('employe.tasks.commenter');
@@ -228,7 +249,7 @@ Route::get('/reunions/{id}', [MeetingController::class, 'show'])->name('meetings
 Route::get('/offres/{entreprise}', [PublicJobOfferController::class, 'listByEntreprise'])
     ->name('public.offres.list');
 
-Route::get('/rh/candidature/candidat/list/{entreprise_id}', [JobOfferController::class, 'list_offer'])->name('offres_candidat.index');
+    Route::get('/rh/candidature/candidat/list/{entreprise_id}', [JobOfferController::class, 'list_offer'])->name('offres_candidat.index');
 Route::get('/rh/candidature/candidat/{id}/depot', [JobOfferController::class, 'depotform'])->name('offres.depot');
 
 Route::post('/candidature/{jobOffer}/store', [CandidatureController::class, 'store'])->name('candidatures.store');

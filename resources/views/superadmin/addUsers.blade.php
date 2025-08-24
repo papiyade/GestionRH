@@ -1,51 +1,55 @@
-@extends('layouts.admin-dashboard')
+@extends('layout.superadmin')
+
+@section('title', 'Tableau de Bord SuperAdmin')
+@section('page-title', 'Ajouter un Admin Entreprise')
 
 @section('content')
-    <!-- Headings -->
-    <h2 class="mb-3">Ajout d'un nouveau administrateur d'entreprise </h2>
-    <div class="card">
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4 p-5">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-dark">Ajouter un nouvel administrateur d'entreprise</h2>
+            <p class="text-muted">Remplissez les informations ci-dessous pour créer un compte.</p>
+        </div>
+
         <form action="{{ route('add_admin') }}" method="POST">
             @csrf
-            <div class="col-12 mt-4">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Prénom et Nom</label>
-                    <input type="text" class="form-control" name="name" placeholder="Entrez le nom complet" id="name" required>
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Prénom et Nom" required>
+                        <label for="name">Prénom et Nom</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="Numéro de téléphone (facultatif)">
+                        <label for="telephone">Numéro de téléphone <span class="text-muted">(facultatif)</span></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Adresse Email" required>
+                        <label for="email">Adresse Email</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required>
+                        <label for="password">Mot de passe</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirmer le mot de passe" required>
+                        <label for="password_confirmation">Confirmer le mot de passe</label>
+                    </div>
                 </div>
             </div>
-    
-            <div class="row">
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="telephone" class="form-label">Numéro téléphone</label>
-                        <input type="tel" name="telephone" class="form-control" placeholder="(facultatif)" id="telephone">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Adresse Email</label>
-                        <input type="email" name="email" class="form-control" placeholder="example@gmail.com" id="email" required>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Mot de passe</label>
-                        <input type="password" name="password" class="form-control" id="password" required>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Confirmer le mot de passe</label>
-                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
-                    </div>
-                </div>
 
-                <div class="col-lg-12 mb-1">
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-success">Ajouter</button>
-                    </div>
-                </div>
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-dark btn-lg">Ajouter</button>
             </div>
         </form>
     </div>
-    
+</div>
 @endsection

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Entreprise;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountCreated;
+use App\Models\Project;
+
 
 
 class AdminController extends Controller
@@ -32,12 +35,10 @@ class AdminController extends Controller
         $userId = Auth::id();
         $entreprise = Entreprise::where('id_user', $userId)->first();
 
-        // If a company exists for the user AND it's inactive, redirect
         if ($entreprise && !$entreprise->is_actif) {
             return redirect()->route('status');
         }
 
-        // Otherwise, show the company index view
         return view('admin.entreprises.index');
     }
 
@@ -46,12 +47,11 @@ class AdminController extends Controller
         $userId = Auth::id();
         $entreprise = Entreprise::where('id_user', $userId)->first();
 
-        // If a company exists for the user AND it's inactive, redirect
+       
         if ($entreprise && !$entreprise->is_actif) {
             return redirect()->route('status');
         }
 
-        // Otherwise, show the user creation form view
         return view('admin.users.create');
     }
 
@@ -66,17 +66,14 @@ public function createEmploye(Request $request)
         'role' => 'required|string|in:rh,chef_projet',
     ]);
 
-    // Utilisateur connecté
     $currentUser = Auth::user();
 
-    // Récupère l'entreprise liée
     $entreprise = Entreprise::where('id_user', $currentUser->id)->first();
 
     if (!$entreprise) {
         return back()->with('error', 'Aucune entreprise trouvée pour cet utilisateur.');
     }
 
-    // Création de l'employé
     $user = User::create([
         'name' => $request->name,
         'email' => $request->email,
@@ -86,12 +83,48 @@ public function createEmploye(Request $request)
         'entreprise_id' => $entreprise->id,
     ]);
 
-    // Envoi de mail avec le mot de passe en clair
     Mail::to($user->email)->send(new AccountCreated($user->name, $user->email, $request->password));
 
     return redirect()->route('entreprise.employes')->with('success', 'Employé ajouté avec succès.');
 }
 
+
+
+
+public function showTeams(Request $request)
+{
+    $user = $request->user();
+
+    $teams = $user->getTeamsInSameEntreprise();
+
+    return view('admin.teams.index', compact('teams'));
+}
+
+
+
+
+public function showProjects()
+{
+    $entrepriseId = Auth::user()->entreprise_id;
+
+    $projectCount = Project::where('entreprise_id', $entrepriseId)->count();
+    $teamCount = Team::where('entreprise_id', $entrepriseId)->count();
+    $userCount = User::where('entreprise_id', $entrepriseId)->count();
+
+    // Charger les projets en incluant la relation 'lead' et 'tasks'
+    // La relation `lead` est celle que vous avez définie dans le modèle Project
+    $projects = Project::with(['lead', 'tasks'])->where('entreprise_id', $entrepriseId)->get();
+
+    // Calculer la progression pour chaque projet
+    $projects->each(function ($project) {
+        $totalTasks = $project->tasks->count();
+        $completedTasks = $project->tasks->where('status', 'completed')->count();
+        $project->progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
+        $project->leadUser = $project->lead->first();
+    });
+
+    return view('admin.project.index', compact('projectCount', 'teamCount', 'userCount', 'projects'));
+}
 
     
 }

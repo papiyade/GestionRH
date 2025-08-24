@@ -1,124 +1,93 @@
-@extends('layouts.admin-dashboard')
+@extends('layout.superadmin')
+
+@section('title', 'Tableau de Bord SuperAdmin')
+@section('page-title', 'Liste des Admins Entreprise')
 
 @section('content')
 @if(session('success'))
 <!-- Success Alert -->
-<div class="alert alert-success alert-border-left alert-dismissible fade show material-shadow" role="alert">
-    <i class="ri-notification-off-line me-3 align-middle"></i> <strong>Succès</strong> - {{ session('success') }}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Succès</strong> - {{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
 </div>
 @endif
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title mb-0">Liste des admin entreprise</h4>
-            </div><!-- end card header -->
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold text-dark">Liste des Admins Entreprise</h4>
+                <a href="{{ route('add_admin_view') }}" class="btn btn-dark">
+                    <i class="ri-add-line align-bottom me-1"></i> Nouvel Admin
+                </a>
+            </div>
 
-            <div class="card-body">
-                <div class="listjs-table" id="customerList">
-                    <div class="row g-4 mb-3">
-                        <div class="col-sm-auto">
-                            <div>
-                                <a href="{{ route("add_admin_view") }}"  class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1"></i> Nouvel Admin</a>
-                                {{-- <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button> --}}
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="d-flex justify-content-sm-end">
-                                <div class="search-box ms-2">
-                                    <input type="text" class="form-control search" placeholder="Rechercher...">
-                                    <i class="ri-search-line search-icon"></i>
+            <div class="mb-4">
+                <input type="text" class="form-control" placeholder="Rechercher..." id="searchAdmin">
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 50px;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkAll">
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive table-card mt-3 mb-1">
-                        <table class="table align-middle table-nowrap" id="customerTable">
-                            <thead class="table-light">
-                                <tr>
-                                    <th scope="col" style="width: 50px;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                        </div>
-                                    </th>
-                                    <th class="sort" data-sort="customer_name">Nom</th>
-                                    <th class="sort" data-sort="email">Email</th>
-                                    <th class="sort" data-sort="phone">Télephone</th>
-                                    <th class="sort" data-sort="address">Nom Entreprise</th>
-                                    <th class="sort" data-sort="action">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="list form-check-all">
-                                @foreach ($admins as $admin)
-                                <tr>
-                                    <th scope="row">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-                                        </div>
-                                    </th>
-                                    <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ2101</a></td>
-                                    <td class="customer_name">{{ $admin->name }}</td>
-                                    <td class="email">{{ $admin->email }}</td>
-                                    <td class="phone">{{ $admin->telephone ?? 'N/A' }}</td>
-                                    <td class="address">{{ $admin->adresse ?? 'N/A' }}</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <div class="edit">
-@if($admin->entreprise_id)
-    <a class="btn btn-sm btn-success edit-item-btn" href="{{ route('entreprise.show', $admin->entreprise_id) }}">Voir</a>
-@else
-    <span class="text-muted">Aucune entreprise</span>
-@endif
-                                            </div>
-                                            <div class="remove">
-                                                <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Supprimer</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
-                                <h5 class="mt-2">Désolé! Aucun résultat trouvé</h5>
-                                <p class="text-muted mb-0">Nous avons recherché plus de{{ $admins->count() }}+ utilisateurs et Nous n’avons trouvé aucun utilisateur pour votre recherche.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end">
-                        <div class="pagination-wrap hstack gap-2">
-                            <a class="page-item pagination-prev disabled" href="javascript:void(0);">
-                                Précedent
-                            </a>
-                            <ul class="pagination listjs-pagination mb-0"></ul>
-                            <a class="page-item pagination-next" href="javascript:void(0);">
-                                Suivant
-                            </a>
-                        </div>
-                    </div>
+                            </th>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Nom Entreprise</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($admins as $admin)
+                        <tr class="border-bottom">
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </td>
+                            <td>{{ $admin->name }}</td>
+                            <td>{{ $admin->email }}</td>
+                            <td>{{ $admin->telephone ?? 'N/A' }}</td>
+                            <td>{{ $admin->adresse ?? 'N/A' }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    @if($admin->entreprise_id)
+                                    <a class="btn btn-sm btn-dark" href="{{ route('entreprise.show', $admin->entreprise_id) }}">Voir</a>
+                                    @else
+                                    <span class="text-muted">Aucune entreprise</span>
+                                    @endif
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Supprimer</button>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @if($admins->isEmpty())
+                <div class="text-center text-muted py-5">
+                    Aucun admin trouvé.
                 </div>
-            </div><!-- end card -->
+                @endif
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <div class="pagination-wrap hstack gap-2">
+                    <a class="page-item pagination-prev disabled" href="javascript:void(0);">Précédent</a>
+                    <ul class="pagination listjs-pagination mb-0"></ul>
+                    <a class="page-item pagination-next" href="javascript:void(0);">Suivant</a>
+                </div>
+            </div>
         </div>
-        <!-- end col -->
-
     </div>
-    <!-- end col -->
-
 </div>
-
-
 
 <script src="{{ asset('assets/libs/prismjs/prism.js') }}"></script>
 <script src="{{ asset('assets/libs/list.js/list.min.js') }}"></script>
 <script src="{{ asset('assets/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-
-<!-- listjs init -->
 <script src="{{ asset('assets/js/pages/listjs.init.js') }}"></script>
-
 @endsection

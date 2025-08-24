@@ -1,50 +1,52 @@
-@extends('layouts.chef_projet')
+@extends('layout.employe')
+
+@section('title', 'Projets')
+
+@section('page-title', 'Mes projets')
 
 @section('content')
-<div class="container mt-4">
-    <h2 class="mb-4">Mes projets</h2>
+<div class="container mx-auto max-w-6xl px-4">
 
-    {{-- Filter and Search Section --}}
-    <div class="card mb-4 shadow-sm border-0">
-        <div class="card-body">
-            <form action="{{ route('employe.projects') }}" method="GET" class="row g-3 align-items-center">
-                <div class="col-md-5">
-                    <label for="search" class="visually-hidden">Rechercher par titre ou description</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        <input type="text" name="search" id="search" class="form-control" placeholder="Rechercher par titre ou description" value="{{ request('search') }}">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label for="status_filter" class="visually-hidden">Filtrer par statut</label>
-                    <select name="status_filter" id="status_filter" class="form-select">
-                        <option value="">Tous les statuts</option>
-                        <option value="not_started" {{ request('status_filter') == 'not_started' ? 'selected' : '' }}>Non débuté</option>
-                        <option value="in_progress" {{ request('status_filter') == 'in_progress' ? 'selected' : '' }}>En cours</option>
-                        <option value="completed" {{ request('status_filter') == 'completed' ? 'selected' : '' }}>Terminé</option>
-                    </select>
-                </div>
-                <div class="col-md-3 d-grid">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-funnel me-1"></i> Appliquer les filtres
-                    </button>
-                </div>
-            </form>
-        </div>
+    <!-- En-tête -->
+    <div class="mb-10 text-center">
+        <h1 class="text-3xl font-semibold text-gray-900 mb-2">📂 Mes Projets</h1>
+        <p class="text-gray-500">Gérez et suivez vos projets en un coup d'œil</p>
     </div>
 
-    {{-- Dynamic Task Completion Message --}}
+    <!-- Barre de recherche & filtre -->
+    <form action="{{ route('employe.projects') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-8">
+        <div class="md:col-span-5">
+            <input type="text" name="search" id="search"
+                   class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black text-sm"
+                   placeholder="🔍 Rechercher par titre ou description"
+                   value="{{ request('search') }}">
+        </div>
+        <div class="md:col-span-4">
+            <select name="status_filter" id="status_filter"
+                    class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black text-sm">
+                <option value="">Tous les statuts</option>
+                <option value="not_started" {{ request('status_filter') == 'not_started' ? 'selected' : '' }}>Non débuté</option>
+                <option value="in_progress" {{ request('status_filter') == 'in_progress' ? 'selected' : '' }}>En cours</option>
+                <option value="completed" {{ request('status_filter') == 'completed' ? 'selected' : '' }}>Terminé</option>
+            </select>
+        </div>
+        <div class="md:col-span-3">
+            <button type="submit"
+                    class="w-full bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                ⚡ Appliquer les filtres
+            </button>
+        </div>
+    </form>
+
+    <!-- Message dynamique tâches -->
     @php
         $userTotalTasks = 0;
         $userCompletedTasks = 0;
         foreach ($projets as $projet) {
             foreach ($projet->tasks as $task) {
-                // Check if the current user is assigned to this task
                 if ($task->users->contains(Auth::id())) {
                     $userTotalTasks++;
-                    if ($task->status === 'completed') {
-                        $userCompletedTasks++;
-                    }
+                    if ($task->status === 'completed') $userCompletedTasks++;
                 }
             }
         }
@@ -52,116 +54,88 @@
     @endphp
 
     @if ($userIncompleteTasks > 0)
-        <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" style="font-size: 1.2rem;"></i>
-            <div>
-                Vous avez **{{ $userIncompleteTasks }} tâche{{ $userIncompleteTasks > 1 ? 's' : '' }}** non terminée{{ $userIncompleteTasks > 1 ? 's' : '' }} parmi vos projets. Gardez le cap !
-            </div>
+        <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg mb-6">
+            ⚠️ Vous avez <strong>{{ $userIncompleteTasks }}</strong> tâche{{ $userIncompleteTasks > 1 ? 's' : '' }} non terminée{{ $userIncompleteTasks > 1 ? 's' : '' }} parmi vos projets.
         </div>
     @else
-        <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
-            <i class="bi bi-check-circle-fill flex-shrink-0 me-2" style="font-size: 1.2rem;"></i>
-            <div>
-                Félicitations ! Toutes vos tâches sont terminées.
-            </div>
+        <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6">
+            🎉 Félicitations ! Toutes vos tâches sont terminées.
         </div>
     @endif
 
-    <div class="row">
+    <!-- Liste des projets -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($projets as $projet)
             @php
-                // Check if the authenticated user is the lead for this specific project
                 $isLead = $projet->users()->where('user_id', Auth::id())->wherePivot('is_lead', true)->exists();
-
-                // Calculate project-level task completion percentage
                 $totalProjectTasks = $projet->tasks->count();
                 $completedProjectTasks = $projet->tasks->where('status', 'completed')->count();
                 $progressPercentage = $totalProjectTasks > 0 ? round(($completedProjectTasks / $totalProjectTasks) * 100) : 0;
 
-                $statusClass = match($projet->status) {
-                    'not_started' => 'secondary',
-                    'in_progress' => 'warning',
-                    'completed' => 'success',
-                    default => 'light',
+                $statusColor = match($projet->status) {
+                    'not_started' => 'bg-gray-200 text-gray-700',
+                    'in_progress' => 'bg-yellow-200 text-yellow-800',
+                    'completed' => 'bg-green-200 text-green-800',
+                    default => 'bg-gray-100 text-gray-600',
                 };
             @endphp
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title d-flex justify-content-between align-items-center">
-                            {{ $projet->title }}
-                            @if ($isLead)
-                                <span class="badge bg-primary ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Vous êtes le chef de projet">
-                                    <i class="bi bi-star-fill"></i> Lead
-                                </span>
-                            @endif
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-muted small">
-                            <i class="bi bi-building me-1"></i> {{ $projet->entreprise->name ?? 'N/A' }}
-                        </h6>
 
-                        <p class="card-text text-truncate-3" style="font-size: 0.9rem;">
-                            {{ $projet->description ?? 'Aucune description disponible.' }}
-                        </p>
-
-                        <div class="mb-2">
-                            <span class="badge bg-{{ $statusClass }}">
-                                {{ ucfirst(str_replace('_', ' ', $projet->status)) }}
-                            </span>
-                            @if ($projet->team)
-                                <span class="badge bg-info text-dark ms-2">
-                                    <i class="bi bi-people-fill me-1"></i> Équipe: {{ $projet->team->name }}
-                                </span>
-                            @endif
-                        </div>
-
-                        <div class="mb-3">
-                            <p class="text-muted small mb-1">
-                                <i class="bi bi-list-task me-1"></i> Tâches du projet: {{ $completedProjectTasks }} / {{ $totalProjectTasks }}
-                            </p>
-                            <div class="progress" style="height: 8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ $progressPercentage }}%;" aria-valuenow="{{ $progressPercentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="text-muted small text-end mt-1">{{ $progressPercentage }}% du projet terminé</p>
-                        </div>
-
-                        <div class="row text-muted small mb-3">
-                            <div class="col-6">
-                                <p class="mb-0"><i class="bi bi-chat-dots me-1"></i> Commentaires: {{ $projet->comments->count() }}</p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <p class="mb-0"><i class="bi bi-file-earmark me-1"></i> Fichiers: {{ $projet->files->count() }}</p>
-                            </div>
-                        </div>
-
-                        <div class="mt-auto">
-                            <a href="{{ route('employe.projects.show', $projet) }}" class="btn btn-primary btn-sm w-100">
-                                <i class="bi bi-eye me-1"></i> Voir les détails
-                            </a>
-                        </div>
-                    </div>
+            <div class="border border-gray-200 rounded-xl p-6 hover:shadow-md transition flex flex-col">
+                <!-- Header -->
+                <div class="flex items-start justify-between mb-3">
+                    <h3 class="text-lg font-semibold text-gray-900">{{ $projet->title }}</h3>
+                    @if ($isLead)
+                        <span class="px-2 py-1 rounded-md text-xs bg-blue-100 text-blue-700 font-medium">⭐ Lead</span>
+                    @endif
                 </div>
+
+                <p class="text-sm text-gray-500 mb-2">
+                    🏢 {{ $projet->entreprise->name ?? 'N/A' }}
+                </p>
+
+                <p class="text-sm text-gray-600 line-clamp-3 mb-4">
+                    {{ $projet->description ?? 'Aucune description disponible.' }}
+                </p>
+
+                <!-- Statut & équipe -->
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="px-2 py-1 text-xs rounded-md {{ $statusColor }}">
+                        {{ ucfirst(str_replace('_', ' ', $projet->status)) }}
+                    </span>
+                    @if ($projet->team)
+                        <span class="px-2 py-1 text-xs rounded-md bg-blue-100 text-blue-700">
+                            👥 Équipe: {{ $projet->team->name }}
+                        </span>
+                    @endif
+                </div>
+
+                <!-- Progression -->
+                <div class="mb-4">
+                    <p class="text-xs text-gray-500 mb-1">Tâches : {{ $completedProjectTasks }} / {{ $totalProjectTasks }}</p>
+                    <div class="w-full bg-gray-100 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1 text-right">{{ $progressPercentage }}% terminé</p>
+                </div>
+
+                <!-- Footer -->
+                <div class="flex justify-between text-xs text-gray-500 mb-4">
+                    <span>💬 {{ $projet->comments->count() }} commentaires</span>
+                    <span>📁 {{ $projet->files->count() }} fichiers</span>
+                </div>
+
+                <a href="{{ route('employe.projects.show', $projet) }}"
+                   class="mt-auto inline-block text-center bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                    👀 Voir les détails
+                </a>
             </div>
         @empty
-            <div class="col-12">
-                <div class="alert alert-info text-center py-4">
-                    <i class="bi bi-info-circle-fill me-2"></i> Aucun projet trouvé correspondant à votre recherche ou filtre.
+            <div class="col-span-3">
+                <div class="text-center py-10 text-gray-500 border rounded-lg">
+                    📭 Aucun projet trouvé correspondant à vos filtres.
                 </div>
             </div>
         @endforelse
     </div>
 </div>
-
-{{-- Add Bootstrap Icons and Tooltip initialization if not already included in your layout --}}
-@push('scripts')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-    });
-</script>
-@endpush
 @endsection

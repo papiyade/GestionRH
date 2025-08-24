@@ -29,16 +29,25 @@ class User extends Authenticatable
         'entreprise_id',
     ];
 
-// L'entreprise que cet utilisateur a créée (optionnel, utile si tu veux savoir qui est le fondateur)
 public function entrepriseCreee()
 {
-    return $this->hasOne(Entreprise::class, 'user_id'); // user_id dans la table entreprises
+    return $this->hasOne(Entreprise::class, 'user_id'); 
 }
 
-// L'entreprise à laquelle il appartient
+public function getTeamsInSameEntreprise()
+{
+    $entrepriseId = $this->entreprise_id;
+
+    if (!$entrepriseId) {
+        return collect();
+    }
+
+    return Team::with('owner')->withCount('users')->where('entreprise_id', $entrepriseId)->get();
+}
+
 public function entreprise()
 {
-    return $this->belongsTo(Entreprise::class, 'entreprise_id'); // entreprise_id dans la table users
+    return $this->belongsTo(Entreprise::class, 'entreprise_id');
 }
 public function teams()
 {
@@ -50,6 +59,11 @@ public function employeeDetail()
 {
     return $this->hasOne(EmployeeDetail::class);
 }
+
+  public function employeDetail()
+    {
+        return $this->hasOne(EmployeeDetail::class);
+    }
 public function employeeDocuments()
 {
     return $this->hasMany(EmployeeDocument::class, 'user_id');
@@ -65,6 +79,14 @@ public function projects()
     return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id');
 }
 
+public function ownedTeams()
+{
+    return $this->hasMany(Team::class, 'owner_id');
+}
+ public function payrollSlips()
+    {
+        return $this->hasMany(PayrollSlip::class);
+    }
 
 
     /**

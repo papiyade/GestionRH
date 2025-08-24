@@ -13,7 +13,7 @@ class Task extends Model
         'status',
         'deadline',
         'project_id',
-      'task_id',
+        'task_id',
     ];
 
     protected $casts = [

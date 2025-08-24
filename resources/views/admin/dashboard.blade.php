@@ -1,7 +1,10 @@
-@extends('layouts.admin_entreprise')
+@extends('layout.admin')
+@section('title', 'Tableau de Bord Admin')
+@section('page-title', 'admin')
+
+
 
 @section('content')
-
 @if(session('first_time_login'))
     <div class="alert alert-info alert-border-left alert-dismissible fade show material-shadow" role="alert">
         <i class="ri-notification-off-line me-3 align-middle"></i>

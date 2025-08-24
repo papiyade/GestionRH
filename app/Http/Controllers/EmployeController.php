@@ -10,6 +10,34 @@ use Illuminate\Support\Facades\Auth;
 
 class EmployeController extends Controller
 {
+
+    public function index()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            $allTasks = $user->tasks()->get();
+
+            $totalTasks = $allTasks->count();
+            $completedTasks = $allTasks->where('status', 'completed')->count();
+            $inProgressTasks = $allTasks->where('status', 'in progress')->count();
+
+            $recentTasks = $user->tasks()->with('project')->latest()->take(3)->get();
+            
+            $tasks = $user->tasks()->with('project')->get();
+
+            return view('employe.dashboard', [
+                'tasks' => $tasks,
+                'recentTasks' => $recentTasks,
+                'totalTasks' => $totalTasks,
+                'completedTasks' => $completedTasks,
+                'inProgressTasks' => $inProgressTasks
+            ]);
+        }
+
+        return redirect()->route('login');
+    }
+
     public function mesProjets(Request $request)
     {
         $user = Auth::user();
