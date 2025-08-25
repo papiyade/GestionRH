@@ -96,18 +96,18 @@ public function getEmployesPremiereEntreprise()
 {
     $user = auth()->user();
 
-    // Récupérer la première entreprise créée par l'utilisateur connecté (ordre par défaut)
     $premiereEntreprise = Entreprise::where('id_user', $user->id)->first();
 
     if (!$premiereEntreprise) {
         return redirect()->back()->with('error', 'Vous n’avez pas encore créé d’entreprise.');
     }
 
-    // Récupérer les employés liés à cette entreprise
     $employes = User::where('entreprise_id', $premiereEntreprise->id)->get();
 
     return view('admin.users.index', compact('employes'));
 }
+
+
 
     public function toggleStatus(Entreprise $entreprise)
     {

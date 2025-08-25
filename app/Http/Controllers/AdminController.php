@@ -55,6 +55,20 @@ class AdminController extends Controller
         return view('admin.users.create');
     }
 
+    public function list_users()
+{$user = auth()->user();
+
+    $premiereEntreprise = Entreprise::where('id_user', $user->id)->first();
+
+    if (!$premiereEntreprise) {
+        return redirect()->back()->with('error', 'Vous n’avez pas encore créé d’entreprise.');
+    }
+
+    $employes = User::where('entreprise_id', $premiereEntreprise->id)->get();
+
+    return view('admin.users.list', compact('employes'));
+}
+
 
 public function createEmploye(Request $request)
 {

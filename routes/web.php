@@ -18,7 +18,6 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TacheController;
 use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\PublicJobOfferController;
-use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\PersonnelExportController;
 
 
@@ -28,7 +27,6 @@ use App\Http\Controllers\PersonnelExportController;
 
 use Illuminate\Support\Facades\Mail;
 
-use App\Http\Controllers\PayrollSlipController;
 
 
 
@@ -109,11 +107,15 @@ Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->
 });
     Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
     Route::get('/admin/entreprise/project', [AdminController::class, 'showProjects'])->name('admin.project.show');
- //       Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
+       Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
+    Route::get('/listeemploye', [AdminController::class, 'list_users']);
 
-    Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 Route::middleware(['auth', 'role:admin'])->group(function () {
+//Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
+
+    Route::get('/entreprises/employes', [EntrepriseController::class, 'index']);
+
     Route::get('/admin/company/dashboard', [AdminController::class, 'index'])->name('admin_simple');
     Route::get('/admin/company', [AdminController::class, 'companyView'])->name('company');
 Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('entreprise.store');
@@ -158,9 +160,7 @@ Route::patch('/offres/{offre}/update-status', [JobOfferController::class, 'updat
 
 Route::delete('/offres/{offre}', [JobOfferController::class, 'destroy'])->name('offres.destroy');
 
-Route::resource('payroll_slips', PayrollSlipController::class);
 
-Route::get('/personnel/export', [PersonnelController::class, 'exportPersonnel'])->name('personnel.export');
  Route::get('/rh/export-personnel-registry', [PersonnelExportController::class, 'exportPersonnelRegistry'])
         ->name('rh.export.personnel.registry');
 

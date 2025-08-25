@@ -52,11 +52,7 @@ protected static function booted()
     });
 }
 
-    // Permet le Route Model Binding par le slug au lieu de l'ID
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
+
 
       public function jobOffers()
     {
