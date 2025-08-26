@@ -69,6 +69,12 @@ public function employeeDocuments()
     return $this->hasMany(EmployeeDocument::class, 'user_id');
 }
 
+public function ressources()
+{
+    return $this->hasMany(\App\Models\Ressource::class);
+}
+
+
  public function tasks()
     {
         return $this->belongsToMany(Task::class);

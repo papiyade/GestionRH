@@ -52,6 +52,31 @@ public function store(Request $request)
         return redirect()->route('projects.index')->with('success', 'Projet créé avec succès.');
     }
 
+    public function update(Request $request, Project $project)
+{
+    $entrepriseId = Auth::user()->entreprise_id;
+    if ($project->entreprise_id !== $entrepriseId) {
+        abort(403, "Vous n'êtes pas autorisé à modifier ce projet.");
+    }
+
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'team_id' => 'required|exists:teams,id',
+        'status' => 'required|in:not_started,in_progress,completed',
+    ]);
+
+    // Mise à jour
+    $project->update([
+        'title' => $request->title,
+        'description' => $request->description,
+        'team_id' => $request->team_id,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->route('projects.index')->with('success', 'Projet mis à jour avec succès.');
+}
+
  public function show(Project $project)
 {
     $entrepriseId = Auth::user()->entreprise_id;

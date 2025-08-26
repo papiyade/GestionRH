@@ -157,39 +157,95 @@
             </div>
 
             <!-- Actions -->
-            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
-                <div class="card-body p-4">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-12 col-sm-6">
-                            <a href="{{ route('entreprise.edit', $entreprise->id) }}" 
-                               class="btn btn-outline-dark btn-lg w-100 rounded-pill shadow-sm">
-                                <i class="fas fa-pencil-alt me-2"></i>
-                                Modifier l'entreprise
-                            </a>
-                        </div>
-                        
-                        <div class="col-12 col-sm-6">
-                            <form action="{{ route('entreprise.toggleStatus', $entreprise->id) }}" method="POST" class="d-inline w-100">
-                                @csrf
-                                <button type="submit" 
-                                        class="btn btn-dark btn-lg w-100 rounded-pill shadow-sm">
-                                    @if ($entreprise->is_actif)
-                                        <i class="fas fa-ban me-2"></i>
-                                        Restreindre l'entreprise
-                                    @else
-                                        <i class="fas fa-check-circle me-2"></i>
-                                        Activer l'entreprise
-                                    @endif
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            <!-- Actions -->
+<div class="card border-0 shadow-sm" style="border-radius: 20px;">
+    <div class="card-body p-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-12 col-sm-6">
+                <a href="{{ route('entreprise.edit', $entreprise->id) }}" 
+                   class="btn btn-outline-dark btn-lg w-100 rounded-pill shadow-sm">
+                    <i class="fas fa-pencil-alt me-2"></i>
+                    Modifier l'entreprise
+                </a>
             </div>
+
+            <div class="col-12 col-sm-6">
+                <!-- Bouton pour ouvrir la modal -->
+                <button type="button"
+                        class="btn btn-dark btn-lg w-100 rounded-pill shadow-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#confirmModal"
+                        data-action="{{ route('entreprise.toggleStatus', $entreprise->id) }}"
+                        data-status="{{ $entreprise->is_actif ? 'restreindre' : 'activer' }}">
+                    @if ($entreprise->is_actif)
+                        <i class="fas fa-ban me-2"></i> Restreindre l'entreprise
+                    @else
+                        <i class="fas fa-check-circle me-2"></i> Activer l'entreprise
+                    @endif
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmation -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header bg-light border-0 rounded-top-4">
+                <h5 class="modal-title fw-bold" id="confirmModalLabel">Confirmation requise</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-exclamation-circle text-warning fs-1 mb-3"></i>
+                <p class="mb-0 fs-5" id="modalMessage">
+                    <!-- Message injecté dynamiquement -->
+                </p>
+            </div>
+            <div class="modal-footer bg-light border-0 rounded-bottom-4">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
+                <form method="POST" id="statusForm" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-dark rounded-pill px-4" id="confirmButton">
+                        <!-- Texte injecté dynamiquement -->
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
         </div>
     </div>
 </div>
+
+<script>
+    // Script pour gérer la modal de confirmation
+    var confirmModal = document.getElementById('confirmModal');
+    confirmModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var action = button.getAttribute('data-action');
+        var status = button.getAttribute('data-status');
+
+        var modalMessage = confirmModal.querySelector('#modalMessage');
+        var confirmButton = confirmModal.querySelector('#confirmButton');
+        var statusForm = confirmModal.querySelector('#statusForm');
+
+        if (status === 'restreindre') {
+            modalMessage.textContent = "Êtes-vous sûr de vouloir restreindre cette entreprise ? Cette action peut affecter l'accès de ses utilisateurs.";
+            confirmButton.textContent = "Restreindre";
+            confirmButton.classList.remove('btn-success');
+            confirmButton.classList.add('btn-danger');
+        } else {
+            modalMessage.textContent = "Êtes-vous sûr de vouloir activer cette entreprise ? Cela rétablira l'accès pour ses utilisateurs.";
+            confirmButton.textContent = "Activer";
+            confirmButton.classList.remove('btn-danger');
+            confirmButton.classList.add('btn-success');
+        }
+
+        statusForm.action = action;
+    });
+</script>
 
 <style>
 /* Styles personnalisés pour améliorer l'apparence */

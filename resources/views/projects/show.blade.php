@@ -1,5 +1,7 @@
-@extends('layouts.chef_projet')
+@extends('layout.employe')
 
+@section('title', 'Projets')
+@section('page-title', ' projet')@section('content')
 @section('content')
 <div class="container-fluid px-4 py-4">
     <div class="row justify-content-center">

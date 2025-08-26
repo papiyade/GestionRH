@@ -109,22 +109,30 @@ class EmployeController extends Controller
         return back()->with('success', 'Statut de la tâche mis à jour !');
     }
 
-    public function changerPrioriteTache(Request $request, Project $project, Task $task)
-    {
-        $user = Auth::user();
+public function changerPrioriteTache(Request $request, Project $project, Task $tache)
+{
+    $user = Auth::user();
 
-        if (!$project->isLead($user)) {
-            return back()->with('error', 'Vous n\'êtes pas autorisé à modifier la priorité de cette tâche.');
-        }
 
-        $request->validate([
-            'priority' => ['required', 'string', \Illuminate\Validation\Rule::in(array_keys(Task::priorities()))],
-        ]);
 
-        $task->update(['priority' => $request->input('priority')]);
+    // Validation
+    $request->validate([
+        'priority' => ['required', 'string', \Illuminate\Validation\Rule::in(['low', 'medium', 'high'])],
+    ]);
 
-        return back()->with('success', 'Priorité de la tâche mise à jour !');
+    try {
+        $tache->priority = $request->input('priority');
+        $tache->save();
+    } catch (\Exception $e) {
+        return back()->with('error', 'Erreur lors de la mise à jour : ' . $e->getMessage());
     }
+
+    return back()->with('success', 'Priorité de la tâche mise à jour !');
+}
+
+
+
+
 
     public function commenterTache(Request $request, Task $task)
     {

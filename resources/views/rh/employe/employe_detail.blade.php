@@ -4,29 +4,31 @@
 @section('page-title', 'Détails de l\'employé')
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-lg-12">
-            @if (session('success_detail'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success_detail') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+ <div class="row justify-content-center">
+    {{-- ✅ Bloc 1 : Détails RH --}}
+    <div class="col-lg-12">
+        @if (session('success_detail'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success_detail') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+            </div>
+        @endif
+
+        <div class="card shadow-lg border-0 rounded-4 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="card-title mb-0 fs-5 text-dark fw-bold">
+                        <i class="ri-user-line me-2 text-primary"></i>Détails RH de {{ $user->name }}
+                    </h4>
+                    <button class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#employeeDetailModal">
+                        <i class="ri-{{ $user->employeeDetail ? 'edit' : 'add' }}-line me-1"></i>
+                        {{ $user->employeeDetail ? 'Modifier' : 'Ajouter' }}
+                    </button>
                 </div>
-            @endif
 
-            <div class="card shadow-lg border-0 rounded-4 mb-4">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="card-title mb-0 fs-5 text-dark fw-bold">
-                            <i class="ri-user-line me-2 text-primary"></i>Détails RH de **{{ $user->name }}**
-                        </h4>
-                        <button class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#employeeDetailModal">
-                            <i class="ri-{{ $user->employeeDetail ? 'edit' : 'add' }}-line me-1"></i>
-                            {{ $user->employeeDetail ? 'Modifier' : 'Ajouter' }}
-                        </button>
-                    </div>
-
-                    @if ($user->employeeDetail)
-                        <div class="row g-3">
+                @if ($user->employeeDetail)
+                    {{-- ... contenu RH existant ... --}}
+                      <div class="row g-3">
                             <div class="col-md-4">
                                 <p class="mb-0 text-muted small">Matricule</p>
                                 <h6 class="fw-bold text-dark">{{ $user->employeeDetail->matricule }}</h6>
@@ -83,16 +85,17 @@
                                 <p class="text-secondary">{{ $user->employeeDetail->description_poste ?? 'Non renseignée' }}</p>
                             </div>
                         </div>
-                    @else
-                        <div class="alert alert-light text-center" role="alert">
-                            <i class="ri-information-line me-2 text-dark"></i>Aucun détail RH trouvé pour cet employé.
-                        </div>
-                    @endif
-                </div>
+                @else
+                    <div class="alert alert-light text-center" role="alert">
+                        <i class="ri-information-line me-2 text-dark"></i>Aucun détail RH trouvé pour cet employé.
+                    </div>
+                @endif
             </div>
         </div>
+    </div>
 
-        <div class="col-lg-12">
+    {{-- ✅ Bloc 2 : Documents RH --}}
+    <div class="col-lg-12">
             @if (session('success_document'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success_document') }}
@@ -148,7 +151,58 @@
                 </div>
             </div>
         </div>
+
+
+    {{-- ✅ Bloc 3 : Ressources attribuées --}}
+    <div class="col-lg-12">
+        @if (session('success_ressource'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success_ressource') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+            </div>
+        @endif
+
+        <div class="card shadow-lg border-0 rounded-4 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title mb-0 fs-5 text-dark fw-bold">
+                        <i class="ri-box-3-line me-2 text-primary"></i>Ressources attribuées
+                    </h5>
+                    <button class="btn btn-outline-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addRessourceModal">
+                        <i class="ri-add-line align-bottom me-1"></i> Ajouter
+                    </button>
+                </div>
+
+                @if ($user->ressources->count())
+                    <div class="row g-3">
+                        @foreach ($user->ressources as $ressource)
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-0 shadow-sm p-3 h-100">
+                                    <h6 class="text-dark fw-bold">{{ $ressource->nom }}</h6>
+                                    <p class="mb-1"><strong>Catégorie :</strong> {{ $ressource->categorie }}</p>
+                                    <p class="mb-1 text-muted">{{ $ressource->description }}</p>
+                                    <form action="{{ route('ressource.destroy', $ressource->id) }}" method="POST" onsubmit="return confirm('Supprimer cette ressource ?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill mt-2">
+                                            <i class="ri-delete-bin-line me-1"></i> Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="alert alert-light text-center" role="alert">
+                        <i class="ri-information-line me-2 text-dark"></i>Aucune ressource attribuée à cet employé.
+                    </div>
+                @endif
+            </div>
+        </div>
     </div>
+</div>
+
+
 
     {{-- Modal Ajouter/Modifier Détail RH --}}
     @php
@@ -250,6 +304,47 @@
                     <div class="mb-3">
                         <label for="document" class="form-label text-muted">Fichier</label>
                         <input type="file" id="document" name="document" class="form-control form-control-lg rounded-3" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 justify-content-between p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        <i class="ri-upload-cloud-line me-1"></i>Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+       {{-- Modal ajout ressorce --}}
+    <div class="modal fade" id="addRessourceModal" tabindex="-1" aria-labelledby="addDocumentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('employee.ressource.store') }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 shadow-lg rounded-4" id="addDocumentForm">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                <div class="modal-header border-bottom-0 pt-4 px-4 pb-0">
+                    <h5 class="modal-title fs-5 fw-bold text-dark" id="addDocumentModalLabel">
+                        <i class="ri-add-circle-line me-2 text-primary"></i>Ajouter une ressource
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label text-muted">Nom du ressource</label>
+                        <input type="text" id="nom" name="nom" class="form-control form-control-lg rounded-3" required>
+                    </div>
+                    <div class="col-md-6">
+                            <label for="categorie" class="form-label text-muted">Type de contrat</label>
+                            <select id="categorie" name="categorie" class="form-select form-select-lg rounded-3" required>
+                                    <option value="autres">" autres "</option>
+                                    <option value="autres">" materiel "</option>
+                                    </option>
+                            </select>
+                        </div>
+                     <div class="mb-3">
+                        <label for="description" class="form-label text-muted">description</label>
+                        <input type="text" id="description" name="description" class="form-control form-control-lg rounded-3" required>
                     </div>
                 </div>
                 <div class="modal-footer border-top-0 justify-content-between p-4">

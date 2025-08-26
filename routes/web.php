@@ -19,6 +19,10 @@ use App\Http\Controllers\TacheController;
 use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\PublicJobOfferController;
 use App\Http\Controllers\PersonnelExportController;
+use App\Http\Controllers\RessourceController;
+
+
+
 
 
 
@@ -73,6 +77,7 @@ Route::get('/test-mail', function () {
 
     return 'Mail envoyé (ou erreur si ça coince)';
 });
+    Route::patch('/projets/{project}/taches/{tache}/changer-priorite', [EmployeController::class, 'changerPrioriteTache'])->name('projets.taches.changerPriorite');
 
 
 Route::middleware('auth')->group(function () {
@@ -107,14 +112,15 @@ Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->
 });
     Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
     Route::get('/admin/entreprise/project', [AdminController::class, 'showProjects'])->name('admin.project.show');
-       Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
-    Route::get('/listeemploye', [AdminController::class, 'list_users']);
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
 //Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
     Route::get('/entreprises/employes', [EntrepriseController::class, 'index']);
+Route::get('/liste-employe', function() {
+    return 'Test OK';
+})->middleware(['auth','role:admin']);
 
     Route::get('/admin/company/dashboard', [AdminController::class, 'index'])->name('admin_simple');
     Route::get('/admin/company', [AdminController::class, 'companyView'])->name('company');
@@ -127,6 +133,8 @@ Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('
     Route::get('/employes/create', [AdminController::class, 'formView'])->name('employe.create');
     Route::post('/employes/createe', [AdminController::class, 'createEmploye'])->name('create.employe');
 //    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show'); 
+       Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
+
 
 });
 Route::middleware(['auth','role:rh'])->group(function(){
@@ -147,6 +155,8 @@ Route::put('/employe/{id}', [EmployeeDetailController::class, 'update'])->name('
 Route::get('/users/{id}', [EmployeeDetailController::class, 'show'])->name('users.show');
 Route::post('/employee-details', [EmployeeDetailController::class, 'store'])->name('employee-details.store');
 Route::post('/employee/document/store', [EmployeeDocumentController::class, 'storeDocument'])->name('employee.document.store');
+Route::post('/employee/ressource/store', [RessourceController::class, 'store'])->name('employee.ressource.store');
+Route::delete('/employee/ressource/destroy{ressource}', [RessourceController::class, 'destroy'])->name('ressource.destroy');
 Route::delete('/employee-document/{id}', [EmployeeDocumentController::class, 'destroy'])->name('employee.document.destroy');
 
 Route::get('/rh-dashboard/offres', [JobOfferController::class, 'index'])->name('offres.index');
@@ -183,6 +193,9 @@ Route::get('/unread-messages-count', [CustomMessagesController::class, 'unreadCo
 Route::middleware(['auth','role:chef_projet'])->group(function(){
 
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+    Route::patch('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
@@ -209,13 +222,7 @@ Route::delete('/projects/{project}/members/{user}', [ProjectController::class, '
 
 
 
-Route::prefix('projets/{projet}')->group(function () {
-    Route::get('/taches', [TacheController::class, 'showTachesParProjet'])->name('projets.taches');
-    Route::post('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
-    Route::post('/taches/{tache}/commentaire', [TacheController::class, 'ajouterCommentaire'])->name('projets.taches.ajouterCommentaire');
-Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorites');
 
-});
 
 
 
@@ -227,10 +234,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mes-projets/{project}', [App\Http\Controllers\EmployeController::class, 'voirProjet'])->name('employe.projects.show');
     Route::patch('/mes-projets/taches/{task}/statut', [App\Http\Controllers\EmployeController::class, 'changerStatut'])->name('employe.tasks.changerStatut');
     Route::post('/mes-projets/taches/{task}/commentaire', [App\Http\Controllers\EmployeController::class, 'ajouterCommentaire'])->name('employe.tasks.commenter');
+    Route::prefix('projets/{projet}')->group(function () {
+    Route::get('/taches', [TacheController::class, 'showTachesParProjet'])->name('projets.taches');
+    Route::patch('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
+    Route::post('/taches/{tache}/commentaire', [TacheController::class, 'ajouterCommentaire'])->name('projets.taches.ajouterCommentaire');
+Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorites');
+
+});
     
 });
 Route::middleware('auth')->group(function () {
-    Route::patch('/projets/{project}/taches/{tache}/changer-priorite', [EmployeController::class, 'changerPrioriteTache'])->name('projets.taches.changerPriorite');
     Route::post('/projets/{project}/taches', [EmployeController::class, 'storeTask'])->name('tasks.store');
     
 });
