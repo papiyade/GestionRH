@@ -20,6 +20,7 @@ use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\PublicJobOfferController;
 use App\Http\Controllers\PersonnelExportController;
 use App\Http\Controllers\RessourceController;
+use App\Http\Controllers\CraController;
 
 
 
@@ -239,10 +240,21 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
     Route::post('/taches/{tache}/commentaire', [TacheController::class, 'ajouterCommentaire'])->name('projets.taches.ajouterCommentaire');
 Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorites');
+Route::post('/teams/{team}/assign-pilot/{user}', [TeamController::class, 'assignPilot'])
+     ->name('teams.assignPilot');
+
 
 });
+
+
     
 });
+
+Route::resource('cras', CraController::class)->middleware('auth');
+Route::get('/teams/{team}/cras', [TeamController::class, 'viewCras'])
+    ->name('teams.viewCras')
+    ->middleware('auth');
+
 Route::middleware('auth')->group(function () {
     Route::post('/projets/{project}/taches', [EmployeController::class, 'storeTask'])->name('tasks.store');
     

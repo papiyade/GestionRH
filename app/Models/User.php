@@ -55,6 +55,11 @@ public function teams()
 }
 
 
+  public function pilotedTeams()
+    {
+        return $this->hasMany(Team::class, 'pilot_id');
+    }
+
 public function employeeDetail()
 {
     return $this->hasOne(EmployeeDetail::class);
@@ -93,6 +98,11 @@ public function ownedTeams()
     {
         return $this->hasMany(PayrollSlip::class);
     }
+
+    public function cras()
+{
+    return $this->hasMany(Cra::class);
+}
 
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 
 
@@ -128,5 +129,38 @@ public function removeMember(Team $team, User $user)
     $team->members()->detach($user->id);
 
     return redirect()->back()->with('success', 'Membre retiré de l\'équipe avec succès.');
+}
+
+public function assignPilot(Team $team, User $user)
+{
+   
+    if (!$team->members->contains($user->id)) {
+        return redirect()->back()->with('error', 'Cet utilisateur ne fait pas partie de l\'équipe.');
+    }
+
+    $team->pilot_id = $user->id;
+    $team->save();
+
+    return redirect()->back()->with('success', $user->name . ' est maintenant le pilote de l\'équipe.');
+}
+
+public function viewCras(Team $team, Request $request)
+{
+    if ($team->pilot_id !== Auth::id()) {
+        abort(403, 'Accès interdit : vous n\'êtes pas le pilote de cette équipe.');
+    }
+
+    $weekOffset = $request->input('week', 0); 
+    $startOfWeek = Carbon::now()->startOfWeek()->addWeeks($weekOffset);
+    $endOfWeek   = Carbon::now()->endOfWeek()->addWeeks($weekOffset);
+
+    $memberIds = $team->members()->pluck('users.id');
+
+    $cras = Cra::whereIn('user_id', $memberIds)
+                ->whereBetween('date_debut', [$startOfWeek, $endOfWeek])
+                ->with('user') 
+                ->get();
+
+    return view('teams.cras', compact('team', 'cras', 'startOfWeek', 'endOfWeek', 'weekOffset'));
 }
 }

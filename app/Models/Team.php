@@ -12,7 +12,8 @@ class Team extends Model
         'name',
         'description',
         'owner_id',
-        'entreprise_id'
+        'entreprise_id',
+        'pilot_id'
      ];
 
       public function entreprise()
@@ -38,4 +39,8 @@ public function users()
     return $this->belongsToMany(User::class);
 }
 
+public function pilot()
+    {
+        return $this->belongsTo(User::class, 'pilot_id');
+    }
 }
