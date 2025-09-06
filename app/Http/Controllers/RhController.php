@@ -119,6 +119,75 @@ public function createUsers(Request $request)
 
     return redirect()->route('employeList')->with('success', 'Employé ajouté avec succès.');
 }
+
+public function updateUsers(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'telephone' => 'nullable|string|max:20',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'password' => 'nullable|confirmed|min:6',
+        'team_id' => 'required|exists:teams,id',
+    ]);
+
+    // Mise à jour des informations
+    $user->name = $request->name;
+    $user->telephone = $request->telephone;
+    $user->email = $request->email;
+
+    // Mettre à jour le mot de passe uniquement si renseigné
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
+
+    $user->save();
+
+    // Mettre à jour l'équipe
+    $user->teams()->sync([$request->team_id => ['role' => 'employe']]);
+
+    return redirect()->route('employeList')->with('success', 'Employé mis à jour avec succès.');
+}
+
+
+public function deleteUser($id)
+{
+    try {
+        $user = User::findOrFail($id);
+
+        if ($user->entreprise_id !== Auth::user()->entreprise_id) {
+            return response()->json(['success' => false, 'message' => 'Action non autorisée.'], 403);
+        }
+
+        if ($user->role === 'Admin') {
+            return response()->json(['success' => false, 'message' => 'Impossible de supprimer un administrateur.'], 403);
+        }
+
+        if ($user->id === Auth::id()) {
+            return response()->json(['success' => false, 'message' => 'Vous ne pouvez pas supprimer votre propre compte.'], 403);
+        }
+
+        $user->teams()->detach();
+        $user->delete();
+
+        return response()->json(['success' => true, 'message' => 'Employé supprimé avec succès.']);
+    } catch (\Exception $e) {
+        \Log::error('Erreur suppression employé : ' . $e->getMessage());
+        return response()->json(['success' => false, 'message' => 'Erreur lors de la suppression.'], 500);
+    }
+}
+
+
+public function editUsers($id)
+{
+    $user = User::findOrFail($id);
+    $teams = Team::all(); 
+
+    return view('rh.employe.editUser', compact('user', 'teams'));
+}
+
+
 public function createUserForm()
 {
    

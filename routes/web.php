@@ -141,7 +141,10 @@ Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('
 Route::middleware(['auth','role:rh'])->group(function(){
     Route::get('/rh/dashboard',[RhController::class,'index'])->name('rh_dashboard');
     Route::get('/rh/employe', [RhController::class, 'employeView'])->name('employeList');
-    Route::post('/team/create', [TeamController::class, 'store'])->name('teams.store');
+    Route::get('/users/{id}/edit', [RhController::class, 'editUsers'])->name('rh.editUsers');
+    Route::put('/users/{id}', [RhController::class, 'updateUsers'])->name('rh.updateUsers');
+    Route::delete('/employes/{id}', [RhController::class, 'deleteUser'])->name('employe.delete');
+   Route::post('/team/create', [TeamController::class, 'store'])->name('teams.store');
     Route::get('/teams', [TeamController::class, 'index'])->name('teams');
     Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
     Route::post('/teams/{team}/description', [TeamController::class, 'updateDescription'])->name('teams.updateDescription');
