@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <!-- Font Awesome 6 - Version complète -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    <style>
@@ -444,10 +445,10 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="nav-section">
             <div class="nav-section-title">Système</div>
-            
+
             <div class="nav-item">
                 <a class="nav-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
                     <i class="nav-icon ri-account-circle-line"></i>
@@ -591,12 +592,12 @@
     function setActiveNav() {
         const currentPath = window.location.pathname;
         const navLinks = document.querySelectorAll('.nav-link');
-        
+
         navLinks.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === currentPath) {
                 link.classList.add('active');
-                
+
                 // Open parent collapse if exists
                 const collapse = link.closest('.collapse');
                 if (collapse) {
@@ -611,7 +612,7 @@
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
         setActiveNav();
-        
+
         // Handle collapse arrows
         const collapseElements = document.querySelectorAll('[data-bs-toggle="collapse"]');
         collapseElements.forEach(element => {
@@ -637,7 +638,7 @@
             toast.style.zIndex = '9999';
             toast.innerHTML = 'Lien copié avec succès !';
             document.body.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.remove();
             }, 3000);
@@ -673,7 +674,7 @@
 
     updateUnreadMessages();
 
-  
+
     setInterval(updateUnreadMessages, 10000);
 
     document.getElementById('copy-link-btn').addEventListener('click', function() {
@@ -683,7 +684,7 @@
 
     navigator.clipboard.writeText(link).then(function() {
         document.getElementById('copy-link-text').textContent = "Lien copié !";
-        
+
         setTimeout(() => {
             document.getElementById('copy-link-text').textContent = "Copier le lien de candidature";
         }, 2000);

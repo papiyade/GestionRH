@@ -7,16 +7,16 @@
 <div class="container-fluid px-4 py-5">
     <div class="row justify-content-center">
         <div class="col-12 col-xl-10">
-            
+
             <!-- En-tête -->
             <div class="text-center mb-5">
-                <h1 class="h2 fw-bold text-dark mb-2">Tableau de bord</h1>
+                <h1 class="h2 fw-bold text-blue-800 mb-2">Tableau de bord</h1>
                 <p class="text-muted">Vue d'ensemble de votre plateforme</p>
             </div>
 
             <!-- Statistiques -->
             <div class="row g-4 mb-5">
-                
+
                 <!-- Entreprises Totales -->
                 <div class="col-12 col-md-4">
                     <div class="card border-0 shadow-lg h-100 stats-card" style="border-radius: 20px;">
@@ -81,7 +81,7 @@
                                 <h4 class="fw-bold text-dark mb-2">Actions rapides</h4>
                                 <p class="text-muted mb-0">Accédez rapidement aux fonctionnalités principales</p>
                             </div>
-                            
+
                             <div class="row justify-content-center">
                                 <div class="col-12 col-sm-8 col-md-6 col-lg-4">
                                     <a href="{{ route('add_admin_view') }}" class="action-button">
