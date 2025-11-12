@@ -6,16 +6,23 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountCreated;
+use App\Models\Entreprise;
 
 use Illuminate\Http\Request;
 
 class SuperadminController extends Controller
 {
     //
-     public function index()
-    {
-        return view('superadmin.dashboard'); 
-    }
+public function index()
+{
+    $entreprises = Entreprise::all();
+
+    $actives = $entreprises->where('is_actif', true)->count();
+    $inactives = $entreprises->where('is_actif', false)->count();
+
+    return view('superadmin.dashboard', compact('entreprises', 'actives', 'inactives')); 
+}
+
 
     public function addAdmin()
 {

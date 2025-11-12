@@ -54,8 +54,30 @@ class EmployeeDetailController extends Controller
     ]);
 
     // Retour avec message de succès
-    return redirect()->back()->with('success_detail', 'Détail RH ajouté avec succès.');
+    return redirect()->back()->with('success_detail', 'Détail  RH ajouté avec succès.');
 }
+
+public function storeBankInfo(Request $request, $user_id)
+{
+    $validated = $request->validate([
+        'banque_nom' => 'nullable|string|max:255',
+        'iban' => 'nullable|string|max:255',
+        'bic_swift' => 'nullable|string|max:255',
+        'numero_compte' => 'nullable|string|max:255',
+        'type_compte' => 'nullable|string|max:50',
+        'nom_titulaire' => 'nullable|string|max:255',
+    ]);
+
+    // On récupère le détail de l’employé lié à cet utilisateur
+    $detail = EmployeeDetail::where('user_id', $user_id)->firstOrFail();
+
+    // Mise à jour des infos bancaires
+    $detail->update($validated);
+
+    return redirect()->back()->with('success_bank', 'Informations bancaires mises à jour avec succès.');
+}
+
+
 
 public function edit($id)
 {

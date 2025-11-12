@@ -21,6 +21,10 @@ use App\Http\Controllers\PublicJobOfferController;
 use App\Http\Controllers\PersonnelExportController;
 use App\Http\Controllers\RessourceController;
 use App\Http\Controllers\CraController;
+use App\Http\Controllers\PublicEmployeeController;
+use App\Http\Controllers\PublicRHController;
+use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\PrestataireController;
 
 
 
@@ -108,6 +112,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::post('/admin/add-admin', [SuperadminController::class, 'createUsers'])->name('add_admin');
     Route::get('/admin/list-admin', [SuperadminController::class, 'adminList'])->name('list_admin');
   Route::post('/entreprises/{entreprise}/toggle-status', [EntrepriseController::class, 'toggleStatus'])->name('entreprise.toggleStatus');
+  Route::get('/entreprises/list', [EntrepriseController::class, 'index'])->name('entreprises.list');
 Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->name('entreprise.show');
 
 });
@@ -116,9 +121,9 @@ Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->
 
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-//Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
+Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
-    Route::get('/entreprises/employes', [EntrepriseController::class, 'index']);
+Route::get('/entreprises/employes', [EntrepriseController::class, 'index']);
 Route::get('/liste-employe', function() {
     return 'Test OK';
 })->middleware(['auth','role:admin']);
@@ -133,7 +138,7 @@ Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('
 
     Route::get('/employes/create', [AdminController::class, 'formView'])->name('employe.create');
     Route::post('/employes/createe', [AdminController::class, 'createEmploye'])->name('create.employe');
-//    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show'); 
+//    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
        Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
 
@@ -158,6 +163,29 @@ Route::put('/employe/{id}', [EmployeeDetailController::class, 'update'])->name('
     Route::get('/employe/{id}', [RhController::class, 'show'])->name('employe.show');
 Route::get('/users/{id}', [EmployeeDetailController::class, 'show'])->name('users.show');
 Route::post('/employee-details', [EmployeeDetailController::class, 'store'])->name('employee-details.store');
+Route::post('/employee-details/{user_id}/bank', [EmployeeDetailController::class, 'storeBankInfo'])
+    ->name('employee-details.bank.store');
+
+    Route::get('/rh/fiche/pre/{employee}', [PublicRHController::class, 'previewFiche'])->name('rh.fiche.preview');
+
+
+    // Prestations
+    Route::get('prestataires', [PrestataireController::class, 'index'])->name('rh.prestataires.index');
+    Route::get('prestataires/create', [PrestataireController::class, 'create'])->name('rh.prestataires.create');
+    Route::post('prestataires/store', [PrestataireController::class, 'store'])->name('rh.prestataires.store');
+    // Exports mensuels
+    Route::get('prestataires/export/{mois}/{annee}', [PrestataireController::class, 'exportPrestations'])
+    ->name('rh.prestations.export');
+
+
+    // Formulaire pour ajouter/modifier les prestations du mois
+Route::get('prestataires/prestations-mensuelles/create', [PrestataireController::class, 'createPrestations'])->name('rh.prestataires.prestations.create');
+Route::post('prestataires/prestations-mensuelles/store', [PrestataireController::class, 'storePrestations'])->name('rh.prestataires.prestations.store');
+
+    Route::get('prestataires/prestations-mensuelles', [PrestataireController::class, 'prestationsMensuelles'])->name('rh.prestataires.prestations');
+
+
+
 Route::post('/employee/document/store', [EmployeeDocumentController::class, 'storeDocument'])->name('employee.document.store');
 Route::post('/employee/ressource/store', [RessourceController::class, 'store'])->name('employee.ressource.store');
 Route::delete('/employee/ressource/destroy{ressource}', [RessourceController::class, 'destroy'])->name('ressource.destroy');
@@ -232,7 +260,7 @@ Route::delete('/projects/{project}/members/{user}', [ProjectController::class, '
 
 
 });
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','role:employe'])->group(function () {
     Route::get('/mes-projets', [App\Http\Controllers\EmployeController::class, 'mesProjets'])->name('employe.projects');
     Route::get('/my-dashboard', [App\Http\Controllers\EmployeController::class, 'index'])->name('employe.dashboard');
     Route::get('/mes-projets/{project}', [App\Http\Controllers\EmployeController::class, 'voirProjet'])->name('employe.projects.show');
@@ -250,20 +278,33 @@ Route::post('/teams/{team}/assign-pilot/{user}', [TeamController::class, 'assign
 });
 
 
-    
+
 });
 
-Route::resource('cras', CraController::class)->middleware('auth');
-Route::get('/teams/{team}/cras', [TeamController::class, 'viewCras'])
-    ->name('teams.viewCras')
-    ->middleware('auth');
+// CRA (toutes les routes sont protégées)
+Route::middleware('auth')->group(function () {
+    Route::resource('cras', CraController::class);
+
+    // Télécharger un CRA
+    Route::get('cras/{cra}/download', [CraController::class, 'download'])->name('cras.download');
+
+    // Statistiques et exports
+    Route::prefix('cras')->name('cras.')->group(function () {
+        Route::get('/statistics', [CraController::class, 'statistics'])->name('statistics');
+        Route::get('/{cra}/export-pdf', [CraController::class, 'exportPdf'])->name('export-pdf');
+        Route::get('/team/{team}', [CraController::class, 'teamCras'])->name('team-cras');
+    });
+
+    // CRA par équipe
+    Route::get('/teams/{team}/cras', [TeamController::class, 'viewCras'])->name('teams.viewCras');
+});
 
 Route::middleware('auth')->group(function () {
     Route::post('/projets/{project}/taches', [EmployeController::class, 'storeTask'])->name('tasks.store');
-    
+
 });
 
-use App\Http\Controllers\MeetingController;
+
 
 Route::prefix('projets/{project}')->group(function () {
     Route::get('/reunions', [MeetingController::class, 'index'])->name('meetings.index');
@@ -282,6 +323,58 @@ Route::get('/rh/candidature/candidat/{id}/depot', [JobOfferController::class, 'd
 
 Route::post('/candidature/{jobOffer}/store', [CandidatureController::class, 'store'])->name('candidatures.store');
 Route::get('/job-offers/{id}/details', [JobOfferController::class, 'showDetails']);
+
+Route::prefix('employees')->name('rh.')->group(function () {
+    // Formulaire public avec slug
+
+    // Formulaire public pour un employé rattaché à une entreprise
+    Route::get('/renseignement-infos/{id}', [PublicEmployeeController::class, 'create'])
+        ->name('employees.create');
+
+    Route::post('/renseignement-infos/{id}', [PublicEmployeeController::class, 'store'])
+        ->name('employees.store');
+
+    // Liste des employés pour le RH
+    Route::get('/liste-des-employees', [PublicRHController::class, 'index'])
+        ->name('index');
+    // Voir, éditer, supprimer un employé
+    Route::get('/employees/{employee}', [PublicRHController::class, 'show'])->name('show');
+    Route::get('/employees/{employee}/edit', [PublicRHController::class, 'edit'])->name('edit');
+    Route::put('/employees/{employee}', [PublicRHController::class, 'update'])->name('update');
+    Route::delete('/employees/{employee}', [PublicRHController::class, 'destroy'])->name('destroy');
+
+    // Gestion du salaire
+    Route::get('/employees/{employee}/salaire', [PublicRHController::class, 'editSalaire'])->name('salaire.edit');
+    Route::post('/employees/{employee}/salaire', [PublicRHController::class, 'storeSalaire'])->name('salaire.store');
+
+    // Génération PDF
+    Route::get('/employees/{employee}/bulletin', [PublicRHController::class, 'generateBulletin'])->name('bulletin.generate');
+    Route::get('/employees/{employee}/fiche', [PublicRHController::class, 'generateFiche'])->name('fiche.generate');
+
+});
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+
+use Illuminate\Support\Facades\Artisan;
+Route::get('/run-migrations', function () {
+    $migrations = [
+        'database/migrations/2025_10_22_133829_create_prestataires_table.php',
+        'database/migrations/2025_10_22_134012_create_prestations_table.php',
+    ];
+
+    foreach ($migrations as $migration) {
+        Artisan::call('migrate', [
+            '--path' => $migration,
+            '--force' => true,
+        ]);
+    }
+
+    return 'Les deux migrations ont été exécutées avec succès !';
+});
+
+
 
 
 require __DIR__.'/auth.php';

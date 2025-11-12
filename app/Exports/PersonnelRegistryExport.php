@@ -46,7 +46,6 @@ class PersonnelRegistryExport implements
                 'date_naissance' => ($detail && $detail->date_naissance) ? \Carbon\Carbon::parse($detail->date_naissance)->format('d/m/Y') : '',
                 'sexe' => $detail ? ($detail->genre ?? '') : '',
                 'emploi_qualification' => $detail ? ($detail->description_poste ?? '') : '',
-                'categorie' => $detail ? ($detail->niveau_etude ?? '') : '',
                 'salaire_base' => $detail ? ($detail->salaire ?? '') : '',
                 'date_entree' => ($detail && $detail->date_debut) ? \Carbon\Carbon::parse($detail->date_debut)->format('d/m/Y') : '',
                 'date_sortie' => ($detail && $detail->date_fin) ? \Carbon\Carbon::parse($detail->date_fin)->format('d/m/Y') : '',
@@ -68,7 +67,6 @@ class PersonnelRegistryExport implements
             'Date de naissance',
             'Sexe',
             'Emploi et qualification',
-            'Catégorie',
             'Salaire de base',
             'Dates - Entrée',
             'Dates - Sortie',
@@ -172,7 +170,6 @@ class PersonnelRegistryExport implements
             'E' => 15,  // Date de naissance
             'F' => 10,  // Sexe
             'G' => 25,  // Emploi et qualification
-            'H' => 15,  // Catégorie
             'I' => 15,  // Salaire de base
             'J' => 12,  // Date entrée
             'K' => 12,  // Date sortie

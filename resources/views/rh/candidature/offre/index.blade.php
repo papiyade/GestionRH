@@ -4,82 +4,353 @@
 @section('page-title', 'Gestion des offres')
 @section('content')
 
-<div id="layout-wrapper" class="container my-4">
-    <h2 class="text-center text-primary mb-4">Gestion des Offres d'Emploi</h2>
-    <hr class="mb-5">
+				<!-- Breadcrumb -->
+				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+					<div class="my-auto mb-2">
+						<h2 class="mb-1">Offres d'emploi</h2>
+						<nav>
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item">
+									<a href="https://smarthr.co.in/demo/html/template/index.html"><i class="ti ti-smart-home"></i></a>
+								</li>
+								<li class="breadcrumb-item">
+									RH
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">Offres d'emploi</li>
+							</ol>
+						</nav>
+					</div>
+					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 
-    <div class="row g-4 mb-4">
-        <div class="col-sm-auto">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createJobOfferModal" id="addJobOfferBtn">
-                <i class="ri-add-line align-bottom me-1"></i> Créer une Offre
-            </button>
-        </div>
-    </div>
+						<div class="mb-2">
+							<a href="#" data-bs-toggle="modal" data-bs-target="#createJobOfferModal" id="addJobOfferBtn" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Nouvelle offre</a>
+						</div>
+						<div class="head-icons ms-2">
+							<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
+								<i class="ti ti-chevrons-up"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+				<!-- /Breadcrumb -->
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-        </div>
-    @endif
+				<div class="card">
+					<div class="card-body p-3">
+						<div class="d-flex align-items-center justify-content-between">
+							<h5>Toutes les offres</h5>
+                            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                                <div class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                        Statut
+                                    </a>
+                                    <ul class="dropdown-menu  dropdown-menu-end p-3">
+                                        <li>
+                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">En cours</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Cloturée</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Annulée</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <div class="row gy-2 mb-2" id="job-offer-list">
-        @forelse($offres as $offre)
-            <div class="col-12" id="job-card-{{ $offre->id }}">
-                <div class="card shadow-sm">
-                    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-                        <div>
-                            <h5 class="mb-1">{{ $offre->titre }}</h5>
-                            <p class="mb-0 text-muted">💼 Équipe {{ $offre->equipe }} | 📄 {{ Str::limit($offre->description, 100) }}</p>
-                            <p class="mb-0 text-muted">📅 Fin de dépôt : <strong>{{ \Carbon\Carbon::parse($offre->date_limite)->format('d/m/Y') }}</strong></p>
-                            <span class="badge {{ match($offre->type_contrat) {
-                                'CDI' => 'bg-primary',
-                                'CDD' => 'bg-warning text-dark',
-                                'Stage' => 'bg-success',
-                                'Alternance' => 'bg-info',
-                                'Freelance' => 'bg-secondary',
-                                default => 'bg-secondary'
-                            } }}">{{ $offre->type_contrat }}</span>
+                <div class="row row-cols-1 row-cols-md-3 g-4 mb-2" id="job-offer-list">
+                    @forelse($offres as $offre)
+                        <div class="col" id="job-card-{{ $offre->id }}">
+                            <div class="card shadow-sm h-100 border-0" style="background: linear-gradient(135deg, #fff7e6 0%, #ffe5d0 100%);">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md avatar-rounded bg-orange me-3">
+                                            <i class="ti ti-briefcase fs-20 text-black"></i>
+                                        </span>
+                                        <div>
+                                            <h5 class="mb-1 text-orange">{{ $offre->titre }}</h5>
+                                            <span class="badge {{ match($offre->type_contrat) {
+                                                'CDI' => 'bg-primary',
+                                                'CDD' => 'bg-warning text-dark',
+                                                'Stage' => 'bg-success',
+                                                'Alternance' => 'bg-info',
+                                                'Freelance' => 'bg-secondary',
+                                                default => 'bg-secondary'
+                                            } }}">{{ $offre->type_contrat }}</span>
+                                        </div>
+                                    </div>
+                                    <p class="mb-2 text-muted"><i class="ti ti-users me-1 text-orange"></i>Équipe {{ $offre->equipe }}</p>
+                                    <p class="mb-2 text-muted"><i class="ti ti-file-description me-1 text-orange"></i>{{ Str::limit($offre->description, 80) }}</p>
+                                    <p class="mb-2 text-muted"><i class="ti ti-calendar-time me-1 text-orange"></i>Fin de dépôt : <strong>{{ \Carbon\Carbon::parse($offre->date_limite)->format('d/m/Y') }}</strong></p>
+                                    <div class="mt-auto d-flex align-items-center gap-2">
+                                        <select class="form-select form-select-sm w-auto border-orange bg-primary text-white" style="min-width:110px" onchange="updateJobStatus({{ $offre->id }}, this.value)">
+                                            <option class="bg-light" value="En cours" {{ $offre->statut === "En cours" ? "selected" : "" }}>En cours</option>
+                                            <option class="bg-light" value="Clôturé" {{ $offre->statut === "Clôturé" ? "selected" : "" }}>Clôturé</option>
+                                            <option class="bg-light" value="Annulé" {{ $offre->statut === "Annulé" ? "selected" : "" }}>Annulé</option>
+                                        </select>
+                                        <button class="btn btn-icon btn-outline-orange btn-sm" onclick="editJobOffer({{ $offre->id }})" title="Modifier">
+                                            <i class="ti ti-edit"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-outline-danger btn-sm" onclick="deleteJobOffer({{ $offre->id }})" title="Supprimer">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="d-flex align-items-center gap-2 mt-3 mt-md-0">
-                            <select class="form-select form-select-sm" onchange="updateJobStatus({{ $offre->id }}, this.value)">
-                                <option value="En cours" {{ $offre->statut === "En cours" ? "selected" : "" }}>En cours</option>
-                                <option value="Clôturé" {{ $offre->statut === "Clôturé" ? "selected" : "" }}>Clôturé</option>
-                                <option value="Annulé" {{ $offre->statut === "Annulé" ? "selected" : "" }}>Annulé</option>
-                            </select>
-                            <button class="btn btn-outline-info btn-sm" onclick="editJobOffer({{ $offre->id }})">✏️</button>
-                            <button class="btn btn-outline-danger btn-sm" onclick="deleteJobOffer({{ $offre->id }})">🗑️</button>
+                    @empty
+                        <div class="col-12">
+                            <p class="text-muted text-center">Aucune offre d'emploi trouvée.</p>
                         </div>
+                    @endforelse
+                </div>
+
+                <div class="row g-0 justify-content-end mb-4" id="pagination-element">
+                    <div class="col-sm-6">
+                        <nav>
+                            <ul class="pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
+                            </ul>
+                        </nav>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div class="col-12">
-                <p class="text-muted text-center">Aucune offre d'emploi trouvée.</p>
-            </div>
-        @endforelse
-    </div>
-
-    <div class="row g-0 justify-content-end mb-4" id="pagination-element">
-        <div class="col-sm-6">
-            <nav>
-                <ul class="pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
-                </ul>
-            </nav>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="createJobOfferModal" tabindex="-1" aria-labelledby="createJobOfferModalLabel" aria-hidden="true">
+		{{-- <div class="modal fade" id="add_post">
+			<div class="modal-dialog modal-dialog-centered modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Post Job</h4>
+						<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
+							<i class="ti ti-x"></i>
+						</button>
+					</div>
+					<form id="createJobOfferForm" class="needs-validation" method="POST" action="{{ route('offres.store') }}" novalidate>
+                        @csrf
+						<div class="modal-body pb-0">
+							<div class="row">
+                                <div class="contact-grids-tab pt-0">
+                                    <ul class="nav nav-underline" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                          <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab" aria-selected="true">Basic Information</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                          <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab" aria-selected="false">Location</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="info-tab" tabindex="0">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">                                                
+                                                    <div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
+                                                        <img src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-30.jpg" alt="img" class="rounded-circle">
+                                                    </div>                                              
+                                                    <div class="profile-upload">
+                                                        <div class="mb-2">
+                                                            <h6 class="mb-1">Upload Profile Image</h6>
+                                                            <p class="fs-12">Image should be below 4 mb</p>
+                                                        </div>
+                                                        <div class="profile-uploader d-flex align-items-center">
+                                                            <div class="drag-upload-btn btn btn-sm btn-primary me-2">
+                                                                Upload
+                                                                <input type="file" class="form-control image-sign" multiple="">
+                                                            </div>
+                                                            <a href="javascript:void(0);" class="btn btn-light btn-sm">Cancel</a>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Titre du poste <span class="text-danger"> *</span></label>
+                                                    <input type="text" name="jobTitle" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Description du poste<span class="text-danger"> *</span></label>
+                                                    <textarea name="jobDescription" rows="3" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Job Category <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+                                                        <option>Select</option>
+                                                        <option>IOS</option>
+                                                        <option>Web & Application</option>
+                                                        <option>Networking</option>
+                                                    </select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Job Type <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+                                                        <option>Select</option>
+                                                        <option>Full Time</option>
+                                                        <option>Part Time</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Job Level <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+														<option>Select</option>
+                                                        <option>Team Lead</option>
+                                                        <option>Manager</option>
+														<option>Senior</option>
+														<option>junior</option>
+                                                    </select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Experience <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+                                                        <option>Select</option>
+                                                        <option>Entry Level</option>
+                                                        <option>Mid Level</option>
+                                                        <option>Expert</option>
+                                                    </select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Qualification <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+                                                        <option>Select</option>
+                                                        <option>Bachelore Degree</option>
+                                                        <option>Master Degree</option>
+                                                        <option>Others</option>
+                                                    </select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Gender <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+                                                        <option>Select</option>
+                                                        <option>Male</option>
+                                                        <option>Female</option>
+                                                    </select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Min. Sallary <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+                                                        <option>Select</option>
+                                                        <option>10k - 15k</option>
+                                                        <option>15k -20k</option>
+                                                    </select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Max. Sallary <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+                                                        <option>Select</option>
+                                                        <option>40k - 50k</option>
+                                                        <option>50k - 60k</option>
+                                                    </select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3 ">
+                                                    <label class="form-label">Job Expired Date <span class="text-danger"> *</span></label>
+                                                    <div class="input-icon-end position-relative">
+														<input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
+														<span class="input-icon-addon">
+															<i class="ti ti-calendar text-gray-7"></i>
+														</span>
+													</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Required Skills</label>
+                                                    <input type="text" class="form-control">
+                                                </div>									
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success_modal">Save & Next</button>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab" tabindex="0">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Address <span class="text-danger"> *</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+													<label class="form-label">Country <span class="text-danger"> *</span></label>
+													<select class="select">
+														<option>Select</option>
+														<option>USA</option>
+														<option>Canada</option>
+														<option>Germany</option>
+														<option>France</option>
+													</select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">State <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+														<option>Select</option>
+														<option>California</option>
+														<option>New York</option>
+														<option>Texas</option>
+														<option>Florida</option>
+													</select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+													<label class="form-label">City <span class="text-danger"> *</span></label>
+                                                    <select class="select">
+														<option>Select</option>
+														<option>Los Angeles</option>
+														<option>San Diego</option>
+														<option>Fresno</option>
+														<option>San Francisco</option>
+													</select>
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Zip Code <span class="text-danger"> *</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>									
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="map-grid mb-3">
+                                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509170.989457427!2d-123.80081967108484!3d37.192957227641294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sin!4v1669181581381!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
+                                                </div>									
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success_modal">Post</button>
+                                        </div>
+                                    </div>
+                                </div>								
+							</div>
+						</div>						
+					</form>
+				</div>
+			</div>
+		</div> --}}
+        <div class="modal fade" id="createJobOfferModal" tabindex="-1" aria-labelledby="createJobOfferModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header modal-header-custom">
@@ -237,183 +508,13 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" class="btn btn-success btn-lg px-4"><i class="ri-save-line me-2"></i> Enregistrer l'Offre</button>
+                        <button type="submit" class="btn btn-primary btn-lg px-4"><i class="ri-save-line me-2"></i> Enregistrer l'Offre</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    @if ($errors->any())
-        var createJobOfferModal = new bootstrap.Modal(document.getElementById('createJobOfferModal'));
-        createJobOfferModal.show();
-    @endif
-
-    (function () {
-        'use strict'
-        var form = document.getElementById('createJobOfferForm');
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
-    })()
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    const createJobOfferModal = new bootstrap.Modal(document.getElementById('createJobOfferModal'));
-    const createJobOfferForm = document.getElementById('createJobOfferForm');
-
-    function resetCreateJobOfferForm() {
-        createJobOfferForm.reset();
-        createJobOfferForm.classList.remove('was-validated');
-        
-        document.getElementById('jobStatus').value = "En cours";
-        const defaultDate = new Date();
-        defaultDate.setMonth(defaultDate.getMonth() + 1);
-        const year = defaultDate.getFullYear();
-        const month = String(defaultDate.getMonth() + 1).padStart(2, '0');
-        const day = String(defaultDate.getDate()).padStart(2, '0');
-        document.getElementById('applicationDeadline').value = `${year}-${month}-${day}`;
-
-        document.getElementById('createJobOfferModalLabel').innerHTML = '<i class="ri-briefcase-line me-2"></i> Créer une nouvelle Offre d\'Emploi';
-        const hiddenIdInput = document.getElementById('editJobId');
-        if (hiddenIdInput) hiddenIdInput.remove();
-        const methodInput = document.getElementById('methodInput');
-        if (methodInput) methodInput.remove();
-
-        createJobOfferForm.action = "{{ route('offres.store') }}";
-        createJobOfferForm.method = "POST";
-    }
-
-    document.getElementById('addJobOfferBtn').addEventListener('click', resetCreateJobOfferForm);
-    document.getElementById('createJobOfferModal').addEventListener('hidden.bs.modal', resetCreateJobOfferForm);
-
-    function updateJobStatus(id, newStatus) {
-        if (!confirm(`Voulez-vous vraiment changer le statut de cette offre à "${newStatus}" ?`)) {
-            event.target.value = event.target.dataset.originalStatus || 'En cours';
-            return;
-        }
-
-        fetch(`/offres/${id}/update-status`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ status: newStatus })
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw new Error(err.message || 'Erreur serveur'); });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                alert('Statut mis à jour avec succès !');
-                window.location.reload();
-            } else {
-                alert('Erreur lors de la mise à jour du statut : ' + (data.message || ''));
-            }
-        })
-        .catch(error => {
-            console.error('Erreur AJAX lors de la mise à jour du statut:', error);
-            alert('Une erreur est survenue lors de la mise à jour du statut.');
-        });
-    }
-
-    function editJobOffer(id) {
-        fetch(`/offres/${id}/edit`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Offre non trouvée ou erreur serveur.');
-                }
-                return response.json();
-            })
-            .then(jobToEdit => {
-                document.getElementById('createJobOfferModalLabel').innerHTML = '<i class="ri-briefcase-line me-2"></i> Modifier l\'Offre d\'Emploi';
-
-                document.getElementById('jobTitle').value = jobToEdit.titre;
-                document.getElementById('jobTeam').value = jobToEdit.equipe;
-                document.getElementById('jobDescription').value = jobToEdit.description;
-                document.getElementById('contractType').value = jobToEdit.type_contrat;
-                document.getElementById('applicationDeadline').value = jobToEdit.date_limite;
-                document.getElementById('salaryAmount').value = jobToEdit.salaire;
-                document.getElementById('salaryCurrency').value = jobToEdit.devise || '';
-                document.getElementById('salaryPeriod').value = jobToEdit.periode_salaire || '';
-                document.getElementById('experienceRequired').value = jobToEdit.experience_requise;
-                document.getElementById('jobSector').value = jobToEdit.secteur || '';
-                document.getElementById('jobStatus').value = jobToEdit.statut;
-                document.getElementById('remoteOption').checked = jobToEdit.teletravail;
-
-                let hiddenIdInput = document.getElementById('editJobId');
-                if (!hiddenIdInput) {
-                    hiddenIdInput = document.createElement('input');
-                    hiddenIdInput.type = 'hidden';
-                    hiddenIdInput.id = 'editJobId';
-                    hiddenIdInput.name = 'id';
-                    createJobOfferForm.appendChild(hiddenIdInput);
-                }
-                hiddenIdInput.value = jobToEdit.id;
-
-                let methodInput = document.getElementById('methodInput');
-                if (!methodInput) {
-                    methodInput = document.createElement('input');
-                    methodInput.type = 'hidden';
-                    methodInput.name = '_method';
-                    methodInput.id = 'methodInput';
-                    createJobOfferForm.appendChild(methodInput);
-                }
-                methodInput.value = 'PUT';
-
-                createJobOfferForm.action = `/offres/${jobToEdit.id}`;
-                createJobOfferForm.method = 'POST';
-
-                createJobOfferModal.show();
-            })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des données de l\'offre pour édition:', error);
-                alert('Impossible de récupérer les détails de l\'offre pour édition.');
-            });
-    }
-
-    function deleteJobOffer(id) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette offre d\'emploi ? Cette action est irréversible.')) {
-            fetch(`/offres/${id}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ _method: 'DELETE' })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw new Error(err.message || 'Erreur serveur'); });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert('Offre supprimée avec succès ! La page va se recharger.');
-                    window.location.reload();
-                } else {
-                    alert('Erreur lors de la suppression de l\'offre : ' + (data.message || ''));
-                }
-            })
-            .catch(error => {
-                console.error('Erreur AJAX lors de la suppression:', error);
-                alert('Une erreur est survenue lors de la suppression de l\'offre.');
-            });
-        }
-    }
-</script>
+		<!-- /Post Job -->
 
 @endsection

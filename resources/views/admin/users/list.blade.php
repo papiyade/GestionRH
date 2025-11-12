@@ -10,12 +10,13 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
 </div>
 @endif
+                <h4 class="card-title mb-0">Liste des Employes </h4>
 
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title mb-0">Liste des Employe </h4>
+                <h4 class="card-title mb-0">Liste des Employes </h4>
             </div><!-- end card header -->
 
             <div class="card-body">
@@ -48,7 +49,7 @@
                                     <th class="sort" data-sort="customer_name">Nom</th>
                                     <th class="sort" data-sort="email">Email</th>
                                     <th class="sort" data-sort="phone">Télephone</th>
-                                    <th class="sort" data-sort="address">Role</th>
+                                    <th class="sort" data-sort="address">Rolee</th>
                                     <th class="sort" data-sort="action">Action</th>
                                 </tr>
                             </thead>

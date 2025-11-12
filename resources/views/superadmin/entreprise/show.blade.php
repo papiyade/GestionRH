@@ -7,29 +7,27 @@
 <div class="container-fluid px-4 py-4">
     <div class="row justify-content-center">
         <div class="col-12 col-xl-10">
-            
             <!-- En-tête Principal -->
             <div class="card border-0 shadow-lg mb-4" style="border-radius: 20px;">
                 <div class="card-body p-4 p-md-5">
                     <div class="row align-items-center">
-                        
                         <!-- Logo ou avatar -->
                         <div class="col-auto">
                             <div class="position-relative">
-                                <div class="d-flex align-items-center justify-content-center bg-light border rounded-4 shadow-sm" 
+                                <div class="d-flex align-items-center justify-content-center bg-light border rounded-4 shadow-sm"
                                      style="width: 100px; height: 100px; overflow: hidden;">
-                                     
+
                                     @if ($entreprise->logo_path)
                                         <!-- Logo -->
-                                        <img src="{{ asset('storage/' . $entreprise->logo_path) }}" 
-                                             alt="Logo {{ $entreprise->entreprise_name }}" 
-                                             class="img-fluid p-2" 
+                                        <img src="{{ asset('storage/' . $entreprise->logo_path) }}"
+                                             alt="Logo {{ $entreprise->entreprise_name }}"
+                                             class="img-fluid p-2"
                                              style="max-width: 100%; max-height: 100%; object-fit: contain;">
                                     @else
                                         <!-- Première lettre -->
                                         <span class="fw-bold text-white d-flex align-items-center justify-content-center"
-                                              style="width:100%; height:100%; font-size:2.5rem; 
-                                                     background: linear-gradient(135deg, #4e73df, #1cc88a); 
+                                              style="width:100%; height:100%; font-size:2.5rem;
+                                                     background: linear-gradient(135deg, #4e73df, #1cc88a);
                                                      border-radius: 12px;">
                                             {{ strtoupper(mb_substr($entreprise->entreprise_name, 0, 1)) }}
                                         </span>
@@ -134,7 +132,7 @@
                                     </div>
                                 </div>
                                 @endif
-                                
+
                                 <div class="p-3 bg-light rounded-3">
                                     <div class="fw-semibold text-dark small mb-1">Date de création</div>
                                     <div class="d-flex align-items-center">
@@ -142,7 +140,7 @@
                                         <span class="text-dark">{{ $entreprise->created_at->format('d/m/Y à H:i') }}</span>
                                     </div>
                                 </div>
-                                
+
                                 <div class="p-3 bg-light rounded-3">
                                     <div class="fw-semibold text-dark small mb-1">Dernière modification</div>
                                     <div class="d-flex align-items-center">
@@ -162,7 +160,7 @@
     <div class="card-body p-4">
         <div class="row g-3 align-items-center">
             <div class="col-12 col-sm-6">
-                <a href="{{ route('entreprise.edit', $entreprise->id) }}" 
+                <a href="{{ route('entreprise.edit', $entreprise->id) }}"
                    class="btn btn-outline-dark btn-lg w-100 rounded-pill shadow-sm">
                     <i class="fas fa-pencil-alt me-2"></i>
                     Modifier l'entreprise
@@ -287,6 +285,7 @@
     background-color: #f8f9fa !important;
 }
 
+
 .text-primary { color: #007bff !important; }
 .text-success { color: #28a745 !important; }
 .text-danger { color: #dc3545 !important; }
@@ -300,11 +299,11 @@
         padding-left: 1rem;
         padding-right: 1rem;
     }
-    
+
     .card-body {
         padding: 1.5rem !important;
     }
-    
+
     .btn-lg {
         padding: 0.75rem 1.5rem;
         font-size: 1rem;

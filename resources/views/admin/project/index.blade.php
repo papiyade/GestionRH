@@ -3,88 +3,2007 @@
 @section('page-title', 'Tableau de bord')
 
 @section('content')
-<div class="container my-5">
 
-    {{-- Section des statistiques --}}
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card bg-secondary text-light border-0 rounded-4 shadow-sm p-4 text-center">
-                <i class="ri-projector-line fs-2 mb-3"></i>
-                <h3 class="fw-bold mb-1">{{ $projectCount }}</h3>
-                <p class="text-muted">Projets</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-secondary text-light border-0 rounded-4 shadow-sm p-4 text-center">
-                <i class="ri-group-line fs-2 mb-3"></i>
-                <h3 class="fw-bold mb-1">{{ $teamCount }}</h3>
-                <p class="text-muted">Équipes</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-secondary text-light border-0 rounded-4 shadow-sm p-4 text-center">
-                <i class="ri-user-line fs-2 mb-3"></i>
-                <h3 class="fw-bold mb-1">{{ $userCount }}</h3>
-                <p class="text-muted">Utilisateurs</p>
-            </div>
-        </div>
-    </div>
+				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+					<div class="my-auto mb-2">
+						<h2 class="mb-1">Projets</h2>
+						<nav>
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item">
+									<a href="https://smarthr.co.in/demo/html/template/index.html"><i class="ti ti-smart-home"></i></a>
+								</li>
+								<li class="breadcrumb-item">
+									Admin
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">Liste des projets</li>
+							</ol>
+						</nav>
+					</div>
+					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+						<div class="ms-2 mb-0 head-icons">
+							<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
+								<i class="ti ti-chevrons-up"></i>
+							</a>
+						</div>
+					</div>
+				</div>
 
-    {{-- Section des projets --}}
-    <div class="card bg-dark text-light border-0 rounded-4 shadow-lg">
-        <div class="card-header bg-dark border-bottom-0 rounded-top-4 p-4">
-            <h4 class="fw-bold mb-0">
-                <i class="ri-list-check text-info me-2"></i>Liste des projets
-            </h4>
-        </div>
-        
-        <div class="card-body p-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 text-light">
-                    <thead>
-                        <tr class="text-muted small">
-                            <th scope="col">Nom du projet</th>
-                            <th scope="col">Progression</th>
-                            <th scope="col">Responsable</th>
-                            <th scope="col">Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($projects as $project)
-                            <tr class="border-bottom border-secondary">
-                                <td>
-                                    <h6 class="fw-bold mb-0">{{ $project->name }}</h6>
-                                    <small class="text-muted">{{ Str::limit($project->description, 50) }}</small>
-                                </td>
-                                <td>
-                                    <div class="progress bg-secondary" style="height: 8px;">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ $project->progress }}%;" aria-valuenow="{{ $project->progress }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small class="text-muted mt-1 d-block">{{ $project->progress }}% terminé</small>
-                                </td>
-                                <td>
-                                    @if($project->leadUser)
-                                        <span>{{ $project->leadUser->name }}</span>
-                                    @else
-                                        <span class="text-muted">Aucun responsable</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="badge rounded-pill {{ $project->status == 'completed' ? 'bg-success' : 'bg-warning text-dark' }}">{{ ucfirst($project->status) }}</span>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center py-5 text-muted">
-                                    <i class="ri-inbox-line ri-2x mb-3"></i>
-                                    Aucun projet n'a encore été créé dans votre entreprise.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+                				<div class="card">
+					<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+						<h4>Projets</h4>
+						<div class="d-flex align-items-center flex-wrap row-gap-3">
+							<div class="avatar-list-stacked avatar-group-sm me-3">
+@php
+    $maxAvatars = 3;
+    $totalUsers = $userTeams->count();
+@endphp
+
+<div class="d-flex align-items-center">
+    @foreach ($userTeams->take($maxAvatars) as $user)
+        @php
+            // Extraire les initiales (première lettre de chaque mot du nom)
+            $initials = collect(explode(' ', $user->name))
+                        ->map(fn($word) => strtoupper(Str::substr($word, 0, 1)))
+                        ->join('');
+        @endphp
+
+        @if (!empty($user->profile_photo_url))
+            <span class="avatar avatar-rounded me-1">
+                <img class="border border-white"
+                     src="{{ $user->profile_photo_url }}"
+                     alt="{{ $user->name }}">
+            </span>
+        @else
+            <span class="avatar avatar-rounded bg-light text-dark fw-medium me-2 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px">
+                {{ $initials }}
+            </span>
+        @endif
+    @endforeach
+
+    {{-- Si plus de 3 utilisateurs, afficher le badge +N --}}
+    @if ($totalUsers > $maxAvatars)
+        <span class="avatar avatar-rounded bg-primary text-white fw-bold fs-12 d-flex align-items-center justify-content-center">
+            +{{ $totalUsers - $maxAvatars }}
+        </span>
+    @endif
 </div>
+
+</div>
+
+
+
+							</div>
+							<div class="d-flex align-items-center me-3">
+								<p class="mb-0 me-3 pe-3 border-end fs-14">Total projets : <span class="text-dark"> {{ $projectCount }} </span></p>
+								<p class="mb-0 me-3 pe-3 border-end fs-14">Non débuté : <span class="text-dark"> {{$projectNotStartedCount}} </span></p>
+								<p class="mb-0 me-3 pe-3 border-end fs-14">En cours : <span class="text-dark"> {{$projectEnCoursCount}} </span></p>
+								<p class="mb-0 fs-14">Complétées : <span class="text-dark"> {{ $projectCompleteCount }} </span></p>
+							</div>
+							<div class="input-icon-start position-relative">
+								<span class="input-icon-addon">
+									<i class="ti ti-search"></i>
+								</span>
+								<input type="text" class="form-control" placeholder="Rechercher un Projet">
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="tab-content" id="pills-tabContent">
+							<div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+								<div class="d-flex align-items-start overflow-auto project-status pb-4">
+									{{-- Projets Non débutés --}}
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-pink p-1 d-flex rounded-circle me-2"><span class="bg-pink rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Non débuté</h5>
+													<span class="badge bg-light rounded-pill">{{$projectNotStartedCount}}</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											@foreach($projectNotStarted as $project)
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-danger badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Non débuté</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">{{$project->title}} <span class="fs-12 ms-2 text-gray">PRJ-{{$project->id}}</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Taches</span>
+																@if($project->tasks->isNotEmpty())
+																<p class="fs-12 text-dark">{{$project->completedTasks/2}}</p>
+																@else
+																<p class="fs-5 text-center">Aucune Tache pour le moment</p>
+																@endif
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Créé le</span>
+																<p class="fs-12 text-dark">{{$project->created_at->format(' d/M/Y')}}</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											@endforeach
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												Nouveau projet
+											</a>
+										</div>
+									</div>
+									{{-- Projets en Cours --}}
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-skyblue p-1 d-flex rounded-circle me-2"><span class="bg-skyblue rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">En cours</h5>
+													<span class="badge bg-light rounded-pill">{{ $projectEnCoursCount }}</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											@forelse($projectEnCours as $project)
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-purple badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>High</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-156</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											@empty
+											<p class="text-center mt-4">Aucun projet en cours</p>
+											@endforelse
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												Nouveau Projet
+											</a>
+										</div>
+									</div>
+									{{-- Projets Terminés --}}
+									<div class="p-3 rounded bg-transparent-secondary w-100">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-success p-1 d-flex rounded-circle me-2"><span class="bg-success rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Terminé</h5>
+													<span class="badge bg-light rounded-pill">{{$projectCompleteCount}}</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+                                            @forelse ($projectComplete as $project)
+                                            <div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-warning badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Medium</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-161</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+                                            @empty
+                                                Aucun projet terminé
+                                            @endforelse
+
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												Nouveau Projet
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="pills-contact" role="tabpanel">
+								<div class="d-flex align-items-start overflow-auto project-status pb-4">
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-pink p-1 d-flex rounded-circle me-2"><span class="bg-pink rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">New</h5>
+													<span class="badge bg-light rounded-pill">02</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-skyblue p-1 d-flex rounded-circle me-2"><span class="bg-skyblue rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Inprogress</h5>
+													<span class="badge bg-light rounded-pill">13</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-purple badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>High</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-156</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-purple badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>High</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-157</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-danger p-1 d-flex rounded-circle me-2"><span class="bg-danger rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">On-hold</h5>
+													<span class="badge bg-light rounded-pill">04</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-purple badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>High</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-159</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-success p-1 d-flex rounded-circle me-2"><span class="bg-success rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Completed</h5>
+													<span class="badge bg-light rounded-pill">10</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-purple badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>High</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-161</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="pills-medium" role="tabpanel">
+								<div class="d-flex align-items-start overflow-auto project-status pb-4">
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-pink p-1 d-flex rounded-circle me-2"><span class="bg-pink rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">New</h5>
+													<span class="badge bg-light rounded-pill">02</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-warning badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Medium</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-154</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-warning badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Medium</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-155</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-skyblue p-1 d-flex rounded-circle me-2"><span class="bg-skyblue rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Inprogress</h5>
+													<span class="badge bg-light rounded-pill">13</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-warning badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Medium</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-156</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-warning badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Medium</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-157</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-danger p-1 d-flex rounded-circle me-2"><span class="bg-danger rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">On-hold</h5>
+													<span class="badge bg-light rounded-pill">04</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-warning badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Medium</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-159</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-success p-1 d-flex rounded-circle me-2"><span class="bg-success rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Completed</h5>
+													<span class="badge bg-light rounded-pill">10</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-warning badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Medium</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-161</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="pills-low" role="tabpanel">
+								<div class="d-flex align-items-start overflow-auto project-status pb-4">
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-pink p-1 d-flex rounded-circle me-2"><span class="bg-pink rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">New</h5>
+													<span class="badge bg-light rounded-pill">02</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-success badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Low</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-154</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-success badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Low</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-155</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-skyblue p-1 d-flex rounded-circle me-2"><span class="bg-skyblue rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Inprogress</h5>
+													<span class="badge bg-light rounded-pill">13</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-success badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Low</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-156</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-success badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Low</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-157</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100 me-3">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-danger p-1 d-flex rounded-circle me-2"><span class="bg-danger rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">On-hold</h5>
+													<span class="badge bg-light rounded-pill">04</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-success badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Low</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-159</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+									<div class="p-3 rounded bg-transparent-secondary w-100">
+										<div class="bg-white p-2 rounded mb-2">
+											<div class="d-flex align-items-center justify-content-between">
+												<div class="d-flex align-items-center">
+													<span class="bg-soft-success p-1 d-flex rounded-circle me-2"><span class="bg-success rounded-circle d-block p-1"></span></span>
+													<h5 class="me-2">Completed</h5>
+													<span class="badge bg-light rounded-pill">10</span>
+												</div>
+												<div class="dropdown">
+													<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+														<i class="ti ti-dots-vertical"></i>
+													</a>
+													<ul class="dropdown-menu dropdown-menu-end p-3">
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="kanban-drag-wrap">
+											<div>
+												<div class="card kanban-card mb-2">
+													<div class="card-body">
+														<div class="d-flex align-items-center justify-content-between mb-3">
+															<div class="d-flex align-items-center">
+																<span class="badge bg-outline-dark me-2">Web Layout</span>
+																<span class="badge bg-success badge-xs d-flex align-items-center justify-content-center"><i class="fas fa-circle fs-6 me-1"></i>Low</span>
+															</div>
+															<div class="dropdown">
+																<a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+																	<i class="ti ti-dots-vertical"></i>
+																</a>
+																<ul class="dropdown-menu dropdown-menu-end p-3">
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-edit me-2"></i>Edit</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mb-2">
+															<span class="avatar avatar-xs rounded-circle bg-warning me-2">
+																<img src="https://smarthr.co.in/demo/html/template/assets/img/icons/kanban-arrow.svg" class="w-auto h-auto" alt="Img">
+															</span>
+															<h6 class="d-flex align-items-center">Project Title <span class="fs-12 ms-2 text-gray">PRJ-161</span></h6>
+														</div>
+														<div class="d-flex align-items-center border-bottom mb-3 pb-3">
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Budget</span>
+																<p class="fs-12 text-dark">$24,000</p>
+															</div>
+															<div class="me-3 pe-3 border-end">
+																<span class="fw-medium fs-12 d-block mb-1">Tasks</span>
+																<p class="fs-12 text-dark">12/15</p>
+															</div>
+															<div class="">
+																<span class="fw-medium fs-12 d-block mb-1">Due on</span>
+																<p class="fs-12 text-dark">15 Apr 2024</p>
+															</div>
+														</div>
+														<div class="d-flex align-items-center justify-content-between">
+															<div class="avatar-list-stacked avatar-group-sm me-3">
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-19.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-29.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-16.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-02.jpg" alt="img">
+																</span>
+																<span class="avatar avatar-rounded">
+																	<img class="border border-white" src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-03.jpg" alt="img">
+																</span>
+																<a href="#" class="avatar avatar-rounded bg-primary fs-12 text-white">
+																	1+
+																</a>
+															</div>
+															<div class="d-flex align-items-center">
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2"><i class="ti ti-message-circle text-gray me-1"></i>14</a>
+																<a href="javascript:void(0);" class="d-flex align-items-center text-dark"><i class="ti ti-paperclip text-gray me-1"></i>14</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pt-2">
+											<a href="#" class="btn btn-white border border-dashed d-flex align-items-center justify-content-center">
+												<i class="ti ti-plus me-2"></i>
+												New Project
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
 @endsection

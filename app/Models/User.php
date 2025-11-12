@@ -69,6 +69,11 @@ public function employeeDetail()
     {
         return $this->hasOne(EmployeeDetail::class);
     }
+
+    public function employeePublicForm()
+{
+    return $this->hasOne(Employee::class); // si tu veux garder les données du formulaire public
+}
 public function employeeDocuments()
 {
     return $this->hasMany(EmployeeDocument::class, 'user_id');
@@ -80,10 +85,12 @@ public function ressources()
 }
 
 
- public function tasks()
-    {
-        return $this->belongsToMany(Task::class);
-    }
+// User.php
+public function tasks()
+{
+    return $this->belongsToMany(Task::class, 'task_user');
+}
+
 
 public function projects()
 {
@@ -103,6 +110,12 @@ public function ownedTeams()
 {
     return $this->hasMany(Cra::class);
 }
+
+public function employee()
+{
+    return $this->hasOne(Employee::class);
+}
+
 
 
     /**

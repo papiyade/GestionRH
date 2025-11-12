@@ -93,7 +93,11 @@ public function index()
                 ->latest()
                 ->get();
 
-    return view('rh.team.index', compact('teams'));
+                    $teamCount = Team::where('entreprise_id', $user->entreprise_id)
+                ->with('members') // charge les membres pour éviter N+1
+                ->latest()->count();
+
+    return view('rh.team.index', compact('teams','teamCount'));
 }
 
 public function addMember($teamId, $userId)

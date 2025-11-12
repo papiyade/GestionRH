@@ -114,8 +114,8 @@
         <div class="col-12">
             <div class="text-center text-muted mt-5 py-5 border rounded-3 bg-light" id="noResultsMessage">
                 <i class="bi bi-info-circle fs-1 mb-3 text-secondary"></i>
-                <p class="fs-5 fw-light">Aucune candidature ne correspond à vos critères de recherche.</p>
-                <p class="lead">Veuillez ajuster vos filtres et réessayer.</p>
+                <p class="fs-16 fw-light">Aucune candidature ne correspond à vos critères de recherche.</p>
+                <p class="fs-12">Veuillez ajuster vos filtres et réessayer.</p>
             </div>
         </div>
     @endforelse

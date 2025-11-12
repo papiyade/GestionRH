@@ -17,7 +17,7 @@
                 
                 <div class="row g-4 mb-4">
                     <div class="col-md-6">
-                        <h5 class="mb-3 fw-bold" style="color: rgba(138, 43, 226, 0.6);">Informations Personnelles</h5>
+                        <h5 class="mb-3 fw-bold text-primary" >Informations Personnelles</h5>
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control rounded-3" id="name" name="name" placeholder="Nom et Prénom" required>
                             <label for="name">Nom et Prénom</label>
@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <h5 class="mb-3 fw-bold" style="color: rgba(138, 43, 226, 0.6);">Accès et Sécurité</h5>
+                        <h5 class="mb-3 fw-bold text-primary">Accès et Sécurité</h5>
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="Adresse Email" required>
                             <label for="email">Adresse Email</label>
@@ -47,7 +47,7 @@
 
                 <div class="row mb-5">
                     <div class="col-12">
-                        <h5 class="mb-3 fw-bold" style="color: rgba(138, 43, 226, 0.6);">Affectation</h5>
+                        <h5 class="mb-3 fw-bold text-primary" >Affectation</h5>
                         <div class="form-floating">
                             <select id="team_id" class="form-select rounded-3" name="team_id" required>
                                 <option value="" selected disabled>Sélectionnez une équipe...</option>
@@ -61,7 +61,7 @@
                 </div>
                 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-gradient btn-lg text-white" style="background: linear-gradient(135deg, #9370db, #8a2be2); border: none;">
+                    <button type="submit" class="btn btn-gradient btn-lg text-white" style="background: linear-gradient(135deg, #ea6a09, #df4613); border: none;">
                         <i class="ti ti-circle-plus me-2"></i>Ajouter l'employé
                     </button>
                 </div>

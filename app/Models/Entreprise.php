@@ -18,6 +18,7 @@ class Entreprise extends Model
         'description',
         'is_actif',
         'slug',
+        'indemnite_transport',
         
     ];
 
@@ -59,7 +60,11 @@ protected static function booted()
         return $this->hasMany(JobOffer::class);
     }
 
-    
+    public function employees()
+{
+    return $this->hasManyThrough(EmployeeDetail::class, User::class, 'id', 'user_id', 'id', 'id');
+}
+
 
 
 

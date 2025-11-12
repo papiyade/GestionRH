@@ -7,13 +7,14 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card shadow-lg border-0 rounded-4 mt-n4 mx-n4">
-            <div class="card-body p-4">
+        <div class="card shadow-lg border-0 rounded-4 mt-n4 mx-n4" style>
+            <div class="card-body rounded-4 p-4" style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%);">
                 <div class="d-flex justify-content-between align-items-start mb-4">
                     <div class="d-flex align-items-center">
                         <div class="avatar-md me-4">
-                            <div class="avatar-title bg-light text-dark rounded-circle fs-4">
-                                {{ strtoupper(substr($team->name, 0, 1)) }}
+                            <div class="avatar-title rounded-circle fs-24 text-white"
+                                 style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px;">
+                                {{ strtoupper(substr($team->name, 0, 1)) }} 
                             </div>
                         </div>
                         <div>
@@ -28,15 +29,17 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-outline-dark btn-sm"><i class="ri-share-line me-1"></i> Partager</button>
-                        <button type="button" class="btn btn-outline-dark btn-sm"><i class="ri-flag-line me-1"></i> Signaler</button>
-                        <button type="button" class="btn btn-outline-dark btn-sm"><i class="ri-star-line me-1"></i> Favoris</button>
+                        @if($team->entreprise)
+                            <span class="btn btn-outline-dark btn-sm">
+                                <i class="ri-building-line me-1"></i> {{ $team->entreprise->entreprise_name }}
+                            </span>
+                        @endif
                     </div>
                 </div>
 
                 <ul class="nav nav-pills nav-justified mt-4 border-bottom pb-2" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#team-overview" role="tab">
+                        <a class="nav-link active fw-semibold text-white" data-bs-toggle="tab" href="#team-overview" role="tab">
                             <i class="ri-dashboard-line me-1"></i> Aperçu
                         </a>
                     </li>
@@ -58,20 +61,32 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="card shadow-sm border-0 rounded-4 h-100">
-                            <div class="card-body">
+                            <div class="card-body position-relative">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h6 class="fw-semibold text-uppercase mb-0">Description</h6>
-                                    <button class="btn btn-sm btn-outline-dark create-folder-modal" data-bs-toggle="modal" data-bs-target="#createFolderModal">
-                                        <i class="ri-pencil-line me-1 align-bottom"></i> @if ($team->description) Modifier @else Ajouter @endif
+                                    <h6 class="fw-semibold text-uppercase mb-0">
+                                        <i class="ri-information-line me-1"></i> Description
+                                    </h6>
+                                    <button class="btn btn-sm btn-outline-primary create-folder-modal" data-bs-toggle="modal" data-bs-target="#createFolderModal">
+                                        <i class="ri-pencil-line me-1 align-bottom"></i>
+                                        @if ($team->description) Modifier @else Ajouter @endif
                                     </button>
                                 </div>
-                                <p class="text-muted">{{ $team->description ?? 'Aucune description disponible pour le moment.' }}</p>
+                                @if ($team->description)
+                                    <div class="alert alert-light border-0 rounded-3 px-3 py-2 mb-0" style="font-size: 1.05rem;">
+                                        {{ $team->description }}
+                                    </div>
+                                @else
+                                    <div class="alert alert-warning border-0 rounded-3 px-3 py-2 mb-0 d-flex align-items-center gap-2" style="font-size: 1.05rem;">
+                                        <i class="ri-alert-line me-2"></i>
+                                        <span>Aucune description disponible pour le moment.</span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="card shadow-sm border-0 rounded-4 h-100">
-                            <div class="card-body">
+                            <div class="card-body rounded-4" style="background: linear-gradient(135deg, #f6ddab 0%, #f6e3d0 100%);">
                                 <h6 class="fw-semibold text-uppercase mb-3">Détails de l'équipe</h6>
                                 <div class="vstack gap-2">
                                     <p class="mb-0 text-muted d-flex justify-content-between align-items-center">
@@ -84,7 +99,7 @@
                                     </p>
                                     <p class="mb-0 text-muted d-flex justify-content-between align-items-center">
                                         <span>Effectif :</span>
-                                        <span class="badge bg-danger fs-12">{{ $team->members->count() }} Membres</span>
+                                        <span class="badge  fs-12" style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%);">{{ $team->members->count() }} Membres</span>
                                     </p>
                                     <p class="mb-0 text-muted d-flex justify-content-between align-items-center">
                                         <span>Ressources :</span>
@@ -99,7 +114,7 @@
 
             <div class="tab-pane fade" id="team-members" role="tabpanel">
                 <div class="card shadow-sm border-0 rounded-4">
-                    <div class="card-header border-bottom-dashed d-flex align-items-center justify-content-between">
+                    <div class="card-header border-bottom-dashed d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #f6ddab 0%, #f6e3d0 100%);">
                         <h4 class="card-title mb-0 flex-grow-1">Membres de l'équipe ({{ $team->members->count() }})</h4>
                         <div class="flex-shrink-0">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
@@ -112,13 +127,14 @@
                             @foreach ($team->members as $member)
                                 <div class="d-flex align-items-center p-3 rounded-3 hover-bg-light transition-all">
                                     <div class="avatar-md flex-shrink-0 me-4">
-                                        <div class="avatar-title rounded-circle bg-light text-dark fs-4">
+                                        <div class="avatar-title rounded-circle fs-24 text-white"
+                                        style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px;">
                                             {{ strtoupper(substr($member->name, 0, 1) . (strpos($member->name, ' ') !== false ? substr($member->name, strpos($member->name, ' ') + 1, 1) : '')) }}
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
                                         <h5 class="fs-16 mb-0">
-                                            <a href="#" class="text-body fw-medium">{{ $member->name }}</a>
+                                            <a href="{{ route('users.show',$member->id) }}" class="text-body fw-medium">{{ $member->name }}</a>
                                         </h5>
                                         <p class="text-muted mb-0 small">Membre de l'équipe</p>
                                     </div>
@@ -197,7 +213,8 @@
                                         @if ($user->profile_photo_path)
                                             <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="" class="img-fluid rounded-circle">
                                         @else
-                                            <div class="avatar-title bg-secondary-subtle text-secondary rounded-circle">
+                                            <div class="avatar-title rounded-circle fs-15 text-white"
+                                 style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%); display: flex; align-items: center; justify-content: center; width: 25px; height: 25px;">
                                                 {{ strtoupper(substr($user->name, 0, 1)) }}
                                             </div>
                                         @endif

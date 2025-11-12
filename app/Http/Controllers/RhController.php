@@ -64,6 +64,12 @@ class RhController extends Controller
         ->whereHas('jobOffer', fn($q) => $q->where('entreprise_id', $entrepriseId))
         ->count();
 
+        $employesParEquipe = Team::where('entreprise_id', $entrepriseId)
+            ->withCount('users') // Compte les utilisateurs via la table pivot team_user
+            ->get(['id', 'name']);
+
+
+
     return view('rh.dashboard', compact(
         'totalEmployes',
         'offresEmploiActives',
@@ -74,7 +80,8 @@ class RhController extends Controller
         'candidaturesApprouvees',
         'candidaturesRejetees',
         'entreprise',
-        'candidaturesCeMois'
+        'candidaturesCeMois',
+        'employesParEquipe'
     ));
 }
 
@@ -171,7 +178,7 @@ public function deleteUser($id)
         $user->teams()->detach();
         $user->delete();
 
-        return response()->json(['success' => true, 'message' => 'Employé supprimé avec succès.']);
+return redirect()->route('employeList')->with('success', 'Employé supprimé avec succès.');
     } catch (\Exception $e) {
         \Log::error('Erreur suppression employé : ' . $e->getMessage());
         return response()->json(['success' => false, 'message' => 'Erreur lors de la suppression.'], 500);

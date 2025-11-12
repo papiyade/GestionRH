@@ -16,20 +16,65 @@ use App\Models\Project;
 class AdminController extends Controller
 {
     //
-  public function index()
-    {
-        $userId = Auth::id();
+public function index()
+{
+    $userId = Auth::id();
+    $entreprise = Entreprise::where('id_user', $userId)->first();
+        // Récupérer l'ID de l'entreprise liée à l'utilisateur
+    $entrepriseId = Auth::user()->entreprise_id;
 
-       
-        $entreprise = Entreprise::where('id_user', $userId)->first();
+$users = User::with('teams')
+             ->where('entreprise_id', $entrepriseId)
+             ->get();
+// Nombre total d'utilisateurs dans l'entreprise
+             $usersCount = User::where('entreprise_id', $entrepriseId)->count();
 
-        if ($entreprise && !$entreprise->is_actif) {
-            return redirect()->route('status');
-        }
+            //  Nombre total d'utilisateurs avec le role rh dans l'entreprise
+             $rhCount = User::where('entreprise_id', $entrepriseId)
+                            ->where('role', 'rh')
+                            ->count();
 
-      
-        return view('admin.dashboard');
+                            // Nombre total d'utilisateurs avec le role admin dans l'entreprise
+             $adminCount = User::where('entreprise_id', $entrepriseId)
+                            ->where('role', 'admin')->count();
+
+                             // Nombre total d'utilisateurs avec le role chef_projet dans l'entreprise
+             $chefProjetCount = User::where('entreprise_id', $entrepriseId)
+                            ->where('role', 'chef_projet')
+                            ->count();
+
+    // Vérifie si l'entreprise est inactive
+    if ($entreprise && !$entreprise->is_actif) {
+        return redirect()->route('status');
     }
+
+
+
+    // Récupérer les équipes
+    $teams = Team::where('entreprise_id', $entrepriseId)->get();
+
+    $teamsCount = Team::where('entreprise_id', $entrepriseId)->count();
+
+        // Compter les employés par team
+    $teamNames = [];
+    $teamEmployeeCounts = [];
+
+    foreach ($teams as $team) {
+        $teamNames[] = $team->name;
+        $teamEmployeeCounts[] = $team->users()->count(); // <-- relation users()
+    }
+
+    // Récupérer les projets
+    $projects = Project::with('team')
+        ->where('entreprise_id', $entrepriseId)
+        ->paginate(10);
+
+    // Compter le nombre total de projets
+    $projectsCount = Project::where('entreprise_id', $entrepriseId)->count();
+
+    return view('admin.dashboard', compact('entreprise', 'users', 'teams', 'teamsCount', 'projects', 'projectsCount', 'teamNames', 'teamEmployeeCounts', 'usersCount', 'rhCount', 'adminCount', 'chefProjetCount'));
+}
+
    public function companyView()
     {
         $userId = Auth::id();
@@ -47,7 +92,7 @@ class AdminController extends Controller
         $userId = Auth::id();
         $entreprise = Entreprise::where('id_user', $userId)->first();
 
-       
+
         if ($entreprise && !$entreprise->is_actif) {
             return redirect()->route('status');
         }
@@ -77,6 +122,7 @@ public function createEmploye(Request $request)
         'email' => 'required|email|unique:users,email',
         'password' => 'required|string|min:6|confirmed',
         'telephone' => 'nullable|string',
+        'adresse' => 'nullable|string|max:255',
         'role' => 'required|string|in:rh,chef_projet',
     ]);
 
@@ -94,6 +140,7 @@ public function createEmploye(Request $request)
         'password' => Hash::make($request->password),
         'telephone' => $request->telephone,
         'role' => $request->role,
+        'adresse' => $request->adresse,
         'entreprise_id' => $entreprise->id,
     ]);
 
@@ -124,9 +171,27 @@ public function showProjects()
     $projectCount = Project::where('entreprise_id', $entrepriseId)->count();
     $teamCount = Team::where('entreprise_id', $entrepriseId)->count();
     $userCount = User::where('entreprise_id', $entrepriseId)->count();
+    $userTeams = User::where('entreprise_id', $entrepriseId)->get();
+    $projectEnCoursCount = Project::where('entreprise_id', $entrepriseId)
+    ->where('status', 'en_cours')
+    ->count();
+    $projectEnCours = Project::where('entreprise_id', $entrepriseId)
+    ->where('status', 'en_cours')
+    ->get();
+    $projectCompleteCount = Project::where('entreprise_id', $entrepriseId)
+    ->where('status', 'completed')
+    ->count();
+    $projectComplete = Project::where('entreprise_id', $entrepriseId)
+    ->where('status', 'completed')
+    ->get();
+    $projectNotStartedCount = Project::where('entreprise_id', $entrepriseId)
+    ->where('status', 'not_started')
+    ->count();
+    $projectNotStarted = Project::where('entreprise_id', $entrepriseId)
+    ->where('status', 'not_started')
+    ->get();
 
     // Charger les projets en incluant la relation 'lead' et 'tasks'
-    // La relation `lead` est celle que vous avez définie dans le modèle Project
     $projects = Project::with(['lead', 'tasks'])->where('entreprise_id', $entrepriseId)->get();
 
     // Calculer la progression pour chaque projet
@@ -137,8 +202,8 @@ public function showProjects()
         $project->leadUser = $project->lead->first();
     });
 
-    return view('admin.project.index', compact('projectCount', 'teamCount', 'userCount', 'projects'));
+    return view('admin.project.index', compact('projectCount', 'projectEnCoursCount', 'projectCompleteCount','projectNotStartedCount', 'teamCount', 'userCount', 'projects','userTeams','projectComplete','projectNotStarted','projectEnCours'));
 }
 
-    
+
 }

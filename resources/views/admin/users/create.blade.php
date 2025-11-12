@@ -7,7 +7,7 @@
     <div class="card shadow-lg border-0 rounded-4">
         <div class="card-body p-5">
             <div class="text-center mb-4">
-                <h2 class="fw-bold text-dark">
+                <h2 class="fw-bold text-primary">
                     <i class="ri-user-add-line text-primary me-2"></i>Ajouter un nouvel employé
                 </h2>
                 <p class="text-muted">Remplissez les informations ci-dessous pour créer un nouveau compte.</p>
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-dark btn-lg">
+                    <button type="submit" class="btn btn-primary btn-lg">
                         <i class="ri-save-line me-2"></i>Ajouter l'employé
                     </button>
                 </div>

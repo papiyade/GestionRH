@@ -78,8 +78,15 @@ class Task extends Model
                     ->withTimestamps();
     }
 
+
+    public function files()
+    {
+        return $this->hasMany(File::class, 'task_id', 'id'); // task_id sur files
+    }
+
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'task_id', 'id'); // task_id sur comments
     }
+
 }

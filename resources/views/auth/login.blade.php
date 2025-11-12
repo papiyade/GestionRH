@@ -1,112 +1,181 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
+
+
+<!-- Mirrored from smarthr.co.in/demo/html/template/login by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 26 Sep 2025 19:08:56 GMT -->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Farlu">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Farlu</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<meta name="description" content="Smarthr - Bootstrap Admin Template">
+	<meta name="keywords" content="admin, estimates, bootstrap, business, html5, responsive, Projects">
+	<meta name="author" content="Dreams technologies - Bootstrap Admin Template">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Farlu | Connexion</title>
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('template/html/template/assets/img/favicon.png') }}">
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.png') }}">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('template/html/template/assets/css/bootstrap.min.css') }}">
+	<!-- Apple Touch Icon -->
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/apple-touch-icon.png') }}">
 
-    <!-- Tabler Icon CSS -->
-    <link rel="stylesheet" href="{{ asset('template/html/template/assets/plugins/tabler-icons/tabler-icons.min.css') }}">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
 
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="{{ asset('template/html/template/assets/css/style.css') }}">
+	<!-- Feather CSS -->
+	<link rel="stylesheet" href="{{ asset('assets/plugins/icons/feather/feather.css') }}">
+
+	<!-- Tabler Icon CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/tabler-icons/tabler-icons.min.css') }}">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
+
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+
 </head>
 
-<body>
-<div class="main-wrapper auth-bg position-relative overflow-hidden">
+<body class="bg-white">
 
-    <div class="container-fluid position-relative z-1">
-        <div class="w-100 overflow-hidden position-relative flex-wrap d-block vh-100">
+	<div id="global-loader" style="display: none;">
+		<div class="page-loader"></div>
+	</div>
 
-            <div class="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap py-3">
-                <div class="col-lg-4 mx-auto">
+	<!-- Main Wrapper -->
+	<div class="main-wrapper">
 
-                    <form method="POST" action="{{ route('login') }}" class="d-flex justify-content-center align-items-center">
-                        @csrf
-                        <div class="d-flex flex-column justify-content-lg-center p-4 p-lg-0 pb-0 flex-fill">
-                            <div class="mx-auto mb-4 text-center">
-                                <img src="{{ asset('template/html/template/assets/img/logo.svg') }}" class="img-fluid" width="100" alt="Logo">
-                            </div>
+		<div class="container-fuild">
+			<div class="w-100 overflow-hidden position-relative flex-wrap d-block vh-100">
+				<div class="row">
+					<div class="col-lg-5">
+						<div class="login-background position-relative d-lg-flex align-items-center justify-content-center d-none flex-wrap vh-100">
+							<div class="bg-overlay-img">
+								<img src="https://smarthr.co.in/demo/html/template/assets/img/bg/bg-01.png" class="bg-1" alt="Img">
+								<img src="https://smarthr.co.in/demo/html/template/assets/img/bg/bg-02.png" class="bg-2" alt="Img">
+								<img src="https://smarthr.co.in/demo/html/template/assets/img/bg/bg-03.png" class="bg-3" alt="Img">
+							</div>
+							<div class="authentication-card w-100">
+								<div class="authen-overlay-item border w-100">
+                                    <h1 class="text-white display-1">Donner du pouvoir aux gens <br> grâce à une gestion RH fluide et efficace.</h1>
+									<div class="my-4 mx-auto authen-overlay-img">
+										<img src="https://smarthr.co.in/demo/html/template/assets/img/bg/authentication-bg-01.png" alt="Img">
+									</div>
+									<div>
+                                        <p class="text-white fs-20 fw-semibold text-center">Gérez efficacement votre personnel, simplifiez <br> vos opérations en toute simplicité.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-12 col-sm-12">
+						<div class="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap">
+							<div class="col-md-7 mx-auto vh-100">
+								<form method="POST" action="{{ route('login') }}" class="vh-100">
+                                    @csrf
+									<div class="vh-100 d-flex flex-column justify-content-between p-4 pb-0">
+										<div class=" mx-auto mb-5 text-center">
+											<img src="https://smarthr.co.in/demo/html/template/assets/img/logo.svg"
+												class="img-fluid" alt="Logo">
+										</div>
+										<div class="">
+											<div class="text-center mb-3">
+												<h2 class="mb-2">Connexion</h2>
+												<p class="mb-0">Entrez vos détails de connexion svp</p>
+											</div>
+											<div class="mb-3">
+												<label class="form-label">Adresse Email</label>
+												<div class="input-group">
+													<input type="email" name="email" value="" class="form-control border-end-0">
+													<span class="input-group-text border-start-0">
+														<i class="ti ti-mail"></i>
+													</span>
+												</div>
+											</div>
+											<div class="mb-3">
+												<label class="form-label">Mot de passe</label>
+												<div class="pass-group">
+													<input type="password" name="password" class="pass-input form-control">
+													<span class="ti toggle-password ti-eye-off"></span>
+												</div>
+											</div>
+											<div class="d-flex align-items-center justify-content-between mb-3">
+												<div class="d-flex align-items-center">
+													<div class="form-check form-check-md mb-0">
+														<input class="form-check-input" name="remember" id="remember_me" type="checkbox">
+														<label for="remember_me"  class="form-check-label mt-0">Se souvenir de moi</label>
+													</div>
+												</div>
+												<div class="text-end">
+                                                    @if(Route::has('password.request'))
+													<a href="{{ route('password.request') }}" class="link-danger">Mot de passe oublié ?</a>
+                                                    @endif
+												</div>
+											</div>
+											<div class="mb-3">
+												<button type="submit" class="btn btn-primary w-100">Se Connecter</button>
+											</div>
+                                            {{-- 
+											<div class="text-center">
+												<h6 class="fw-normal text-dark mb-0">Don’t have an account? 
+													<a href="https://smarthr.co.in/demo/html/template/register.html" class="hover-a"> Create Account</a>
+												</h6>
+											</div>
+											<div class="login-or">
+												<span class="span-or">Ou</span>
+											</div>
+											<div class="mt-2">
+												<div class="d-flex align-items-center justify-content-center flex-wrap">
+													<div class="text-center me-2 flex-fill">
+														<a href="javascript:void(0);"
+															class="br-10 p-2 btn btn-info d-flex align-items-center justify-content-center">
+															<img class="img-fluid m-1" src="{{ asset('assets/img/icons/facebook-logo.svg') }}" alt="Facebook">
+														</a>
+													</div>
+													<div class="text-center me-2 flex-fill">
+														<a href="javascript:void(0);"
+															class="br-10 p-2 btn btn-outline-light border d-flex align-items-center justify-content-center">
+															<img class="img-fluid m-1" src="{{ asset('assets/img/icons/google-logo.svg') }}" alt="Facebook">
+														</a>
+													</div>
+													<div class="text-center flex-fill">
+														<a href="javascript:void(0);"
+															class="bg-white br-10 p-2 btn btn-white d-flex align-items-center justify-content-center">
+															<img class="img-fluid m-1" src="{{ asset('assets/img/icons/apple.svg') }}" alt="Apple">
+														</a>
+													</div>
+												</div>
+											</div> --}}
+										</div>
+                                        <div class="mt-5 pb-4 text-center">
+											<p class="mb-0 text-gray-9">Copyright &copy; 2025 - Farlu</p>
+										</div>
+									</div>
+								</form>
+							</div>
 
-                            <div class="card border-0 p-lg-3 rounded-4">
-                                <div class="card-body">
-                                    <div class="text-center mb-3">
-                                        <h5 class="mb-1 fw-bold">Connexion</h5>
-                                        <p class="mb-0">Entrez vos informations pour accéder au tableau de bord</p>
-                                    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /Main Wrapper -->
 
-                                    <!-- Email -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Adresse Email</label>
-                                        <div class="input-group input-group-flat">
-                                            <span class="input-group-text">
-                                                <i class="ti ti-mail fs-14 text-dark"></i>
-                                            </span>
-                                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Entrez votre email" value="{{ old('email') }}" required autofocus>
-                                        </div>
-                                        @error('email')
-                                            <div class="text-danger small mt-1">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+	<!-- jQuery -->
+	<script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
 
-                                    <!-- Password -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Mot de passe</label>
-                                        <div class="input-group input-group-flat">
-                                            <span class="input-group-text">
-                                                <i class="ti ti-lock-open fs-14 text-dark"></i>
-                                            </span>
-                                            <input type="password" name="password" class="pass-input form-control @error('password') is-invalid @enderror" placeholder="************" required>
-                                            <span class="toggle-password input-group-text ti ti-eye-off fs-14 text-dark"></span>
-                                        </div>
-                                        @error('password')
-                                            <div class="text-danger small mt-1">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+	<!-- Bootstrap Core JS -->
+	<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
 
-                                    <!-- Remember / Forgot -->
-                                    <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <div class="form-check form-check-md mb-0">
-                                            <input class="form-check-input" id="remember_me" type="checkbox" name="remember">
-                                            <label for="remember_me" class="form-check-label mt-0 text-dark">Se souvenir de moi</label>
-                                        </div>
-                                        <div class="text-end">
-                                            @if(Route::has('password.request'))
-                                                <a href="{{ route('password.request') }}">Mot de passe oublié ?</a>
-                                            @endif
-                                        </div>
-                                    </div>
+	<!-- Feather Icon JS -->
+	<script src="{{ asset('assets/js/feather.min.js') }}"></script>
 
-                                    <!-- Submit -->
-                                    <div class="mb-2">
-                                        <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-                                    </div>
-
-                                </div><!-- end card body -->
-                            </div><!-- end card -->
-
-                        </div>
-                    </form>
-
-                </div><!-- end col -->
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<!-- Scripts -->
-<script src="{{ asset('template/html/template/assets/js/jquery-3.7.1.min.js') }}"></script>
-<script src="{{ asset('template/html/template/assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('template/html/template/assets/js/script.js') }}"></script>
+	<!-- Custom JS -->
+	<script src="{{ asset('assets/js/script.js') }}"></script>
 
 </body>
+
+
+<!-- Mirrored from smarthr.co.in/demo/html/template/login by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 26 Sep 2025 19:08:56 GMT -->
 </html>

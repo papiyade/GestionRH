@@ -9,7 +9,7 @@
 
             {{-- Header --}}
             <div class="text-center mb-5">
-                <h2 class="fw-bold text-dark">
+                <h2 class="fw-bold text-primary">
                     <i class="ri-building-2-line text-primary me-2"></i>Configuration de l'entreprise
                 </h2>
                 <p class="text-muted">Mettez à jour les informations essentielles de votre entreprise.</p>
@@ -27,84 +27,93 @@
                 </div>
             @endif
 
-            <form id="step-form" action="{{ route('entreprise.update', $entreprise->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="entrepriseForm" action="{{ route('entreprise.update', $entreprise->id) }}" method="POST" enctype="multipart/form-data" class="w-100">
                 @csrf
                 @method('PUT')
-
-                {{-- Step 1 --}}
-                <div class="step step-active" id="step1">
-                    <h5 class="fw-bold text-dark mb-4">
-                        <i class="ri-image-add-line text-primary me-2"></i>Identité de votre entreprise
-                    </h5>
-
-                    {{-- Logo --}}
-                    <div class="mb-4">
-                        <label class="form-label">Logo de l'entreprise <span class="text-muted">(optionnel)</span></label>
-                        @if ($entreprise->logo_path)
-                            <div class="d-flex align-items-center gap-3">
-                                <img src="{{ asset('storage/' . $entreprise->logo_path) }}" class="rounded shadow-sm" alt="Logo actuel" style="height: 80px;">
-                                <button type="button" class="btn btn-sm btn-outline-danger" id="remove-file">
-                                    <i class="ri-close-line me-1"></i> Supprimer
-                                </button>
-                                <input type="hidden" name="remove_logo" id="remove_logo_input" value="0">
+                <div class="row">
+                    {{-- Logo upload --}}
+                    <div class="col-md-12 mb-4">
+                        <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3">
+                            <div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
+                                @if ($entreprise->logo_path)
+                                    <img src="{{ asset('storage/' . $entreprise->logo_path) }}" alt="Logo actuel" class="rounded-circle" style="height: 80px; width: 80px; object-fit: cover;">
+                                @else
+                                    <i class="ti ti-photo text-gray-2 fs-16"></i>
+                                @endif
                             </div>
-                        @endif
-                        <input type="file" class="form-control mt-3" id="logo_path" name="logo_path" accept="image/*">
+<div class="profile-upload">
+    <div class="mb-2">
+        <h6 class="mb-1">Téléverser le logo de l’entreprise</h6>
+        <p class="fs-12">L’image doit être inférieure à 4 Mo (formats acceptés : JPG, PNG, JPEG)</p>
+    </div>
+
+    <div class="profile-uploader d-flex align-items-center">
+        <div class="drag-upload-btn btn btn-sm btn-primary me-2">
+            Choisir une image
+            <input type="file" class="form-control image-sign" name="logo_path" accept="image/*">
+        </div>
+
+        @if ($entreprise->logo_path)
+            <button type="button" class="btn btn-outline-danger btn-sm" id="remove-file">
+                Supprimer l’image actuelle
+            </button>
+            <input type="hidden" name="remove_logo" id="remove_logo_input" value="0">
+        @else
+            <a href="javascript:void(0);" class="btn btn-light btn-sm">Annuler</a>
+        @endif
+    </div>
+
+    @if ($entreprise->logo_path)
+        <div class="mt-3">
+            <img src="{{ asset('storage/' . $entreprise->logo_path) }}" alt="Logo actuel"
+                 class="img-thumbnail" width="40">
+        </div>
+    @endif
+</div>
+
+                        </div>
                     </div>
-
-                    {{-- Nom entreprise --}}
-                    <div class="form-floating mb-4">
-                        <input type="text" class="form-control" id="entreprise_name" name="entreprise_name"
-                               value="{{ old('entreprise_name', $entreprise->entreprise_name) }}"
-                               placeholder="Nom de l'entreprise" required>
-                        <label for="entreprise_name">Nom de l'entreprise</label>
+                    {{-- Inputs group 1 --}}
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Company Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="entreprise_name" value="{{ old('entreprise_name', $entreprise->entreprise_name) }}" required>
+                        </div>
                     </div>
-                </div>
-
-                {{-- Step 2 --}}
-                <div class="step d-none" id="step2">
-                    <h5 class="fw-bold text-dark mb-4">
-                        <i class="ri-map-pin-line text-primary me-2"></i>Informations de contact
-                    </h5>
-
-                    <div class="form-floating mb-4">
-                        <input type="text" class="form-control" id="adresse" name="adresse"
-                               value="{{ old('adresse', $entreprise->adresse) }}"
-                               placeholder="Adresse complète" required>
-                        <label for="adresse">Adresse complète</label>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Adresse complète <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="adresse" value="{{ old('adresse', $entreprise->adresse) }}" required>
+                        </div>
                     </div>
-
-                    <div class="form-floating mb-4">
-                        <input type="email" class="form-control" id="email" name="email"
-                               value="{{ old('email', $entreprise->email) }}"
-                               placeholder="Adresse email professionnelle" required>
-                        <label for="email">Adresse email professionnelle</label>
+                    {{-- Inputs group 2 --}}
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Adresse email professionnelle <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" name="email" value="{{ old('email', $entreprise->email) }}" required>
+                        </div>
                     </div>
-                </div>
-
-                {{-- Step 3 --}}
-                <div class="step d-none" id="step3">
-                    <h5 class="fw-bold text-dark mb-4">
-                        <i class="ri-file-list-3-line text-primary me-2"></i>Décrivez votre entreprise
-                    </h5>
-
-                    <div class="form-floating mb-4">
-                        <textarea class="form-control" id="description" name="description" style="height: 150px" required
-                                  placeholder="Description de l'entreprise">{{ old('description', $entreprise->description) }}</textarea>
-                        <label for="description">Description de l'entreprise</label>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Description de l'entreprise <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="description" style="height: 150px" required>{{ old('description', $entreprise->description) }}</textarea>
+                        </div>
                     </div>
-                </div>
-
-                {{-- Navigation --}}
-                <div class="d-flex justify-content-between mt-5">
-                    <button type="button" class="btn btn-outline-dark px-4" id="prevBtn">
-                        <i class="ri-arrow-left-line me-2"></i>Précédent
-                    </button>
-                    <button type="button" class="btn btn-dark px-5" id="nextBtn">
-                        Suivant <i class="ri-arrow-right-line ms-2"></i>
-                    </button>
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary px-5">Enregistrer</button>
+                    </div>
                 </div>
             </form>
+
+            @push('scripts')
+            <script>
+                document.getElementById('remove-file')?.addEventListener('click', function() {
+                    document.getElementById('remove_logo_input').value = '1';
+                    this.closest('.avatar').querySelector('img').style.display = 'none';
+                    this.style.display = 'none';
+                });
+            </script>
+            @endpush
         </div>
     </div>
 </div>

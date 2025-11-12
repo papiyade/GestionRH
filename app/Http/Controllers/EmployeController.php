@@ -22,16 +22,19 @@ class EmployeController extends Controller
             $completedTasks = $allTasks->where('status', 'completed')->count();
             $inProgressTasks = $allTasks->where('status', 'in progress')->count();
 
-            $recentTasks = $user->tasks()->with('project')->latest()->take(3)->get();
+$recentTasks = $user->tasks()->with(['project', 'files', 'comments'])->latest()->take(3)->get();
             
-            $tasks = $user->tasks()->with('project')->get();
+$tasks = $user->tasks()->with(['project', 'files', 'comments'])->get();
+// Récupérer les projets uniques liés aux tâches
+$projects = $tasks->pluck('project')->unique('id')->filter();
 
             return view('employe.dashboard', [
                 'tasks' => $tasks,
                 'recentTasks' => $recentTasks,
                 'totalTasks' => $totalTasks,
                 'completedTasks' => $completedTasks,
-                'inProgressTasks' => $inProgressTasks
+                'inProgressTasks' => $inProgressTasks,
+                            'projects' => $projects,
             ]);
         }
 

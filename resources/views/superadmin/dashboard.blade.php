@@ -4,188 +4,207 @@
 @section('page-title', 'Dashboard Superadmin')
 
 @section('content')
-<div class="container-fluid px-4 py-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-xl-10">
 
-            <!-- En-tête -->
-            <div class="text-center mb-5">
-                <h1 class="h2 fw-bold text-blue-800 mb-2">Tableau de bord</h1>
-                <p class="text-muted">Vue d'ensemble de votre plateforme</p>
-            </div>
+				<!-- Breadcrumb -->
+				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+					<div class="my-auto mb-2">
+						<h2 class="mb-1">Tableau de Bord</h2>
+						<nav>
+							{{-- <ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item">
+									<a href="https://farlu.com"><i class="ti ti-smart-home"></i></a>
+								</li>
+								<li class="breadcrumb-item">
+									Superadmin
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">Tableau de Bord</li>
+							</ol> --}}
+						</nav>
+					</div>
+					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+						<div class="input-icon mb-2 position-relative">
+							<span class="input-icon-addon">
+								<i class="ti ti-calendar text-gray-9"></i>
+							</span>
+							<input type="text" class="form-control date-range bookingrange" placeholder="dd/mm/yyyy - dd/mm/yyyy">
+						</div>
+						<div class="ms-2 head-icons">
+							<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
+								<i class="ti ti-chevrons-up"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+				<!-- /Breadcrumb -->
 
-            <!-- Statistiques -->
-            <div class="row g-4 mb-5">
+    				<!-- Welcome Wrap -->
+				<div class="welcome-wrap mb-4">
+					<div class=" d-flex align-items-center justify-content-between flex-wrap">
+						<div class="mb-3">
+							<h2 class="mb-1 text-white">Bonjour , {{ Auth::user()->role }} </h2>
+							<p class="text-light">Passez une bonne journée sur la plateforme !</p>
+						</div>
+						<div class="d-flex align-items-center flex-wrap mb-1">
+							<a href="{{ route('list_admin') }}" class="btn btn-dark btn-md me-2 mb-2">Admins</a>
+							<a href="https://smarthr.co.in/demo/html/template/packages.html" class="btn btn-light btn-md mb-2">Entreprises</a>
+						</div>
+					</div>
+					<div class="welcome-bg">
+						{{-- <img src="{{ asset('assets/img/bg/card-bg-02.png') }}" alt="img" class="welcome-bg-01">
+						<img src="{{ asset('assets/img/bg/welcome-bg-03.svg') }}" alt="img" class="welcome-bg-02">
+						<img src="{{ asset('assets/img/bg/welcome-bg-01.svg') }}" alt="img" class="welcome-bg-03"> --}}
+					</div>
+				</div>	
+				<!-- /Welcome Wrap -->
 
-                <!-- Entreprises Totales -->
-                <div class="col-12 col-md-4">
-                    <div class="card border-0 shadow-lg h-100 stats-card" style="border-radius: 20px;">
-                        <div class="card-body p-4 d-flex align-items-center">
-                            <div class="stats-icon bg-primary me-4">
-                                <i class="fas fa-building"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1 fw-medium">ENTREPRISES TOTALES</p>
-                                <h2 class="fw-bold text-dark mb-0" style="font-size: 2.5rem;">
-                                    {{ \App\Models\Entreprise::count() }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="row">
 
-                <!-- Entreprises Actives -->
-                <div class="col-12 col-md-4">
-                    <div class="card border-0 shadow-lg h-100 stats-card" style="border-radius: 20px;">
-                        <div class="card-body p-4 d-flex align-items-center">
-                            <div class="stats-icon bg-success me-4">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1 fw-medium">ENTREPRISES ACTIVES</p>
-                                <h2 class="fw-bold text-dark mb-0" style="font-size: 2.5rem;">
-                                    {{ \App\Models\Entreprise::where('is_actif',1)->count() }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+					<!-- Total Companies -->
+					<div class="col-xl-4 col-sm-6 d-flex">
+						<div class="card flex-fill">
+							<div class="card-body">
+								<div class="d-flex align-items-center justify-content-between">
+									<span class="avatar avatar-md bg-dark mb-3">
+										<i class="ti ti-building fs-16"></i>
+									</span>
+								</div>
+								<div class="d-flex align-items-center justify-content-between">
+									<div>
+										<h2 class="mb-1">{{ \App\Models\Entreprise::count() }}</h2>
+										<p class="fs-13">Total Entreprises</p>
+									</div>
+									<div class="company-bar1">5,10,7,5,10,7,5</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Total Companies -->
 
-                <!-- Utilisateurs -->
-                <div class="col-12 col-md-4">
-                    <div class="card border-0 shadow-lg h-100 stats-card" style="border-radius: 20px;">
-                        <div class="card-body p-4 d-flex align-items-center">
-                            <div class="stats-icon bg-warning me-4">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1 fw-medium">UTILISATEURS TOTAL</p>
-                                <h2 class="fw-bold text-dark mb-0" style="font-size: 2.5rem;">
-                                    {{ \App\Models\User::count() }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+					<!-- Active Companies -->
+					<div class="col-xl-4 col-sm-6 d-flex">
+						<div class="card flex-fill">
+							<div class="card-body">
+								<div class="d-flex align-items-center justify-content-between">
+									<span class="avatar avatar-md bg-dark mb-3">
+										<i class="ti ti-carousel-vertical fs-16"></i>
+									</span>
+								</div>
+								<div class="d-flex align-items-center justify-content-between">
+									<div>
+										<h2 class="mb-1">{{ \App\Models\Entreprise::where('is_actif',1)->count() }}</h2>
+										<p class="fs-13">Entreprises actives</p>
+									</div>
+									<div class="company-bar2">5,3,7,6,3,10,5</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Active Companies -->
 
-            <!-- Actions rapides -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card border-0 shadow-lg" style="border-radius: 20px;">
-                        <div class="card-body p-4 p-md-5">
-                            <div class="text-center mb-4">
-                                <div class="d-inline-flex align-items-center justify-content-center bg-dark rounded-circle mb-3" style="width: 60px; height: 60px;">
-                                    <i class="fas fa-bolt text-white fs-4"></i>
-                                </div>
-                                <h4 class="fw-bold text-dark mb-2">Actions rapides</h4>
-                                <p class="text-muted mb-0">Accédez rapidement aux fonctionnalités principales</p>
-                            </div>
+					<!-- Total Subscribers -->
+					<div class="col-xl-4 col-sm-6 d-flex">
+						<div class="card flex-fill">
+							<div class="card-body">
+								<div class="d-flex align-items-center justify-content-between">
+									<span class="avatar avatar-md bg-dark mb-3">
+										<i class="ti ti-chalkboard-off fs-16"></i>
+									</span>
+								</div>
+								<div class="d-flex align-items-center justify-content-between">
+									<div>
+										<h2 class="mb-1">{{ \App\Models\User::count() }}</h2>
+										<p class="fs-13">Total Utilisateurs</p>
+									</div>
+									<div class="company-bar3">8,10,10,8,8,10,8</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Total Subscribers -->
 
-                            <div class="row justify-content-center">
-                                <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-                                    <a href="{{ route('add_admin_view') }}" class="action-button">
-                                        <div class="d-flex align-items-center p-4 rounded-4 bg-light border-2 border-transparent">
-                                            <div class="action-icon bg-dark me-4">
-                                                <i class="fas fa-user-plus text-white"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="fw-bold text-dark mb-1">Nouvel Administrateur</h6>
-                                                <p class="text-muted small mb-0">Ajouter un admin à la plateforme</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <div class="row">
 
+					<!-- Top Plans -->
+<!-- Overview sur les entreprises -->
+<div class="col-xxl-3 col-xl-12 d-flex">
+    <div class="card flex-fill">
+        <div class="card-header pb-2 d-flex align-items-center justify-content-between flex-wrap">
+            <h5 class="mb-2">Overview sur les entreprises</h5>
+        </div>
+        <div class="card-body">
+            <div id="entreprise-overview"></div>
         </div>
     </div>
 </div>
 
-<style>
-/* Statistiques */
-.stats-card {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-}
+					<!-- /Top Plans -->
 
-.stats-card:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.15) !important;
-}
+				</div>
 
-.stats-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.75rem;
-    color: white !important;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
+				<div class="row">
 
-.stats-card:hover .stats-icon {
-    transform: scale(1.15) rotate(-5deg);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-}
-
-/* Actions rapides */
-.action-button {
-    text-decoration: none;
-    display: block;
-    transition: all 0.3s ease;
-    border-radius: 1rem;
-}
-
-.action-button:hover {
-    text-decoration: none;
-    transform: translateY(-3px);
-}
-
-.action-button:hover .bg-light {
-    background-color: #e9ecef !important;
-    border-color: #000 !important;
-}
-
-.action-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
-
-.action-button:hover .action-icon {
-    transform: scale(1.1);
-}
-
-/* Typographie */
-h1, h2, h4, h6 { letter-spacing: -0.5px; }
-.small { letter-spacing: 0.5px; text-transform: uppercase; }
-
-/* Couleurs */
-.bg-primary { background-color: #007bff !important; }
-.bg-success { background-color: #28a745 !important; }
-.bg-warning { background-color: #ffc107 !important; }
-.bg-dark { background-color: #343a40 !important; }
-
-/* Responsive */
-@media (max-width: 768px) {
-    .stats-icon { width: 60px; height: 60px; font-size: 1.5rem; }
-    .card-body h2 { font-size: 2rem !important; }
-    .action-icon { width: 45px; height: 45px; font-size: 1.1rem; }
-}
-</style>
+					<!-- Recent Transactions -->
+					<div class="col-xxl-4 col-xl-12 d-flex">
+						<div class="card flex-fill">
+							<div class="card-header pb-2 d-flex align-items-center justify-content-between flex-wrap">
+								<h5 class="mb-2">Entreprises récemment créées</h5>
+								<a href="{{ route('entreprises.list') }}" class="btn btn-light btn-md mb-2">Voir tout</a>
+							</div>
+							<div class="card-body pb-2">
+                                @foreach ($entreprises as $entreprise)
+								<div class="d-sm-flex justify-content-between flex-wrap mb-3">
+                                    <div class="d-flex align-items-center mb-2">                                         
+                                        <a href="javscript:void(0);" class="avatar avatar-md bg-gray-100 rounded-circle flex-shrink-0">
+                                            <img src="{{ asset('assets/img/company/company-02.svg') }}" class="img-fluid w-auto h-auto" alt="img">
+                                        </a>
+                                        <div class="ms-2 flex-fill">
+                                            <h6 class="fs-medium text-truncate mb-1"><a href="javscript:void(0);">{{$entreprise->entreprise_name}}</a></h6>
+                                            <p class="fs-13 d-inline-flex align-items-center"><span class="text-info">#{{ $entreprise->id }}</span><i class="ti ti-circle-filled fs-4 text-primary mx-1"></i>{{ $entreprise->created_at->format('d M Y') }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm-end mb-2">
+                                        <h6 class="mb-1">Statut</h6>
+                                        @if ($entreprise->is_actif==true)
+                                            <span class="badge badge-soft-success">Active</span>
+                                            @else
+                                            <span class="badge badge-soft-primary">Inactive</span>
+                                        @endif
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                                @endforeach
+							</div>
+						</div>
+					</div>
+					<!-- /Recent Transactions -->
+				</div>
+				</div>
 @endsection
+
+{{-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var options = {
+            chart: {
+                type: 'donut',
+                height: 300
+            },
+            series: [{{ $actives }}, {{ $inactives }}],
+            labels: ['Actives', 'Inactives'],
+            colors: ['#47AB2E', '#FB6B19'],
+            legend: {
+                position: 'bottom'
+            },
+            dataLabels: {
+                formatter: function (val, opts) {
+                    return val.toFixed(1) + "%";
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#entreprise-overview"), options);
+        chart.render();
+    });
+</script>
+

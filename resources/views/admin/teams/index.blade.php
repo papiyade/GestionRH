@@ -3,100 +3,223 @@
 @section('page-title', 'Vos équipes')
 
 @section('content')
-<div class="container my-5" style="max-width: 1000px;">
 
-    {{-- Header de la page --}}
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-            <h2 class="fw-bold text-dark fs-1">
-                <i class="ri-group-line text-dark me-3"></i>Toutes les équipes
-            </h2>
-            <p class="text-muted fs-6 mt-3">Gérez et explorez les équipes au sein de votre entreprise.</p>
+    @if (session('success'))
+        <div class="alert alert-success alert-border-left alert-dismissible fade show material-shadow" role="alert">
+            <i class="ti ti-check me-3 align-middle"></i>
+            <strong>Succès</strong> - {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
         </div>
-        <a href="#" class="btn btn-dark px-4 py-2 fw-bold rounded-3 shadow-sm">
-            <i class="ri-add-line me-2"></i>Nouvelle équipe
-        </a>
+    @endif
+
+    <!-- Breadcrumb -->
+    <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+        <div class="my-auto mb-2">
+            <h2 class="mb-1">Equipes</h2>
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="https://smarthr.co.in/demo/html/template/index.html"><i class="ti ti-smart-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        RH
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Liste des équipes</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+            <div class="head-icons ms-2">
+                <a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-original-title="Collapse" id="collapse-header">
+                    <i class="ti ti-chevrons-up"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <div class="card">
+        <div class="card-body p-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5>Equipes </h5>
+                <div class="dropdown">
+                    <a href="javascript:void(0);"
+                        class="dropdown-toggle btn btn-sm btn-white d-inline-flex align-items-center"
+                        data-bs-toggle="dropdown">
+                        Trier par
+                    </a>
+                    <ul class="dropdown-menu  dropdown-menu-end p-3">
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Recently Added</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Ascending</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Desending</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Last Month</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Last 7 Days</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {{-- Grille des équipes --}}
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @forelse($teams as $team)
-            <div class="col">
-                <div class="card h-100 border-0 rounded-4 shadow-sm p-3">
-                    <div class="card-body d-flex flex-column">
-                        {{-- Nom de l'équipe --}}
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="ri-folder-line text-dark me-2 fs-4"></i>
-                            <h5 class="card-title fw-bold text-dark mb-0">
-                                {{ $team->name ?? 'Nom d\'équipe non défini' }}
-                            </h5>
-                        </div>
-
-                        {{-- Description --}}
-                        <p class="card-text text-muted small mb-4" style="min-height: 45px;">
-                            {{ Str::limit($team->description ?? 'Pas de description disponible.', 70) }}
-                        </p>
-
-                        {{-- Détails clés --}}
-                        <ul class="list-unstyled text-dark mb-4 small">
-                            <li class="mb-2">
-                                <i class="ri-user-line text-muted me-2"></i>
-                                Membres : <span class="fw-bold">{{ $team->users_count ?? '0' }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <i class="ri-award-line text-muted me-2"></i>
-                                Gérant :
-                                <span class="fw-bold">
-                                    {{ $team->owner->name ?? 'Non défini' }}
-                                </span>
-                            </li>
-                        </ul>
-
-                        {{-- Liens d'action --}}
-                        <div class="d-flex justify-content-between mt-auto pt-3 border-top">
-                            <a href="#" class="btn btn-link text-dark text-decoration-none fw-bold p-0">
-                                Voir plus <i class="ri-arrow-right-s-line ms-1"></i>
-                            </a>
-                            <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-dark btn-sm rounded-circle d-flex align-items-center justify-content-center shadow-sm" 
-                                   data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier">
-                                    <i class="ri-pencil-line"></i>
+    <div class="row">
+        @if ($teams->isEmpty())
+            <div class="text-center py-5">
+                <div class="empty-state">
+                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                        colors="primary:#121331,secondary:#08a88a" style="width:100px;height:100px"></lord-icon>
+                    <h5 class="mt-3 mb-2">Aucune équipe trouvée</h5>
+                    <p class="text-muted mb-4">Créez des équipes pour pouvoir les manipuler</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTeamModal"><i
+                            class="ti ti-circle-plus me-1"></i>Créer la première équipe</button>
+                </div>
+            </div>
+        @endif
+        @foreach ($teams as $team)
+            <div class="col-xl-4 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="form-check form-check-md">
+                                <input class="form-check-input" type="checkbox">
+                            </div>
+                            <div>
+                                <a href="{{ route('teams.show', $team->id) }}"
+                                    class="avatar avatar-xl avatar-rounded online border rounded-circle">
+                                    <img src="{{ asset('assets/img/company/company-12.svg') }}"
+                                        class="img-fluid h-auto w-auto" alt="img">
                                 </a>
-                                <form action="#" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                        class="btn btn-dark btn-sm rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Supprimer">
-                                        <i class="ri-delete-bin-line"></i>
-                                    </button>
-                                </form>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-icon btn-sm rounded-circle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="ti ti-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end p-3">
+                                    <li>
+                                        <a class="dropdown-item rounded-1" href="{{ route('teams.show', $team->id) }}"><i
+                                                class="ti ti-edit me-1"></i>Voir</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-1" href="javascript:void(0);"
+                                            data-bs-toggle="modal" data-bs-target="#deleteTeamModal"
+                                            data-id="{{ $team->id }}" data-name="{{ $team->name }}"><i
+                                                class="ti ti-trash me-1"></i>Supprimer</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="text-center mb-3">
+                            <h6 class="mb-1"><a href="{{ route('teams.show', $team->id) }}">{{ $team->name }}</a></h6>
+                            <div class="avatar-list-stacked avatar-group-sm mb-2">
+                                @php
+                                    $members = $team->members->take(5);
+                                    $remaining = $team->members->count() - 5;
+                                @endphp
+                                @foreach ($members as $member)
+                                    <span class="avatar avatar-md rounded-circle bg-primary" title="{{ $member->name }}">
+                                        @php
+                                            $initials = collect(explode(' ', $member->name))
+                                                ->map(fn($word) => mb_substr($word, 0, 1))
+                                                ->join('');
+                                        @endphp
+                                        <span class="avatar-initials">{{ strtoupper($initials) }}</span>
+                                    </span>
+                                @endforeach
+                                @if ($remaining > 0)
+                                    <span class="avatar avatar-xs rounded-circle"
+                                        style="background: orange; color: #fff; display: inline-flex; align-items: center; justify-content: center;"
+                                        title="+{{ $remaining }}">
+                                        +{{ $remaining }}
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="avatar-list-stacked avatar-group-sm">
+                                Créé par {{ $team->owner->name }}
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-column align-items-center">
+                                <p class="text-dark d-inline-flex align-items-center mb-2">
+                                    <i class="ti ti-users text-gray-5 me-2"></i>
+                                    <a class="text-center">{{ $team->members->count() }} membre(s)</a>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        @empty
-            <div class="col-12">
-                <div class="alert alert-dark rounded-4 text-center py-5" role="alert">
-                    <h4 class="fw-bold mb-3">
-                        <i class="ri-group-line me-2"></i>Aucune équipe n'a encore été créée.
-                    </h4>
-                    <p class="mb-0">Commencez dès maintenant à organiser votre travail d'équipe !</p>
-                    <a href="#" class="btn btn-dark mt-4 px-4 py-2 fw-bold rounded-3 shadow-sm">
-                        Créer votre première équipe
-                    </a>
-                </div>
-            </div>
-        @endforelse
+        @endforeach
     </div>
-</div>
+    {{-- @if ($teamCount > 6)
+        <div class="text-center mb-4">
+            <a href="#" class="btn btn-white border"><i class="ti ti-loader-3 text-primary me-2"></i>Afficher
+                plus</a>
+        </div>
+    @endif --}}
 
-<script>
-    // Initialiser les tooltips de Bootstrap
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-</script>
+
+    <!-- Modal Delete Team -->
+    <div class="modal fade" id="deleteTeamModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" id="deleteTeamForm">
+                @csrf
+                @method('DELETE')
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation de suppression</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                        Voulez-vous vraiment supprimer l'équipe <strong id="teamName"></strong> ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            var deleteTeamModal = document.getElementById('deleteTeamModal');
+            deleteTeamModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var id = button.getAttribute('data-id');
+                var name = button.getAttribute('data-name');
+
+                var modalTitle = deleteTeamModal.querySelector('#teamName');
+                modalTitle.textContent = name;
+
+                var form = deleteTeamModal.querySelector('#deleteTeamForm');
+                form.action = '/teams/' + id;
+            });
+
+            // Datatable init
+            $(document).ready(function() {
+                $('#teamsTable').DataTable({
+                    responsive: true,
+                    columnDefs: [{
+                        orderable: false,
+                        targets: [5]
+                    }],
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Rechercher..."
+                    }
+                });
+            });
+        </script>
+    @endpush
 @endsection

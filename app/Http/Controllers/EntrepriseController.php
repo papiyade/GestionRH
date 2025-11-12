@@ -15,6 +15,12 @@ class EntrepriseController extends Controller
 {
     //
 
+    public function index(Entreprise $entreprise) {
+        $entreprises = Entreprise::all();
+        $adminUser = User::find($entreprise->id_user);
+        return view('superadmin.entreprise.index', compact('entreprises','entreprise','adminUser'));
+    }
+
 public function store(Request $request)
 {
     $validated = $request->validate([
@@ -127,8 +133,5 @@ public function getEmployesPremiereEntreprise()
 
         return view('superadmin.entreprise.show', compact('entreprise', 'adminUser'));
     }
-
-
-
 
 }

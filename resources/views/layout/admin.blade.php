@@ -1,761 +1,504 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
+
+
+<!-- Mirrored from smarthr.co.in/demo/html/template/dashboard by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 26 Sep 2025 19:08:12 GMT -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Farlu - Gestion de Projets')</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<meta name="description" content="Smarthr - Bootstrap Admin Template">
+	<meta name="keywords" content="admin, estimates, bootstrap, business, html5, responsive, Projects">
+	<meta name="author" content="Dreams technologies - Bootstrap Admin Template">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Farlu | Admin</title>
 
-    <!-- CSS externes -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/img/favicon.png')}}">
 
-    <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7f6f3;
-            --sidebar-bg: #fbfbfa;
-            --border-light: rgba(55, 53, 47, 0.09);
-            --border-medium: rgba(55, 53, 47, 0.16);
-            --text-primary: #37352f;
-            --text-secondary: rgba(55, 53, 47, 0.65);
-            --text-tertiary: rgba(55, 53, 47, 0.4);
-            --hover-bg: rgba(55, 53, 47, 0.08);
-            --active-bg: rgba(55, 53, 47, 0.12);
-            --sidebar-width: 260px;
-            --header-height: 60px;
-            --accent-blue: #2383e2;
-            --accent-blue-light: rgba(35, 131, 226, 0.1);
-        }
+	<!-- Apple Touch Icon -->
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/apple-touch-icon.png') }}">
 
-        * {
-            box-sizing: border-box;
-        }
+	<!-- Theme Script js -->
+	<script src="{{asset('assets/js/theme-script.js')}}"></script>
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
-            background-color: var(--bg-secondary);
-            margin: 0;
-            color: var(--text-primary);
-            font-size: 14px;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-light);
-            padding: 0;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
-        }
+	<!-- Feather CSS -->
+	<link rel="stylesheet" href="{{asset('assets/plugins/icons/feather/feather.css')}}">
 
-        /* Header Sidebar */
-        .sidebar-header {
-            padding: 16px 20px 12px;
-            border-bottom: 1px solid var(--border-light);
-            background: var(--bg-primary);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
+	<!-- Tabler Icon CSS -->
+    <link rel="stylesheet" href="{{asset('assets/plugins/tabler-icons/tabler-icons.min.css')}}">
 
-        .brand-link {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-primary);
-            padding: 6px 8px;
-            border-radius: 6px;
-            transition: background-color 0.15s ease;
-            font-weight: 600;
-            font-size: 15px;
-        }
+	<!-- Select2 CSS -->
+	<link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
 
-        .brand-link:hover {
-            background-color: var(--hover-bg);
-            color: var(--text-primary);
-        }
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="{{asset('assets/plugins/fontawesome/css/fontawesome.min.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/plugins/fontawesome/css/all.min.css')}}">
 
-        .brand-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-        }
+    	<!-- Datatable CSS -->
+	<link rel="stylesheet" href="{{asset('assets/css/dataTables.bootstrap5.min.css')}}">
 
-        /* Navigation */
-        .sidebar-nav {
-            flex: 1;
-            padding: 16px 12px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--border-medium) transparent;
-        }
+	<!-- Datetimepicker CSS -->
+	<link rel="stylesheet" href="{{asset('assets/css/bootstrap-datetimepicker.min.css')}}">
 
-        .sidebar-nav::-webkit-scrollbar {
-            width: 4px;
-        }
+	<!-- Summernote CSS -->
+	<link rel="stylesheet" href="{{asset('assets/plugins/summernote/summernote-lite.min.css')}}">
 
-        .sidebar-nav::-webkit-scrollbar-track {
-            background: transparent;
-        }
+	<!-- Daterangepikcer CSS -->
+	<link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
 
-        .sidebar-nav::-webkit-scrollbar-thumb {
-            background-color: var(--border-medium);
-            border-radius: 2px;
-        }
+	<!-- Color Picker Css -->
+	<link rel="stylesheet" href="{{asset('assets/plugins/flatpickr/flatpickr.min.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/plugins/@simonwep/pickr/themes/nano.min.css')}}">
 
-        .nav-section {
-            margin-bottom: 24px;
-        }
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 
-        .nav-section-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 0 0 8px 12px;
-            user-select: none;
-        }
-
-        .nav-item {
-            margin-bottom: 2px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            color: var(--text-primary);
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 400;
-            transition: all 0.15s ease;
-            position: relative;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .nav-link:hover {
-            background-color: var(--hover-bg);
-            color: var(--text-primary);
-        }
-
-        .nav-link.active {
-            background-color: var(--active-bg);
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .nav-link.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 16px;
-            background-color: var(--accent-blue);
-            border-radius: 0 2px 2px 0;
-        }
-
-        .nav-icon {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: var(--text-secondary);
-            transition: color 0.15s ease;
-        }
-
-        .nav-link:hover .nav-icon,
-        .nav-link.active .nav-icon {
-            color: var(--text-primary);
-        }
-
-        .nav-arrow {
-            margin-left: auto;
-            width: 16px;
-            height: 16px;
-            color: var(--text-tertiary);
-            transition: transform 0.2s ease, color 0.15s ease;
-        }
-
-        .nav-link[aria-expanded="true"] .nav-arrow {
-            transform: rotate(90deg);
-            color: var(--text-secondary);
-        }
-
-        /* Submenu */
-        .submenu {
-            padding-left: 32px;
-            margin-top: 4px;
-            overflow: hidden;
-        }
-
-        .submenu .nav-link {
-            padding: 6px 12px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .submenu .nav-link:hover {
-            color: var(--text-primary);
-        }
-
-        /* Header */
-        .main-header {
-            position: sticky;
-            top: 0;
-            height: var(--header-height);
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-light);
-            margin-left: var(--sidebar-width);
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 999;
-        }
-
-        .breadcrumb {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin: 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .breadcrumb-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .breadcrumb-item:not(:last-child)::after {
-            content: '/';
-            margin: 0 8px;
-            color: var(--text-tertiary);
-        }
-
-        /* User Menu */
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-button {
-            display: flex;
-            align-items: center;
-            padding: 6px 10px;
-            background: transparent;
-            border: none;
-            border-radius: 6px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: background-color 0.15s ease;
-            font-size: 14px;
-        }
-
-        .user-button:hover {
-            background-color: var(--hover-bg);
-        }
-
-        .user-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 500;
-            font-size: 12px;
-            margin-left: 8px;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            min-height: calc(100vh - var(--header-height));
-            padding: 32px 24px;
-            background-color: var(--bg-primary);
-        }
-
-        .content-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Footer */
-        .main-footer {
-            margin-left: var(--sidebar-width);
-            padding: 20px 24px;
-            background-color: var(--bg-primary);
-            border-top: 1px solid var(--border-light);
-            text-align: center;
-            color: var(--text-tertiary);
-            font-size: 12px;
-        }
-
-        /* Dropdown Menu */
-        .dropdown-menu {
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            padding: 8px;
-            min-width: 200px;
-            background-color: var(--bg-primary);
-        }
-
-        .dropdown-item {
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            color: var(--text-primary);
-            transition: background-color 0.15s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .dropdown-item:hover {
-            background-color: var(--hover-bg);
-            color: var(--text-primary);
-        }
-
-        .dropdown-divider {
-            margin: 8px 0;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .dropdown-header {
-            padding: 8px 12px 4px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .main-header {
-                margin-left: 0;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px 16px;
-            }
-
-            .main-footer {
-                margin-left: 0;
-            }
-        }
-
-        /* Animations */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .nav-section {
-            animation: slideIn 0.3s ease-out;
-        }
-
-        /* Custom scrollbar for webkit browsers */
-        .sidebar-nav::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-thumb {
-            background-color: var(--border-medium);
-            border-radius: 3px;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-thumb:hover {
-            background-color: var(--text-tertiary);
-        }
-    </style>
 </head>
+
 <body>
 
-<!-- Sidebar -->
-<aside class="sidebar">
-    <div class="sidebar-header">
-        <a href="{{ route('admin_simple') }}" class="brand-link">
-            <div class="brand-icon">F</div>
-            <span>Farlu</span>
-        </a>
-    </div>
+	<div id="global-loader">
+		<div class="page-loader"></div>
+	</div>
 
-    <nav class="sidebar-nav">
-        <div class="nav-section">
-            <div class="nav-section-title">Menu</div>
-            <div class="nav-item">
-                <a class="nav-link" href="{{ route('admin_simple') }}">
-                    <i class="nav-icon ri-dashboard-2-line"></i>
-                    <span>Tableau de Bord</span>
-                </a>
-            </div>
-        </div>
+	<!-- Main Wrapper -->
+	<div class="main-wrapper">
 
-        <div class="nav-section">
-            <div class="nav-section-title">Système</div>
-            
-            <div class="nav-item">
-                <a class="nav-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsers">
-                    <i class="nav-icon ri-account-circle-line"></i>
-                    <span>Utilisateurs</span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
-                </a>
-                <div class="collapse submenu" id="sidebarUsers">
-                    <a href="{{ route('entreprise.employes') }}" class="nav-link">
-                        <span>Liste des utilisateurs</span>
-                    </a>
-                    <a href="{{ route('employe.create') }}" class="nav-link">
-                        <span>Ajouter un nouvel utilisateur</span>
-                    </a>
-                </div>
-            </div>
+		<!-- Header -->
+		<div class="header">
+			<div class="main-header">
 
-            <div class="nav-item">
-                <a class="nav-link" href="#sidebarCompanies" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCompanies">
-                    <i class="nav-icon ri-building-line"></i>
-                    <span>Entreprises</span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
-                </a>
-                <div class="collapse submenu" id="sidebarCompanies">
-                    <a href="{{ route('entreprise.redirect') }}" class="nav-link">
-                        <span>Configuration</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+				<div class="header-left">
+					<a href="https://smarthr.co.in/demo/html/template/index.html" class="logo">
+						<img src="{{asset('assets/img/logo.svg')}}" alt="Logo">
+					</a>
+					<a href="https://smarthr.co.in/demo/html/template/index.html" class="dark-logo">
+						<img src="{{asset('assets/img/logo-white.svg')}}" alt="Logo">
+					</a>
+				</div>
 
-        <div class="nav-section">
-            <div class="nav-section-title">Équipes</div>
-            <div class="nav-item">
-                <a class="nav-link" href="#sidebarTeams" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTeams">
-                    <i class="nav-icon ri-shield-star-line"></i>
-                    <span>Liste des équipes</span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
-                </a>
-                <div class="collapse submenu" id="sidebarTeams">
-                    <a href="{{ route('admin.team.show') }}" class="nav-link">
-                        <span>Liste des équipes</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+				<a id="mobile_btn" class="mobile_btn" href="#sidebar">
+					<span class="bar-icon">
+						<span></span>
+						<span></span>
+						<span></span>
+					</span>
+				</a>
 
-        <div class="nav-section">
-            <div class="nav-section-title">Projets</div>
-            <div class="nav-item">
-                <a class="nav-link" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
-                    <i class="nav-icon ri-layout-4-fill"></i>
-                    <span>Projets</span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
-                </a>
-                <div class="collapse submenu" id="sidebarProjects">
-                    <a href="{{ route('admin.project.show') }}" class="nav-link">
-                        <span>Liste des projets</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+				<div class="header-user">
+					<div class="nav user-menu nav-list">
 
-        <div class="nav-section">
-            <div class="nav-section-title">Divers & Autres</div>
-            <div class="nav-item">
-                <a class="nav-link" href="#sidebarDivers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDivers">
-                    <i class="nav-icon ri-layout-4-fill"></i>
-                    <span>Divers/Autres</span>
-                    <span id="chat-badge-main" class="badge bg-danger ms-2" style="display:none;"></span>
-                    <i class="nav-arrow ri-arrow-right-s-line"></i>
-                </a>
-                <div class="collapse submenu" id="sidebarDivers">
-                    <a href="{{ route('chatify') }}" class="nav-link" data-key="t-alerts">
-                        <span>Messagerie</span>
-                        <span id="chat-badge-sub" class="badge bg-danger ms-2" style="display:none;"></span>
-                    </a>
-                 <!--   <a href="#" class="nav-link" data-key="t-alerts">
-                        <span>Boite à idées</span>
-                    </a> -->
-                </div>
-            </div>
-        </div>
-    </nav>
-</aside>
+						<div class="me-auto d-flex align-items-center" id="header-search">
+							<a id="toggle_btn" href="javascript:void(0);" class="btn btn-menubar me-1">
+								<i class="ti ti-arrow-bar-to-left"></i>
+							</a>
+							<!-- Search -->
+							<div class="input-group input-group-flat d-inline-flex me-1">
+								<span class="input-icon-addon">
+									<i class="ti ti-search"></i>
+								</span>
+								<input type="text" class="form-control" placeholder="Rechercher...">
+								<span class="input-group-text">
+									<kbd>CTRL + / </kbd>
+								</span>
+							</div>
+							<!-- /Search -->
+							<div class="dropdown crm-dropdown">
+								<a href="#" class="btn btn-menubar me-1" data-bs-toggle="dropdown">
+									<i class="ti ti-layout-grid"></i>
+								</a>
+								<div class="dropdown-menu dropdown-lg dropdown-menu-start">
+									<div class="card mb-0 border-0 shadow-none">
+										<div class="card-header">
+											<h4>CRM</h4>
+										</div>
+										<div class="card-body pb-1">
+											<div class="row">
+												<div class="col-sm-6">
+													<a href="https://smarthr.co.in/demo/html/template/contacts.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
+														<span class="d-flex align-items-center me-3">
+															<i class="ti ti-user-shield text-default me-2"></i>Contacts
+														</span>
+														<i class="ti ti-arrow-right"></i>
+													</a>
+													<a href="https://smarthr.co.in/demo/html/template/deals-grid.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
+														<span class="d-flex align-items-center me-3">
+															<i class="ti ti-heart-handshake text-default me-2"></i>Deals
+														</span>
+														<i class="ti ti-arrow-right"></i>
+													</a>
 
-<!-- Main Layout -->
-<div class="main-layout">
-    <!-- Header -->
-    <header class="main-header">
-        <nav class="breadcrumb">
-            <div class="breadcrumb-item">
-                <span>Farlu</span>
-            </div>
-            <div class="breadcrumb-item">
-                <span>@yield('page-title', 'Tableau de Bord')</span>
-            </div>
-        </nav>
-
-        <div class="user-menu">
-            <div class="dropdown">
-                <button class="user-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span>{{ Auth::user()->name }}</span>
-                    <div class="user-avatar">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                    </div>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><h6 class="dropdown-header">{{ Auth::user()->name }}</h6></li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="mdi mdi-account-circle me-2"></i>
-                            <span>Mon profil</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="mdi mdi-calendar-check-outline me-2"></i>
-                            <span>Mes tâches</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="mdi mdi-cog-outline me-2"></i>
-                            <span>Paramètres</span>
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}" class="m-0">
+												</div>
+												<div class="col-sm-6">
+													<a href="https://smarthr.co.in/demo/html/template/companies-grid.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
+														<span class="d-flex align-items-center me-3">
+															<i class="ti ti-building text-default me-2"></i>Companies
+														</span>
+														<i class="ti ti-arrow-right"></i>
+													</a>
+													<a href="https://smarthr.co.in/demo/html/template/leads-grid.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
+														<span class="d-flex align-items-center me-3">
+															<i class="ti ti-user-check text-default me-2"></i>Leads
+														</span>
+														<i class="ti ti-arrow-right"></i>
+													</a>
+													<a href="https://smarthr.co.in/demo/html/template/activity.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
+														<span class="d-flex align-items-center me-3">
+															<i class="ti ti-activity text-default me-2"></i>Activities
+														</span>
+														<i class="ti ti-arrow-right"></i>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<a href="https://smarthr.co.in/demo/html/template/profile-settings.html" class="btn btn-menubar">
+								<i class="ti ti-settings-cog"></i>
+							</a>
+						</div>
+						<div class="d-flex align-items-center">
+							<div class="me-1">
+								<a href="#" class="btn btn-menubar btnFullscreen">
+									<i class="ti ti-maximize"></i>
+								</a>
+							</div>
+							<div class="dropdown me-1">
+								<a href="#" class="btn btn-menubar" data-bs-toggle="dropdown">
+									<i class="ti ti-layout-grid-remove"></i>
+								</a>
+								<div class="dropdown-menu dropdown-menu-end">
+									<div class="card mb-0 border-0 shadow-none">
+										<div class="card-header">
+											<h4>Applications</h4>
+										</div>
+										<div class="card-body">
+											<a href="https://smarthr.co.in/demo/html/template/calendar.html" class="d-block pb-2">
+												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-calendar text-gray-9"></i></span>Calendar
+											</a>
+											<a href="https://smarthr.co.in/demo/html/template/todo.html" class="d-block py-2">
+												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-subtask text-gray-9"></i></span>To Do
+											</a>
+											<a href="https://smarthr.co.in/demo/html/template/notes.html" class="d-block py-2">
+												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-notes text-gray-9"></i></span>Notes
+											</a>
+											<a href="https://smarthr.co.in/demo/html/template/file-manager.html" class="d-block py-2">
+												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-folder text-gray-9"></i></span>File Manager
+											</a>
+											<a href="https://smarthr.co.in/demo/html/template/kanban-view.html" class="d-block py-2">
+												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-layout-kanban text-gray-9"></i></span>Kanban
+											</a>
+											<a href="https://smarthr.co.in/demo/html/template/invoices.html" class="d-block py-2 pb-0">
+												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-file-invoice text-gray-9"></i></span>Invoices
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="me-1 notification_item">
+								<a href="#" class="btn btn-menubar position-relative me-1" id="notification_popup"
+									data-bs-toggle="dropdown">
+									<i class="ti ti-bell"></i>
+									<span class="notification-status-dot"></span>
+								</a>
+								<div class="dropdown-menu dropdown-menu-end notification-dropdown p-4">
+									<div class="d-flex align-items-center justify-content-between border-bottom p-0 pb-3 mb-3">
+										<h4 class="notification-title">Notifications</h4>
+										<div class="d-flex align-items-center">
+											<a href="#" class="text-primary fs-15 me-3 lh-1">Tout marquer comme lue</a>
+											<div class="dropdown">
+												<a href="javascript:void(0);" class="bg-white dropdown-toggle"
+													data-bs-toggle="dropdown">
+													<i class="ti ti-calendar-due me-1"></i>Aujourd'hui
+												</a>
+												<ul class="dropdown-menu mt-2 p-3">
+													<li>
+														<a href="javascript:void(0);" class="dropdown-item rounded-1">
+															This Week
+														</a>
+													</li>
+													<li>
+														<a href="javascript:void(0);" class="dropdown-item rounded-1">
+															Last Week
+														</a>
+													</li>
+													<li>
+														<a href="javascript:void(0);" class="dropdown-item rounded-1">
+															Last Month
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class="d-flex p-0">
+										<a href="#" class="btn btn-light w-100 me-2">Fermer</a>
+									</div>
+								</div>
+							</div>
+							<div class="dropdown profile-dropdown">
+								<a href="javascript:void(0);" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+									<span class="avatar avatar-sm online">
+										{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+									</span>
+								</a>
+								<div class="dropdown-menu shadow-none">
+									<div class="card mb-0">
+										<div class="card-header">
+											<div class="d-flex align-items-center">
+												<span class="avatar avatar-lg me-2 avatar-rounded">
+													{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+												</span>
+												<div>
+													<h5 class="mb-0">{{Auth::user()->name}}</h5>
+													<p class="fs-12 fw-medium mb-0"><a >{{Auth::user()->email}}</a></p>
+												</div>
+											</div>
+										</div>
+										<div class="card-body">
+											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2"
+												href="https://smarthr.co.in/demo/html/template/profile.html">
+												<i class="ti ti-user-circle me-1"></i>Profil
+											</a>
+											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2" href="https://smarthr.co.in/demo/html/template/bussiness-settings.html">
+												<i class="ti ti-settings me-1"></i>Paramètres
+											</a>
+										</div>
+										<div class="card-footer py-1">
+                                                                    <form method="POST" action="{{ route('logout') }}" class="m-0">
                             @csrf
-                            <button type="submit" class="dropdown-item">
-                                <i class="mdi mdi-logout me-2"></i>
+                            <button type="submit" class="dropdown-item d-inline-flex align-items-center p-0 py-2">
+                                <i class="ti ti-login me-2"></i>
                                 <span>Déconnexion</span>
                             </button>
                         </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </header>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="content-wrapper">
-            @yield('content')
-        </div>
-    </main>
+				<!-- Mobile Menu -->
+				<div class="dropdown mobile-user-menu">
+					<a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+						<i class="fa fa-ellipsis-v"></i>
+					</a>
+					<div class="dropdown-menu dropdown-menu-end">
+						<a class="dropdown-item" href="https://smarthr.co.in/demo/html/template/profile.html">My Profile</a>
+						<a class="dropdown-item" href="https://smarthr.co.in/demo/html/template/profile-settings.html">Settings</a>
+						<a class="dropdown-item" href="https://smarthr.co.in/demo/html/template/login.html">Logout</a>
+					</div>
+				</div>
+				<!-- /Mobile Menu -->
 
-    <!-- Footer -->
-    <footer class="main-footer">
-        <p>© 2024 Farlu. Tous droits réservés.</p>
-    </footer>
-</div>
+			</div>
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Active navigation management
-    function setActiveNav() {
-        const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === currentPath) {
-                link.classList.add('active');
-                
-                // Open parent collapse if exists
-                const collapse = link.closest('.collapse');
-                if (collapse) {
-                    collapse.classList.add('show');
-                    const trigger = document.querySelector(`[data-bs-target="#${collapse.id}"]`);
-                    if (trigger) trigger.setAttribute('aria-expanded', 'true');
-                }
-            }
-        });
-    }
+		</div>
+		<!-- /Header -->
 
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        setActiveNav();
-        
-        // Handle collapse arrows
-        const collapseElements = document.querySelectorAll('[data-bs-toggle="collapse"]');
-        collapseElements.forEach(element => {
-            element.addEventListener('click', function() {
-                const target = document.querySelector(this.getAttribute('data-bs-target'));
-                if (target) {
-                    setTimeout(() => {
-                        const isExpanded = target.classList.contains('show');
-                        this.setAttribute('aria-expanded', isExpanded);
-                    }, 100);
-                }
-            });
-        });
-    });
+		<!-- Sidebar -->
+		<div class="sidebar" id="sidebar">
+			<!-- Logo -->
+			<div class="sidebar-logo">
+				<a href="https://smarthr.co.in/demo/html/template/index.html" class="logo logo-normal">
+					<img src="{{asset('assets/img/logo.svg')}}" alt="Logo">
+				</a>
+				<a href="https://smarthr.co.in/demo/html/template/index.html" class="logo-small">
+					<img src="{{asset('assets/img/logo-small.svg')}}" alt="Logo">
+				</a>
+				<a href="https://smarthr.co.in/demo/html/template/index.html" class="dark-logo">
+					<img src="{{asset('assets/img/logo-white.svg')}}" alt="Logo">
+				</a>
+			</div>
+			<!-- /Logo -->
+			<div class="modern-profile p-3 pb-0">
+				<div class="text-center rounded bg-light p-3 mb-4 user-profile">
+					<div class="avatar avatar-lg online mb-3">
+						<img src="{{asset('assets/img/profiles/avatar-02.jpg')}}" alt="Img" class="img-fluid rounded-circle">
+					</div>
+					<h6 class="fs-12 fw-normal mb-1">Adrian Herman</h6>
+					<p class="fs-10">System Admin</p>
+				</div>
+				<div class="sidebar-nav mb-3">
+					<ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified bg-transparent"
+						role="tablist">
+						<li class="nav-item"><a class="nav-link active border-0" href="#">Menu</a></li>
+						<li class="nav-item"><a class="nav-link border-0" href="https://smarthr.co.in/demo/html/template/chat.html">Chats</a></li>
+						<li class="nav-item"><a class="nav-link border-0" href="https://smarthr.co.in/demo/html/template/email.html">Inbox</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="sidebar-header p-3 pb-0 pt-2">
+				<div class="text-center rounded bg-light p-2 mb-4 sidebar-profile d-flex align-items-center">
+					<div class="avatar avatar-md onlin">
+						<img src="{{asset('assets/img/profiles/avatar-02.jpg')}}" alt="Img" class="img-fluid rounded-circle">
+					</div>
+					<div class="text-start sidebar-profile-info ms-2">
+						<h6 class="fs-12 fw-normal mb-1">Adrian Herman</h6>
+						<p class="fs-10">System Admin</p>
+					</div>
+				</div>
+				<div class="input-group input-group-flat d-inline-flex mb-4">
+					<span class="input-icon-addon">
+						<i class="ti ti-search"></i>
+					</span>
+					<input type="text" class="form-control" placeholder="Search in HRMS">
+					<span class="input-group-text">
+						<kbd>CTRL + / </kbd>
+					</span>
+				</div>
+				<div class="d-flex align-items-center justify-content-between menu-item mb-3">
+					<div class="me-3">
+						<a href="https://smarthr.co.in/demo/html/template/calendar.html" class="btn btn-menubar">
+							<i class="ti ti-layout-grid-remove"></i>
+						</a>
+					</div>
+					<div class="me-3">
+						<a href="https://smarthr.co.in/demo/html/template/chat.html" class="btn btn-menubar position-relative">
+							<i class="ti ti-brand-hipchat"></i>
+							<span class="badge bg-info rounded-pill d-flex align-items-center justify-content-center header-badge">5</span>
+						</a>
+					</div>
+					<div class="me-3 notification-item">
+						<a href="https://smarthr.co.in/demo/html/template/activity.html" class="btn btn-menubar position-relative me-1">
+							<i class="ti ti-bell"></i>
+							<span class="notification-status-dot"></span>
+						</a>
+					</div>
+					<div class="me-0">
+						<a href="https://smarthr.co.in/demo/html/template/email.html" class="btn btn-menubar">
+							<i class="ti ti-message"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="sidebar-inner slimscroll">
+				<div id="sidebar-menu" class="sidebar-menu">
+					<ul>
+						<li class="menu-title"><span>GENERAL</span></li>
+						<li>
+							<ul>
+								<li class="">
+									<a href="{{ route('admin_simple') }}" class="active subdrop">
+										<i class="ti ti-user-star"></i><span>Tableau de Bord</span>
+									</a>
+								</li>
+							</ul>
+						<li class="menu-title"><span>Système</span></li>
+						<li>
+							<ul>
+								<li>
+									<a href="{{ route('entreprise.employes') }}">
+										<i class="ti ti-user-shield"></i><span>Employés</span>
+									</a>
+								</li>
+								<li>
+									<a href="{{route('entreprise.redirect')}}">
+										<i class="ti ti-building"></i><span>Mon entreprise</span>
+									</a>
+								</li>
+								<li>
+									<a href="{{ route('admin.team.show') }}">
+										<i class="ti ti-shield"></i><span>Equipes</span>
+									</a>
+								</li>
+								<li>
+									<a href="{{ route('admin.project.show') }}">
+										<i class="ti ti-activity"></i><span>Projets</span>
+									</a>
+								</li>
+								<li href="/cras">
+									<a href="/cras">
+										<i class="ti ti-file"></i><span>Comptes rendus/Activités<script></script></span>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /Sidebar -->
 
-    // Copy link function
-    function copyPublicOfferLink() {
-        const input = document.getElementById("publicLinkInput");
-        navigator.clipboard.writeText(input.value).then(() => {
-            // Create a toast notification
-            const toast = document.createElement('div');
-            toast.className = 'position-fixed top-0 end-0 m-3 alert alert-success alert-dismissible fade show';
-            toast.style.zIndex = '9999';
-            toast.innerHTML = 'Lien copié avec succès !';
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        });
-    }
+		<!-- Page Wrapper -->
+		<div class="page-wrapper">
+			<div class="content">
+                <div>
+                    @yield('content')
+                </div>
+			</div>
 
-    // Mobile sidebar toggle (if needed)
-    function toggleSidebar() {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.classList.toggle('show');
-    }
+			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
+				<p class="mb-0"> 2025 &copy; Farlu.</p>
+				<p> By <a href="javascript:void(0);" class="text-primary">BBS MASTER GROUP</a></p>
+			</div>
 
-     function updateUnreadMessages() {
-        fetch('{{ route('messages.unread.count') }}')
-            .then(response => response.json())
-            .then(data => {
-                const mainBadge = document.getElementById('chat-badge-main');
-                const subBadge = document.getElementById('chat-badge-sub');
+		</div>
+		<!-- /Page Wrapper -->
 
-                if (data.count > 0) {
-                    mainBadge.textContent = data.count;
-                    subBadge.textContent = data.count;
+	</div>
+	<!-- /Main Wrapper -->
 
-                    mainBadge.style.display = 'inline-block';
-                    subBadge.style.display = 'inline-block';
-                } else {
-                    mainBadge.style.display = 'none';
-                    subBadge.style.display = 'none';
-                }
-            })
-            .catch(error => console.error('Erreur fetch:', error));
-    }
+	<!-- jQuery -->
+	<script data-cfasync="false" src="https://smarthr.co.in/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
 
-    updateUnreadMessages();
+	<!-- Bootstrap Core JS -->
+	<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
 
-  
-    setInterval(updateUnreadMessages, 10000);
+	<!-- Feather Icon JS -->
+	<script src="{{asset('assets/js/feather.min.js')}}"></script>
 
-    document.getElementById('copy-link-btn').addEventListener('click', function() {
-    const entrepriseId = this.dataset.entreprise;
+    	<!-- Datatable JS -->
+	<script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('assets/js/dataTables.bootstrap5.min.js')}}"></script>
 
-    const link = "{{ url('/rh/candidature/candidat/list') }}/" + entrepriseId;
+	<!-- Slimscroll JS -->
+	<script src="{{asset('assets/js/jquery.slimscroll.min.js')}}"></script>
 
-    navigator.clipboard.writeText(link).then(function() {
-        document.getElementById('copy-link-text').textContent = "Lien copié !";
-        
-        setTimeout(() => {
-            document.getElementById('copy-link-text').textContent = "Copier le lien de candidature";
-        }, 2000);
-    }).catch(function(err) {
-        console.error('Erreur lors de la copie : ', err);
-    });
-});
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let currentStep = 1;
-        const totalSteps = 3;
+	<!-- Chart JS -->
+	<script src="{{asset('assets/plugins/apexchart/apexcharts.min.js')}}"></script>
+	<script src="{{asset('assets/plugins/apexchart/chart-data.js')}}"></script>
 
-        const steps = document.querySelectorAll(".step");
-        const nextBtn = document.getElementById("nextBtn");
-        const prevBtn = document.getElementById("prevBtn");
+	<!-- Chart JS -->
+	<script src="https://smarthr.co.in/demo/html/template/assets/plugins/chartjs/chart.min.js"></script>
+	<script src="https://smarthr.co.in/demo/html/template/assets/plugins/chartjs/chart-data.js"></script>
 
-        function showStep(step) {
-            steps.forEach((el, index) => {
-                if (index + 1 === step) {
-                    el.classList.remove("d-none");
-                    el.classList.add("step-active");
-                } else {
-                    el.classList.add("d-none");
-                    el.classList.remove("step-active");
-                }
-            });
+	<!-- Datetimepicker JS -->
+	<script src="{{asset('assets/js/moment.min.js')}}"></script>
+	<script src="{{asset('assets/js/bootstrap-datetimepicker.min.js')}}"></script>
 
-            // Gérer affichage boutons
-            prevBtn.style.display = (step === 1) ? "none" : "inline-block";
-            nextBtn.innerHTML = (step === totalSteps)
-                ? 'Enregistrer <i class="ri-check-line ms-2"></i>'
-                : 'Suivant <i class="ri-arrow-right-line ms-2"></i>';
-        }
+	<!-- Daterangepikcer JS -->
+	<script src="{{asset('assets/plugins/daterangepicker/daterangepicker.js')}}"></script>
 
-        nextBtn.addEventListener("click", function () {
-            if (currentStep < totalSteps) {
-                currentStep++;
-                showStep(currentStep);
-            } else {
-                // dernière étape -> submit form
-                document.getElementById("step-form").submit();
-            }
-        });
+	<!-- Summernote JS -->
+	<script src="{{asset('assets/plugins/summernote/summernote-lite.min.js')}}"></script>
 
-        prevBtn.addEventListener("click", function () {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        });
+	<!-- Select2 JS -->
+	<script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
 
-        // init
-        showStep(currentStep);
-    });
-</script>
+	<!-- Chart JS -->
+	<script src="{{asset('assets/plugins/peity/jquery.peity.min.js')}}"></script>
+	<script src="{{asset('assets/plugins/peity/chart-data.js')}}"></script>
+
+		<!-- Drag Card -->
+	<script src="{{asset('assets/js/jquery-ui.min.js')}}"></script>
+	<script src="{{asset('assets/js/jquery.ui.touch-punch.min.js')}}"></script>
+
+	<!-- Color Picker JS -->
+	<script src="{{asset('assets/plugins/@simonwep/pickr/pickr.es5.min.js')}}"></script>
+
+	<!-- Custom JS -->
+	<script src="{{asset('assets/js/theme-colorpicker.js')}}"></script>
+	<script src="{{asset('assets/js/script.js')}}"></script>
+
 </body>
+
+
+<!-- Mirrored from smarthr.co.in/demo/html/template/dashboard by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 26 Sep 2025 19:08:12 GMT -->
 </html>
