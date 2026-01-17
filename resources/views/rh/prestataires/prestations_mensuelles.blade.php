@@ -21,11 +21,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         {{-- Bouton mois précédent --}}
         <a href="{{ route('rh.prestataires.prestations', ['mois' => $prev->month, 'annee' => $prev->year]) }}"
-           class="btn btn-outline-secondary">
+           class="btn btn-outline-secondary bos">
             &laquo; {{ $moisPrecedent }} {{ $prev->year }}
         </a>
 
-        <h3 class="text-center mb-0">
+        <h3 class="title-prest text-center mb-0">
             Prestations du mois de {{ $moisActuel }} {{ $annee }}
         </h3>
 
@@ -95,7 +95,7 @@
         </tbody>
 
         <tfoot>
-            <tr class="fw-bold text-center bg-light">
+            <tr class="fw-bold text-center bg-light tfoot">
                 <th colspan="3" class="text-end">TOTAL</th>
                 <th>{{ number_format($totalBrut, 0, ',', ' ') }} XOF</th>
                 <th>{{ number_format($totalBRS, 0, ',', ' ') }} XOF</th>

@@ -69,7 +69,7 @@
 						</div>
 					</div>
 					<div class="col-lg-7 col-md-12 col-sm-12">
-						<div class="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap">
+						<div class="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap body-background">
 							<div class="col-md-7 mx-auto vh-100">
 								<form method="POST" action="{{ route('login') }}" class="vh-100">
                                     @csrf
@@ -115,9 +115,9 @@
 											<div class="mb-3">
 												<button type="submit" class="btn btn-primary w-100">Se Connecter</button>
 											</div>
-                                            {{-- 
+                                            {{--
 											<div class="text-center">
-												<h6 class="fw-normal text-dark mb-0">Don’t have an account? 
+												<h6 class="fw-normal text-dark mb-0">Don’t have an account?
 													<a href="https://smarthr.co.in/demo/html/template/register.html" class="hover-a"> Create Account</a>
 												</h6>
 											</div>

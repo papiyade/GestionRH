@@ -9,35 +9,43 @@
 
         <div class="card-body">
 
-            {{-- Informations Employé --}}
+            {{-- Informations Employé - Deux colonnes --}}
             <div class="mb-4">
                 <h5 class="text-secondary">Informations Employé</h5>
-                <table class="table table-bordered">
-                    <tr>
-                        <th>Nom Complet</th>
-                        <td>{{ $employee->nom_complet }}</td>
-                    </tr>
-                    <tr>
-                        <th>Matricule</th>
-                        <td>{{ $employee->matricule ?? '—' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Poste</th>
-                        <td>{{ $employee->fiche_poste ?? '—' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Date d'embauche</th>
-                        <td>{{ $employee->date_debut ?? '—' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Banque</th>
-                        <td>{{ $employee->banque_nom ?? '—' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Compte</th>
-                        <td>{{ $employee->numero_compte ?? '—' }}</td>
-                    </tr>
-                </table>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th width="40%">Nom Complet</th>
+                                <td>{{ $employee->nom_complet }}</td>
+                            </tr>
+                            <tr>
+                                <th>Matricule</th>
+                                <td>EMP-{{ str_pad($employee->id,5,'0',STR_PAD_LEFT) ?? '—' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Poste</th>
+                                <td>{{ $employee->fiche_poste ?? '—' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th width="40%">Date d'embauche</th>
+                                <td>{{ $employee->created_at->format('d/m/Y') ?? '—' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Banque</th>
+                                <td>{{ $employee->employeeDetail->banque_nom ?? '—' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Compte</th>
+                                <td>{{ $employee->numero_compte ?? '—' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             {{-- Rubrique Salaire --}}
@@ -67,11 +75,11 @@
                             <td>{{ number_format($prime,0,',',' ') }}</td>
                             <td>{{ number_format($prime,0,',',' ') }}</td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td>Indemnité</td>
                             <td>{{ number_format($indemnite,0,',',' ') }}</td>
                             <td>{{ number_format($indemnite,0,',',' ') }}</td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td><strong>Total Brut</strong></td>
                             <td></td>
@@ -81,34 +89,38 @@
                 </table>
             </div>
 
-            {{-- Rubriques Soumises --}}
+            {{-- Rubriques Soumises - Nouveau format --}}
             <div class="mb-4">
                 <h5 class="text-secondary">Rubriques Soumises</h5>
                 <table class="table table-bordered text-center align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>Libellé</th>
-                            <th>Taux Salarial (%)</th>
-                            <th>Taux Patronal (%)</th>
-                            <th>Part Salariale (FCFA)</th>
-                            <th>Part Patronale (FCFA)</th>
+                            <th rowspan="2" class="align-middle">Libellé</th>
+                            <th colspan="2">Part Salariale</th>
+                            <th colspan="2">Part Patronale</th>
+                        </tr>
+                        <tr>
+                            <th>Taux (%)</th>
+                            <th>Montant (FCFA)</th>
+                            <th>Taux (%)</th>
+                            <th>Montant (FCFA)</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{-- IR --}}
                         <tr>
-                            <td>IR</td>
-                            <td>-</td>
+                            <td class="text-start">IR</td>
                             <td>-</td>
                             <td>{{ number_format($detail->ir ?? 0,0,',',' ') }}</td>
+                            <td>-</td>
                             <td>0</td>
                         </tr>
                         {{-- TRIMF --}}
                         <tr>
-                            <td>TRIMF</td>
-                            <td>-</td>
+                            <td class="text-start">TRIMF</td>
                             <td>-</td>
                             <td>{{ number_format($detail->trimf ?? 0,0,',',' ') }}</td>
+                            <td>-</td>
                             <td>0</td>
                         </tr>
                         {{-- Autres cotisations --}}
@@ -127,18 +139,18 @@
                         <tr>
                             <td class="text-start">{{ $label }}</td>
                             <td>{{ $taux[$key]['salarial'] }}%</td>
-                            <td>{{ $taux[$key]['patronal'] }}%</td>
                             <td>{{ number_format($cotisations[$key]['salariale'],0,',',' ') }}</td>
+                            <td>{{ $taux[$key]['patronal'] }}%</td>
                             <td>{{ number_format($cotisations[$key]['patronale'],0,',',' ') }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                     <tfoot class="table-secondary fw-bold">
                         <tr>
-                            <td>Total</td>
-                            <td></td>
+                            <td class="text-start">Total</td>
                             <td></td>
                             <td>{{ number_format($totalSalariale,0,',',' ') }}</td>
+                            <td></td>
                             <td>{{ number_format($totalPatronale,0,',',' ') }}</td>
                         </tr>
                     </tfoot>
@@ -179,8 +191,19 @@
                         <td>{{ number_format($totalSalariale,0,',',' ') }} FCFA</td>
                     </tr>
                     <tr>
+                        <th>Indemnité de Transport</th>
+                        <td>{{ number_format($indemniteTransport,0,',',' ') }} FCFA</td>
+                    </tr>
+                    <tr class="table-primary">
                         <th>Net à Payer</th>
-                        <td class="fw-bold text-primary fs-15">{{ number_format($net,0,',',' ') }} FCFA</td>
+                        <td class="fw-bold text-primary">{{ number_format($net,0,',',' ') }} FCFA</td>
+                    </tr>
+                    <tr class="table-light">
+                        <th colspan="2" class="text-center" style="font-style: italic; font-size: 0.95rem; color: #2c3e50; background-color: #f8f9fa; padding: 15px;">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Arrêté le présent bulletin à la somme de : 
+                            <span class="fw-bold text-dark">{{ numberToWords($net) }}</span> francs CFA
+                        </th>
                     </tr>
                 </table>
             </div>
@@ -210,6 +233,22 @@
     }
     table th, table td {
         vertical-align: middle !important;
+    }
+
+    /* Style pour les colonnes séparées */
+    .col-md-6:first-child {
+        border-right: 2px solid #dee2e6;
+        padding-right: 20px;
+    }
+
+    .col-md-6:last-child {
+        padding-left: 20px;
+    }
+
+    /* Style amélioré pour les tableaux imbriqués */
+    thead th {
+        background-color: #f8f9fa;
+        font-weight: 600;
     }
 </style>
 @endpush

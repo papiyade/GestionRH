@@ -34,7 +34,7 @@ class RhController extends Controller
         ->where('entreprise_id', $entrepriseId)
         ->count();
 
-    $candidaturesEnAttente = Candidature::where('status_demande', 'pending')
+    $candidaturesEnAttente = Candidature::where('status_demande', 'En attente')
         ->whereHas('jobOffer', fn($q) => $q->where('entreprise_id', $entrepriseId))
         ->count();
 
@@ -121,7 +121,7 @@ public function createUsers(Request $request)
     Mail::to($user->email)->send(new AccountCreated(
         $user->name,
         $user->email,
-        $request->password 
+        $request->password
     ));
 
     return redirect()->route('employeList')->with('success', 'Employé ajouté avec succès.');
@@ -189,7 +189,7 @@ return redirect()->route('employeList')->with('success', 'Employé supprimé ave
 public function editUsers($id)
 {
     $user = User::findOrFail($id);
-    $teams = Team::all(); 
+    $teams = Team::all();
 
     return view('rh.employe.editUser', compact('user', 'teams'));
 }
@@ -197,7 +197,7 @@ public function editUsers($id)
 
 public function createUserForm()
 {
-   
+
     $teams = Team::where('entreprise_id', Auth::user()->entreprise_id)->get();
 
     return view('rh.employe.addUsers', compact('teams'));

@@ -30,7 +30,7 @@
             </div> --}}
             <div class="mb-2">
     <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center mb-3" data-bs-toggle="modal" data-bs-target="#addPrestataireModal">
-        <i class="ti ti-circle-plus me-2"></i>Nouveau Prestataire
+        <i class="ti ti-circle-plus me-2 icon-plus"></i>Nouveau Prestataire
     </a>
             </div>
         </div>
@@ -62,8 +62,8 @@
                             <p class="text-muted mb-1 small">Prestations Ce Mois</p>
                             <h3 class="fw-bold mb-0">{{ $stats['total_prestations_mois'] }}</h3>
                         </div>
-                        <div class="avatar avatar-lg bg-success bg-opacity-10 rounded-3">
-                            <i class="ti ti-file-invoice fs-2 text-success"></i>
+                        <div class="avatar avatar-lg bg-primary bg-opacity-10 rounded-3">
+                            <i class="ti ti-file-invoice fs-2 text-primary"></i>
                         </div>
                     </div>
                 </div>
@@ -78,8 +78,8 @@
                             <p class="text-muted mb-1 small">Montant Total Ce Mois</p>
                             <h3 class="fw-bold mb-0">{{ number_format($stats['montant_total_mois'], 0, ',', ' ') }} FCFA</h3>
                         </div>
-                        <div class="avatar avatar-lg bg-warning bg-opacity-10 rounded-3">
-                            <i class="ti ti-cash fs-2 text-warning"></i>
+                        <div class="avatar avatar-lg bg-primary bg-opacity-10 rounded-3">
+                            <i class="ti ti-cash fs-2 text-primary"></i>
                         </div>
                     </div>
                 </div>
@@ -88,8 +88,8 @@
     </div>
 
             <div class="mb-2 d-flex justify-content-end">
-                <a href="{{ route('rh.prestataires.prestations') }}" class="btn btn-secondary d-flex align-items-center text-left btn-left">
-                    <i class="ti ti-clipboard-data me-2"></i>Aller à la page des prestations
+                <a href="{{ route('rh.prestataires.prestations') }}" class="btn btn-primary d-flex align-items-center text-left btn-left">
+                    <i class="ti ti-clipboard-data me-2 icon-plus"></i>Aller à la page des prestations
                 </a>
             </div>
 
@@ -98,7 +98,7 @@
 
 
         <div class="card-body p-0">
-            <div class="card-header bg-white border-bottom">
+            <div class="card-header bg-white border-bottom control-card">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="ti ti-list me-2"></i>Liste des Prestataires</h5>
                 <div class="d-flex gap-2">

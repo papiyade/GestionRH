@@ -55,6 +55,99 @@
 
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+	    <!-- ... autres CSS ... -->
+    <link rel="stylesheet" href="{{ asset('assets/css/dark-mode.css') }}">
+
+    		    <style>
+/* Sidebar Padding */
+.sidebar-inner {
+    padding: 0 8px;
+}
+
+/* Menu Items */
+#sidebar-menu ul li a {
+    padding: 12px 16px;
+    margin: 6px 0;
+    margin-right: 8px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+#sidebar-menu ul li a i {
+    font-size: 20px;
+    margin-right: 10px;
+    color: #666 !important;
+    transition: all 0.3s ease;
+}
+
+#sidebar-menu ul li a span {
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+#sidebar-menu ul li a:hover {
+    background: linear-gradient(135deg, #AE3D7D 0%, #861254FF 100%);
+    color: white !important;
+    transform: translateX(4px);
+}
+
+#sidebar-menu ul li a:hover i,
+#sidebar-menu ul li a:hover span {
+    color: white !important;
+}
+
+/* Active State */
+#sidebar-menu ul li a.active {
+    background: linear-gradient(135deg, #AE3D7D 0%, #861254FF 100%) !important;
+    color: white !important;
+}
+
+#sidebar-menu ul li a.active i,
+#sidebar-menu ul li a.active span {
+    color: white !important;
+}
+
+/* Submenu Parent Active */
+#sidebar-menu ul li.submenu.active > a {
+    background: linear-gradient(135deg, #AE3D7D 0%, #861254FF 100%);
+    color: white !important;
+}
+
+#sidebar-menu ul li.submenu.active > a i,
+#sidebar-menu ul li.submenu.active > a span,
+#sidebar-menu ul li.submenu.active > a .menu-arrow {
+    color: white !important;
+}
+
+/* Submenu Items Simple */
+#sidebar-menu ul li.submenu ul {
+    padding-left: 0;
+    margin-top: 4px;
+}
+
+#sidebar-menu ul li.submenu ul li a {
+    padding: 10px 16px 10px 46px;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+/* Menu Title */
+.menu-title {
+    padding: 12px 16px 8px;
+    margin-top: 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+}
+.theme-toggle {
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #4a1f3a;
+}
+</style>
 
 </head>
 
@@ -261,10 +354,10 @@
 										</div>
 										<div class="card-body">
 											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2"
-												href="https://smarthr.co.in/demo/html/template/profile.html">
+												href="{{route('settings.edit')}}">
 												<i class="ti ti-user-circle me-1"></i>Profil
 											</a>
-											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2" href="https://smarthr.co.in/demo/html/template/bussiness-settings.html">
+											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2" href="{{route('settings.preferences')}}">
 												<i class="ti ti-settings me-1"></i>Paramètres
 											</a>
 										</div>
@@ -305,17 +398,17 @@
 		<!-- Sidebar -->
 		<div class="sidebar" id="sidebar">
 			<!-- Logo -->
-			<div class="sidebar-logo">
-				<a href="https://smarthr.co.in/demo/html/template/index.html" class="logo logo-normal">
-					<img src="{{asset('assets/img/logo.svg')}}" alt="Logo">
-				</a>
-				<a href="https://smarthr.co.in/demo/html/template/index.html" class="logo-small">
-					<img src="{{asset('assets/img/logo-small.svg')}}" alt="Logo">
-				</a>
-				<a href="https://smarthr.co.in/demo/html/template/index.html" class="dark-logo">
-					<img src="{{asset('assets/img/logo-white.svg')}}" alt="Logo">
-				</a>
-			</div>
+            <div class="sidebar-logo">
+                <a href="{{ route('rh_dashboard') }}" class="logo logo-normal">
+                    <img src="{{ asset('assets/img/farlu.png') }}" alt="Logo">
+                </a>
+                <a href="{{ route('rh_dashboard') }}" class="logo-small">
+                    <img src="{{ asset('assets/img/logo-small.svg') }}" alt="Logo">
+                </a>
+                <a href="{{ route('rh_dashboard') }}" class="dark-logo">
+                    <img src="{{ asset('assets/img/logo-white.svg') }}" alt="Logo">
+                </a>
+            </div>
 			<!-- /Logo -->
 			<div class="modern-profile p-3 pb-0">
 				<div class="text-center rounded bg-light p-3 mb-4 user-profile">
@@ -385,7 +478,7 @@
 						<li>
 							<ul>
 								<li class="">
-									<a href="{{ route('employe.dashboard') }}" class="active subdrop">
+									<a href="{{ route('employe.dashboard') }}" class="{{ request()->routeIs('employe.dashboard') ? 'active' : '' }}">
 										<i class="ti ti-user-star"></i><span>Tableau de Bord</span>
 									</a>
 								</li>
@@ -394,7 +487,7 @@
 						<li>
 							<ul>
 								<li>
-									<a href="{{ route('employe.projects') }}">
+									<a href="{{ route('employe.projects') }}" class="{{ request()->routeIs('employe.projects') ? 'active' : '' }}">
 										<i class="ti ti-activity"></i><span>Mes projets</span>
 									</a>
 								</li>
@@ -404,7 +497,7 @@
 									</a>
 								</li>
 								<li href="/cras">
-									<a href="/cras">
+									<a href="/cras" class="{{ request()->is('cras*') ? 'active' : '' }}">
 										<i class="ti ti-file"></i><span>Comptes rendus/Activités<script></script></span>
 									</a>
 								</li>

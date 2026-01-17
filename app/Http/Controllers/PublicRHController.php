@@ -48,7 +48,7 @@ class PublicRHController extends Controller
             'telephone' => 'required|string|max:20',
             'email' => 'required|email|unique:employees,email,'.$employee->id,
             'fiche_poste' => 'required|string|max:255',
-            'statut' => 'required|in:en_attente,validé,rejeté',
+            'statut' => 'nullable|in:en_attente,validé,rejeté',
         ]);
 
         $employee->update($validated);

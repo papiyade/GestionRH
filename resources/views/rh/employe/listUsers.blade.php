@@ -18,7 +18,7 @@
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a href="https://smarthr.co.in/demo/html/template/index.html"><i class="ti ti-smart-home"></i></a>
+                        <a href="/"><i class="ti ti-smart-home"></i></a>
                     </li>
                     <li class="breadcrumb-item">
                         RH
@@ -30,7 +30,7 @@
         <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
             <div class="me-2 mb-2">
                 <div class="dropdown">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
+                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-light d-inline-flex align-items-center"
                         data-bs-toggle="dropdown">
                         <i class="ti ti-file-export me-1"></i>Exporter
                     </a>
@@ -43,15 +43,9 @@
                 </div>
             </div>
             <div class="mb-2">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#add_users"
-                    class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Nouvel
+                <a style="color: #fff !important;" href="#" data-bs-toggle="modal" data-bs-target="#add_users"
+                    class="btn btn-primary d-flex align-items-center"><i class=" icon-plus ti ti-circle-plus me-2"></i>Nouvel
                     employé</a>
-            </div>
-            <div class="head-icons ms-2">
-                <a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top"
-                    data-bs-original-title="Collapse" id="collapse-header">
-                    <i class="ti ti-chevrons-up"></i>
-                </a>
             </div>
         </div>
     </div>
@@ -114,7 +108,7 @@
                                         <span class="badge bg-info-subtle text-info rounded-pill px-3 py-2"><i
                                                 class="ti ti-user-cog me-1"></i>{{ $user->role }}</span>
                                     @else
-                                        <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-2"><i
+                                        <span class="badge-secondaire badge bg-secondary-subtle text-secondary rounded-pill px-3 py-2"><i
                                                 class="ti ti-user me-1"></i>{{ $user->role ?? 'Employé' }}</span>
                                     @endif
                                 </td>
@@ -377,21 +371,20 @@
             const deleteForm = document.getElementById('deleteUserForm');
             const userNameSpan = document.getElementById('deleteUserName');
 
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const userId = this.dataset.id;
-                    const userName = this.dataset.name;
+deleteButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const userId = this.dataset.id;
+        const userName = this.dataset.name;
 
-                    // Afficher le nom dans le modal
-                    userNameSpan.textContent = userName;
+        // Afficher le nom dans le modal
+        userNameSpan.textContent = userName;
 
-                    // Mettre à jour l’action du formulaire
-                    deleteForm.action = "{{ url('employes') }}/" + userId;
-                });
-            });
+        // Mettre à jour l’action du formulaire en utilisant la route nommée
+        deleteForm.action = "{{ route('employe.delete', ['id' => 'USER_ID']) }}".replace('USER_ID', userId);
+    });
+});
+
         });
     </script>
-
-
 
 @endsection

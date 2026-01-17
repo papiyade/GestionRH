@@ -4,314 +4,438 @@
 @section('page-title', 'Répertoire statistique')
 
 @section('content')
-				<!-- Breadcrumb -->
-				<div class="d-md-flex d-block align-items-center justify-content-between mb-3">
-					<div class="my-auto mb-2">
-						<h2 class="mb-1">Tableau de Bord</h2>
-						<nav>
-							<ol class="breadcrumb mb-0">
-								<li class="breadcrumb-item">
-									<a href="https://smarthr.co.in/demo/html/template/index.html"><i class="ti ti-smart-home"></i></a>
-								</li>
-								<li class="breadcrumb-item">
-									Tableau de bord
-								</li>
-								<li class="breadcrumb-item active" aria-current="page">Dashboard employé</li>
-							</ol>
-						</nav>
-					</div>
-					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-						<div class="ms-2 head-icons">
-							<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
-								<i class="ti ti-chevrons-up"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-				<!-- /Breadcrumb -->
+    <style>
+        .dashboard-modern {
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
 
-                				<div class="row">
-					<div class="col-xl-3 col-md-6">
-						<div class="card position-relative">
-							<div class="card-body">
-								<div class="d-flex align-items-center mb-3">
-									<div class="avatar avatar-md br-10 icon-rotate bg-primary flex-shrink-0">
-										<span class="d-flex align-items-center"><i class="ti ti-delta text-white fs-16"></i></span>
-									</div>
-									<div class="ms-3">
-										<p class="fw-medium text-truncate mb-1">Mes tâches</p>
-										<h5>{{ $totalTasks }}</h5>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-md-6">
-						<div class="card position-relative">
-							<div class="card-body">
-								<div class="d-flex align-items-center mb-3">
-									<div class="avatar avatar-md br-10 icon-rotate bg-primary flex-shrink-0">
-										<span class="d-flex align-items-center"><i class="ti ti-currency text-white fs-16"></i></span>
-									</div>
-									<div class="ms-3">
-										<p class="fw-medium text-truncate mb-1">Tâches en cours</p>
-										<h5>{{ $inProgressTasks }}</h5>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-md-6">
-						<div class="card position-relative">
-							<div class="card-body">
-								<div class="d-flex align-items-center mb-3">
-									<div class="avatar avatar-md br-10 icon-rotate bg-secondary flex-shrink-0">
-										<span class="d-flex align-items-center"><i class="ti ti-stairs-up text-white fs-16"></i></span>
-									</div>
-									<div class="ms-3">
-										<p class="fw-medium text-truncate mb-1">Tâches terminées</p>
-										<h5>{{ $completedTasks }}</h5>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-md-6">
-						<div class="card position-relative">
-							<div class="card-body">
-								<div class="d-flex align-items-center mb-3">
-									<div class="avatar avatar-md br-10 icon-rotate bg-purple flex-shrink-0">
-										<span class="d-flex align-items-center"><i class="ti ti-users-group text-white fs-16"></i></span>
-									</div>
-									<div class="ms-3">
-										<p class="fw-medium text-truncate mb-1">Tâches récentes</p>
-										<a href="{{ route('employe.projects') }}">Voir</h5>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+        /* Header Section */
+        .header-gradient {
+            background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(174, 61, 125, 0.25);
+        }
 
-                <div class="row">
-					<div class="col-xl-12 d-flex">
-						<div class="card flex-fill">
-							<div class="card-header">
-								<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
-									<h5>Tâches récentes</h5>
-									<div>
-										<a href="" class="btn btn-sm btn-light px-3">Tout voir</a>
-									</div>
-								</div>
-							</div>
-<div class="card-body schedule-timeline activity-timeline">
-    @if($recentTasks->isEmpty())
-        <div class="text-center py-10 text-gray-500 border border-dashed border-gray-300 rounded-xl">
-            Aucune tâche récente pour le moment.
+        .breadcrumb-modern {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            margin: 0;
+        }
+
+        .breadcrumb-modern .breadcrumb-item {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .breadcrumb-modern .breadcrumb-item.active {
+            color: white;
+            font-weight: 600;
+        }
+
+        .breadcrumb-modern .breadcrumb-item+.breadcrumb-item::before {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(174, 61, 125, 0.15);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(174, 61, 125, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Task Card */
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #f0f0f0;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .task-card:hover {
+            border-color: #E46E2F;
+            box-shadow: 0 4px 12px rgba(228, 110, 47, 0.15);
+        }
+
+        .task-priority-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-high {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        .priority-medium {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: #000;
+        }
+
+        .priority-low {
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: white;
+        }
+
+        .task-progress {
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .task-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #AE3D7D 0%, #E46E2F 100%);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
+
+        .task-meta i {
+            color: #E46E2F;
+        }
+
+        /* Project Card */
+        .project-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.5rem;
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: #AE3D7D;
+            box-shadow: 0 8px 20px rgba(174, 61, 125, 0.15);
+        }
+
+        .project-status {
+            background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+            color: white;
+            padding: 0.25rem 0.7rem;
+            /* au lieu de 0.4rem 1rem */
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            width: fit-content;
+            white-space: nowrap;
+            max-width: 110px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(174, 61, 125, 0.3);
+            color: white;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: #E46E2F;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        /* Status Badges */
+        .status-completed {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .status-progress {
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            color: #6c757d;
+            font-weight: 600;
+        }
+    </style>
+
+    <div class="dashboard-modern">
+        <!-- Header -->
+        <div class="header-gradient">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h2 class="mb-2 text-white" style="color: #fff !important;">Tableau de Bord</h2>
+                    <nav>
+                        <ol class="breadcrumb breadcrumb-modern">
+                            <li class="breadcrumb-item">
+                                <a href="#" class="text-white icon-plus"><i class="ti ti-smart-home me-1 icon-plus"></i>Accueil</a>
+                            </li>
+                            <li class="breadcrumb-item active">Dashboard Employé</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
         </div>
-    @else
-        @foreach($recentTasks as $task)
-            <div class="d-flex align-items-start mb-4">
-                <!-- Icône / Avatar selon priorité -->
-                <div class="avatar avatar-sm avatar-rounded flex-shrink-0
-                    @if($task->priority === 'High') bg-danger
-                    @elseif($task->priority === 'Medium') bg-warning
-                    @else bg-success
-                    @endif">
-                    <i class="ti ti-list-details fs-15 text-white"></i>
-                </div>
 
-                <!-- Contenu de la tâche -->
-                <div class="flex-fill ps-3 timeline-flow">
-                    <p class="fw-medium text-gray-9 mb-1">
-                        <a href="javascript:void(0);" class="text-dark">
-                            {{ $task->title }}
-                        </a>
-                    </p>
-
-                    <span class="text-gray-500 text-sm">
-                        Projet : <span class="fw-medium text-dark">{{ $task->project->title ?? 'N/A' }}</span> |
-                        Statut : <span class="fw-medium">
-                            @if($task->status === 'completed') ✅ Terminée
-                            @elseif($task->status === 'in progress') ⏳ En cours
-                            @else  Non commencée
-                            @endif
-                        </span> |
-                        Échéance : <span class="fw-medium">{{ \Carbon\Carbon::parse($task->deadline)->format('d/m/Y') }}</span>
-                    </span>
-
-                    <!-- Barre de progression -->
-                    <div class="progress progress-sm mt-2" role="progressbar" aria-label="Progress" aria-valuenow="{{ $task->progress ?? 1 }}" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress-bar
-                            @if($task->status === 'completed') bg-success
-                            @elseif($task->status === 'in progress') bg-warning
-                            @else bg-gray-400
-                            @endif"
-                            style="width: {{ $task->progress ?? 1 }}%">
+        <!-- Stats Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon">
+                            <i class="ti ti-list-check icon-plus"></i>
                         </div>
-                    </div>
-                    <span class="text-xs text-gray-500 mt-1 d-block">{{ $task->progress ?? 0 }}%</span>
-
-                    <!-- Actions et méta -->
-<div class="d-flex align-items-center justify-content-between mt-2">
-    <div class="d-flex align-items-center">
-        <!-- Commentaires -->
-        <a href="javascript:void(0);" class="d-flex align-items-center text-dark me-2">
-            <i class="ti ti-message-circle text-gray me-1"></i> {{ $task->comments->count() }}
-        </a>
-
-        <!-- Fichiers -->
-        <a href="javascript:void(0);" class="d-flex align-items-center text-dark">
-            <i class="ti ti-paperclip text-gray me-1"></i> {{ $task->files->count() }}
-        </a>
-    </div>
-
-    <!-- Dernière mise à jour -->
-    @if($task->updated_at)
-        <span class="text-xs text-gray-400">Màj : {{ $task->updated_at->diffForHumans() }}</span>
-    @endif
-</div>
-
-                </div>
-            </div>
-        @endforeach
-    @endif
-</div>
-
-						</div>
-					</div>
-				</div>
-
-
-                <div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0">Toutes mes tâches</h5>
-    </div>
-    <div class="card-body">
-        @if($tasks->isEmpty())
-            <div class="text-center text-gray-500 py-5">
-                Aucune tâche assignée pour le moment.
-            </div>
-        @else
-            <div class="list-group">
-                @foreach($tasks as $task)
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{{ $task->title }}</strong>
-                            <span class="d-block text-muted small">
-                                Projet : {{ $task->project->title ?? 'N/A' }} |
-                                Statut : {{ ucwords($task->status) }} |
-                                Échéance : {{ \Carbon\Carbon::parse($task->deadline)->format('d/m/Y') }}
-                            </span>
+                            <div class="stat-label">Mes Tâches</div>
+                            <div class="stat-value">{{ $totalTasks }}</div>
                         </div>
-                        <span class="badge 
-                            @if($task->priority === 'High') bg-danger
-                            @elseif($task->priority === 'Medium') bg-warning
-                            @else bg-success
-                            @endif
-                        ">{{ $task->priority }}</span>
                     </div>
-                @endforeach
+                </div>
             </div>
-        @endif
-    </div>
-</div>
-
-
-<div class="row">
-    @forelse($tasks as $task)
-        @php
-            $priorityColors = [
-                'High' => 'bg-danger text-white',
-                'Medium' => 'bg-warning text-dark',
-                'Low' => 'bg-success text-white',
-            ];
-            $statusColors = [
-                'completed' => 'bg-success',
-                'in progress' => 'bg-warning',
-                'pending' => 'bg-secondary',
-            ];
-            $priorityClass = $priorityColors[$task->priority] ?? 'bg-light text-dark';
-            $statusClass = $statusColors[$task->status] ?? 'bg-secondary';
-            $progress = $task->progress ?? 1;
-        @endphp
-
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon">
+                            <i class="ti ti-clock icon-plus"></i>
+                        </div>
                         <div>
-                            <h5 class="card-title mb-1">{{ $task->title }}</h5>
-                            <small class="text-muted">Projet : <strong>{{ $task->project->title ?? 'N/A' }}</strong></small>
-                        </div>
-                        <div class="dropdown">
-                            <a href="#" class="text-muted" data-bs-toggle="dropdown">
-                                <i class="ti ti-dots-vertical"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#"><i class="ti ti-edit me-2"></i>Éditer</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="ti ti-trash me-2"></i>Supprimer</a></li>
-                            </ul>
+                            <div class="stat-label">Tâches en Cours</div>
+                            <div class="stat-value">{{ $inProgressTasks }}</div>
                         </div>
                     </div>
-
-                    <!-- Badge priorité -->
-                    <span class="badge {{ $priorityClass }} mb-2">{{ $task->priority }}</span>
-
-                    <!-- Barre de progression -->
-                    <div class="progress mb-2" style="height: 6px;">
-                        <div class="progress-bar {{ $statusClass }}" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-
-                    <!-- Échéance -->
-                    <p class="mb-2"><small class="text-muted">Échéance : {{ \Carbon\Carbon::parse($task->deadline)->format('d/m/Y') }}</small></p>
-
-                    <!-- Métadonnées messages / pièces jointes -->
-                    <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2">
-                        <div class="d-flex align-items-center text-muted small">
-                            <a href="#" class="me-3 d-flex align-items-center"><i class="ti ti-message-circle me-1"></i>{{$task->comments->count()}} </a>
-                            <a href="#" class="d-flex align-items-center"><i class="ti ti-paperclip me-1"></i> {{$task->files->count()}}</a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon">
+                            <i class="ti ti-circle-check icon-plus"></i>
                         </div>
-                        @if($task->updated_at)
-                            <small class="text-muted">Màj : {{ $task->updated_at->diffForHumans() }}</small>
-                        @endif
+                        <div>
+                            <div class="stat-label">Tâches Terminées</div>
+                            <div class="stat-value">{{ $completedTasks }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon">
+                            <i class="ti ti-folder icon-plus"></i>
+                        </div>
+                        <div>
+                            <div class="stat-label">Total Projets</div>
+                            <div class="stat-value">{{ $projects->count() }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    @empty
-        <div class="col-12 text-center py-5 border border-dashed rounded">
-            Aucune tâche pour le moment.
-        </div>
-    @endforelse
 
-    <div class="mb-6">
-    <h2 class="h5 mb-3">Projets rattachés</h2>
+        <!-- Recent Tasks -->
+        <div class="section-card">
+            <div class="section-header">
+                <h5 class="section-title mb-0">
+                    <i class="ti ti-clock-hour-4"></i>
+                    Tâches Récentes
+                </h5>
+                <a href="{{ route('employe.projects') }}" class="btn btn-gradient btn-sm text-white"
+                    style="margin-left: 2px;">Voir tout</a>
+            </div>
 
-    @if($projects->isEmpty())
-        <div class="text-center py-4 border border-dashed rounded">
-            Aucun projet pour le moment.
-        </div>
-    @else
-        <div class="row g-3">
-            @foreach($projects as $project)
-            <div class="col-md-4">
-                <div class="card border shadow-sm p-3 h-100">
+            @forelse($recentTasks as $task)
+                <div class="task-card">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-primary">{{ $project->status ?? 'Actif' }}</span>
-                        <small class="text-muted">{{ $project->created_at->format('d/m/Y') }}</small>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 fw-bold">{{ $task->title }}</h6>
+                            <div class="task-meta">
+                                <span><i class="ti ti-folder me-1"></i>{{ $task->project->title ?? 'N/A' }}</span>
+                                <span>
+                                    @if ($task->status === 'completed')
+                                        <span class="status-completed">✓ Terminée</span>
+                                    @elseif($task->status === 'in progress')
+                                        <span class="status-progress">⏳ En cours</span>
+                                    @else
+                                        <span class="status-pending">○ En attente</span>
+                                    @endif
+                                </span>
+                                <span><i
+                                        class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($task->deadline)->format('d/m/Y') }}</span>
+                            </div>
+                        </div>
+                        <span
+                            class="task-priority-badge
+                                @if ($task->priority === \App\Models\Task::PRIORITY_HIGH) priority-high
+                                @elseif($task->priority === \App\Models\Task::PRIORITY_MEDIUM) priority-medium
+                                @else priority-low @endif">
+                            {{ \App\Models\Task::priorities()[$task->priority] ?? '—' }}
+                        </span>
                     </div>
-                    <h5 class="card-title">{{ $project->title }}</h5>
-                    <p class="card-text text-truncate">{{ $project->description ?? '' }}</p>
-                    <a href="{{ route('projects.show', $project->id) }}" class="btn btn-sm btn-outline-primary mt-2">Voir projet</a>
+                    <div class="task-progress mb-2">
+                        <div class="task-progress-bar" style="width: {{ $task->progress ?? 0 }}%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="task-meta">
+                            <span><i class="ti ti-message-circle me-1"></i>{{ $task->comments->count() }}</span>
+                            <span><i class="ti ti-paperclip me-1"></i>{{ $task->files->count() }}</span>
+                        </div>
+                        <small class="text-muted">{{ $task->progress ?? 0 }}%</small>
+                    </div>
                 </div>
-            </div>
-            @endforeach
+            @empty
+                <div class="empty-state">
+                    <i class="ti ti-clipboard-off"></i>
+                    <p class="mb-0">Aucune tâche récente</p>
+                </div>
+            @endforelse
         </div>
-    @endif
-</div>
-</div>
 
+        <!-- Projects -->
+        <div class="section-card">
+            <div class="section-header">
+                <h5 class="section-title mb-0">
+                    <i class="ti ti-briefcase"></i>
+                    Mes Projets
+                </h5>
+            </div>
 
+            @if ($projects->isEmpty())
+                <div class="empty-state">
+                    <i class="ti ti-folder-off"></i>
+                    <p class="mb-0">Aucun projet pour le moment</p>
+                </div>
+            @else
+                <div class="row g-3">
+                    @foreach ($projects as $project)
+                        <div class="col-md-4">
+                            <div class="project-card">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="btn btn-sm btn-gradient">
+                                        @if ($project->status === 'not_started')
+                                            Non débuté
+                                        @elseif ($project->status === 'in_progress')
+                                            En cours
+                                        @elseif ($project->status === 'completed')
+                                            Terminée
+                                        @else
+                                            —
+                                        @endif
+                                    </span>
 
+                                    <small class="text-muted">{{ $project->created_at->format('d/m/Y') }}</small>
+                                </div>
+                                <h6 class="fw-bold mb-2">{{ $project->title }}</h6>
+                                <p class="text-muted small mb-3">{{ Str::limit($project->description ?? '', 80) }}</p>
+                                <a href="{{ route('projects.show', $project->id) }}"
+                                    class="btn btn-gradient text-white btn-sm w-100">
+                                    <i class="ti ti-eye me-1"></i>Voir le projet
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
 @endsection

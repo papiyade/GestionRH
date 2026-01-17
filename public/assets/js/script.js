@@ -68,9 +68,9 @@ Template Name: Smarthr - Bootstrap Admin Template
 			"info": true,
 			"language": {
 				search: ' ',
-				sLengthMenu: 'Row Per Page _MENU_ Entries',
-				searchPlaceholder: "Search",
-				info: "Showing _START_ - _END_ of _TOTAL_ entries",
+				sLengthMenu: 'Ligne par page _MENU_ Entrées',
+				searchPlaceholder: "Rechercher",
+				info: "Affichage de _START_ - _END_ sur _TOTAL_ entrées",
 				paginate: {
 					next: '<i class="ti ti-chevron-right"></i>',
 					previous: '<i class="ti ti-chevron-left"></i> '
@@ -336,28 +336,57 @@ Template Name: Smarthr - Bootstrap Admin Template
 	}
 
 	//toggle_btn
-	$(document).on('click', '#toggle_btn', function() {
-		if ($('body').hasClass('mini-sidebar')) {
-			$('body').removeClass('mini-sidebar');
-			$(this).addClass('active');
-			$('.subdrop + ul');
-			localStorage.setItem('screenModeNightTokenState', 'night');
-			setTimeout(function() {
-				$("body").removeClass("mini-sidebar");
-				$(".header-left").addClass("active");
-			}, 100);
-		} else {
-			$('body').addClass('mini-sidebar');
-			$(this).removeClass('active');
-			$('.subdrop + ul');
-			localStorage.removeItem('screenModeNightTokenState', 'night');
-			setTimeout(function() {
-				$("body").addClass("mini-sidebar");
-				$(".header-left").removeClass("active");
-			}, 100);
-		}
-		return false;
-	});
+	// $(document).on('click', '#toggle_btn', function() {
+	// 	if ($('body').hasClass('mini-sidebar')) {
+	// 		$('body').removeClass('mini-sidebar');
+	// 		$(this).addClass('active');
+	// 		$('.subdrop + ul');
+	// 		localStorage.setItem('screenModeNightTokenState', 'night');
+	// 		setTimeout(function() {
+	// 			$("body").removeClass("mini-sidebar");
+	// 			$(".header-left").addClass("active");
+	// 		}, 100);
+	// 	} else {
+	// 		$('body').addClass('mini-sidebar');
+	// 		$(this).removeClass('active');
+	// 		$('.subdrop + ul');
+	// 		localStorage.removeItem('screenModeNightTokenState', 'night');
+	// 		setTimeout(function() {
+	// 			$("body").addClass("mini-sidebar");
+	// 			$(".header-left").removeClass("active");
+	// 		}, 100);
+	// 	}
+	// 	return false;
+	// });
+	// Dark Mode Toggle (pour le bouton toggle_btn si vous en avez un)
+$(document).on('click', '#dark_mode_toggle', function() {
+    if ($('body').hasClass('dark-mode')) {
+        $('body').removeClass('dark-mode');
+        $('body').addClass('light-mode');
+        localStorage.setItem('userTheme', 'light');
+    } else {
+        $('body').addClass('dark-mode');
+        $('body').removeClass('light-mode');
+        localStorage.setItem('userTheme', 'dark');
+    }
+});
+
+// Load theme on page load
+$(document).ready(function() {
+    const savedTheme = localStorage.getItem('userTheme');
+    if (savedTheme === 'dark') {
+        $('body').addClass('dark-mode');
+    } else if (savedTheme === 'light') {
+        $('body').addClass('light-mode');
+    } else {
+        // Auto mode - detect system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            $('body').addClass('dark-mode');
+        } else {
+            $('body').addClass('light-mode');
+        }
+    }
+});
 
 	var myDiv = document.querySelector('.sticky-sidebar-one');	
 
@@ -421,6 +450,8 @@ Template Name: Smarthr - Bootstrap Admin Template
 			localStorage.setItem('theme', 'light');
 		}
 	}
+
+	dark
 
 	
 	$('ul.tabs li').on('click', function(){

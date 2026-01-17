@@ -374,7 +374,7 @@ class CraController extends Controller
     private function authorizeAccess(Cra $cra)
     {
         if ($cra->user_id !== Auth::id()) {
-            abort(403, '❌ Accès interdit - Vous n\'avez pas la permission d\'accéder à ce CRA.');
+            abort(403, 'Accès interdit - Vous n\'avez pas la permission d\'accéder à ce CRA.');
         }
     }
 

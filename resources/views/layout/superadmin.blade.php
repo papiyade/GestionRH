@@ -305,10 +305,10 @@
 										</div>
 										<div class="card-body">
 											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2"
-												href="https://smarthr.co.in/demo/html/template/profile.html">
+												href="{{route('settings.edit')}}">
 												<i class="ti ti-user-circle me-1"></i>Profil
 											</a>
-											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2" href="https://smarthr.co.in/demo/html/template/bussiness-settings.html">
+											<a class="dropdown-item d-inline-flex align-items-center p-0 py-2" href="{{route('settings.preferences')}}l">
 												<i class="ti ti-settings me-1"></i>Paramètres
 											</a>
 										</div>

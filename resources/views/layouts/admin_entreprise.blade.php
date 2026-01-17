@@ -43,7 +43,7 @@
             <div class="d-flex">
                 <!-- LOGO -->
                 <div class="navbar-brand-box horizontal-logo">
-                    <a href="index.html" class="logo logo-dark">
+                    <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
                         </span>
@@ -52,7 +52,7 @@
                         </span>
                     </a>
 
-                    <a href="index.html" class="logo logo-light">
+                    <a href="/" class="logo logo-light">
                         <span class="logo-sm">
                             <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
                         </span>
@@ -378,7 +378,7 @@
                     <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             @if (Auth::user()->profile_photo_path)
-                                <img class="rounded-circle header-profile-user" src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" alt="Header Avatar">
+                                <img class="rounded-circle header-profile-user" src="{{ asset($user->photo_profile_path) }}" width="80" height="80" alt="Header Avatar">
                             @else
                             <div class="avatar-xs">
                                 <span class="avatar-title rounded-circle bg-primary text-white font-size-16">
@@ -444,7 +444,7 @@
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <!-- Dark Logo-->
-                <a href="index.html" class="logo logo-dark">
+                <a href="/" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
                     </span>
@@ -453,7 +453,7 @@
                     </span>
                 </a>
                 <!-- Light Logo-->
-                <a href="index.html" class="logo logo-light">
+                <a href="/" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{asset('assets/images/logo-sm.png')}}" alt="" height="22">
                     </span>

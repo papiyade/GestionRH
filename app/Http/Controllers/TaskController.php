@@ -7,10 +7,7 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User; // N'oubliez pas d'importer User si vous l'utilisez pour les listes déroulantes
-// App\Http\Controllers\TaskController.php
-
-// ... (autres use statements) ...
+use App\Models\User; 
 
 class TaskController extends Controller
 {
@@ -41,29 +38,6 @@ class TaskController extends Controller
                            ->with('openCommentsModal', true)
                            ->with('comment_task_id', $task->id);
     }
-
-    // Ceci est votre méthode `storeComment` originale.
-    // Si elle est destinée à d'autres usages (hors du formulaire de modal de tâche), vous pouvez la conserver.
-    // Sinon, elle est redondante avec `addComment` pour le contexte du Kanban.
-    // Je la laisse ici comme vous l'avez, mais la route associée dans le routes/web.php est supprimée pour éviter les conflits.
-    // Si vous voulez l'utiliser, assurez-vous de lui donner une URL et un nom de route uniques.
-    /*
-    public function storeComment(Request $request)
-    {
-        $request->validate([
-            'task_id' => 'required|exists:tasks,id',
-            'content' => 'required|string|min:2'
-        ]);
-
-        Comment::create([
-            'task_id' => $request->task_id,
-            'user_id' => auth()->id(),
-            'content' => $request->content,
-        ]);
-
-        return back(); // Ou redirection avec message
-    }
-    */
 
     public function store(Request $request, Project $project)
     {

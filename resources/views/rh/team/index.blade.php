@@ -20,7 +20,7 @@
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a href="https://smarthr.co.in/demo/html/template/index.html"><i class="ti ti-smart-home"></i></a>
+                        <a href="/"><i class="ti ti-smart-home"></i></a>
                     </li>
                     <li class="breadcrumb-item">
                         RH
@@ -30,42 +30,10 @@
             </nav>
         </div>
         <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-            <div class="me-2 mb-2">
-                <div class="d-flex align-items-center border bg-white rounded p-1 me-2 icon-list">
-                    <a href="https://smarthr.co.in/demo/html/template/companies-crm.html"
-                        class="btn btn-icon btn-sm me-1"><i class="ti ti-list-tree"></i></a>
-                    <a href="https://smarthr.co.in/demo/html/template/companies-grid.html"
-                        class="btn btn-icon btn-sm active bg-primary text-white"><i class="ti ti-layout-grid"></i></a>
-                </div>
-            </div>
-            <div class="me-2 mb-2">
-                <div class="dropdown">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
-                        data-bs-toggle="dropdown">
-                        <i class="ti ti-file-export me-1"></i>Exporter
-                    </a>
-                    <ul class="dropdown-menu  dropdown-menu-end p-3">
-                        <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                    class="ti ti-file-type-pdf me-1"></i>Exporter vers PDF</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                    class="ti ti-file-type-xls me-1"></i>Exporter vers Excel </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
             <div class="mb-2">
                 <button href="#" data-bs-toggle="modal" data-bs-target="#createTeamModal"
-                    class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Ajouter une
+                    class="btn btn-primary d-flex align-items-center"><i class="icon-plus ti ti-circle-plus me-2"></i>Ajouter une
                     équipe</button>
-            </div>
-            <div class="head-icons ms-2">
-                <a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top"
-                    data-bs-original-title="Collapse" id="collapse-header">
-                    <i class="ti ti-chevrons-up"></i>
-                </a>
             </div>
         </div>
     </div>
@@ -75,30 +43,6 @@
         <div class="card-body p-3">
             <div class="d-flex align-items-center justify-content-between">
                 <h5>Equipes </h5>
-                <div class="dropdown">
-                    <a href="javascript:void(0);"
-                        class="dropdown-toggle btn btn-sm btn-white d-inline-flex align-items-center"
-                        data-bs-toggle="dropdown">
-                        Trier par
-                    </a>
-                    <ul class="dropdown-menu  dropdown-menu-end p-3">
-                        <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Recently Added</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Ascending</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Desending</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Last Month</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Last 7 Days</a>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -108,7 +52,7 @@
             <div class="text-center py-5">
                 <div class="empty-state">
                     <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                        colors="primary:#121331,secondary:#08a88a" style="width:100px;height:100px"></lord-icon>
+                        colors="primary:#902e65,secondary:#08a88a" style="width:100px;height:100px"></lord-icon>
                     <h5 class="mt-3 mb-2">Aucune équipe trouvée</h5>
                     <p class="text-muted mb-4">Créez des équipes pour pouvoir les manipuler</p>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTeamModal"><i

@@ -83,10 +83,10 @@
                             <label class="form-label">Caisse CSS</label>
                             <div class="input-group">
                                 <input type="number" name="caisse_css" class="form-control @error('caisse_css') is-invalid @enderror"
-                                    value="{{ old('caisse_css', $employee->user->employeeDetail->caisse_css ?? 0) }}" step="0.01" max="63000">
-                                <span class="input-group-text">FCFA</span>
+                                    value="{{ old('caisse_css', $employee->user->employeeDetail->caisse_css ?? 0) }}" step="0.01" max="6">
+                                <span class="input-group-text">%</span>
                             </div>
-                            <small class="text-muted">Plafond : 63 000 FCFA</small>
+                            <small class="text-muted">Plafond à 6%, soit 63 000 FCFA</small>
                             @error('caisse_css')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -110,7 +110,7 @@
                             <div class="input-group">
                                 <input type="number" name="ir" class="form-control @error('ir') is-invalid @enderror"
                                     value="{{ old('ir', $employee->user->employeeDetail->ir ?? 0) }}" step="0.01">
-                                <span class="input-group-text">FCFA</span>
+                                <span class="input-group-text">Cote</span>
                             </div>
                             @error('ir')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -123,7 +123,7 @@
                             <div class="input-group">
                                 <input type="number" name="trimf" class="form-control @error('trimf') is-invalid @enderror"
                                     value="{{ old('trimf', $employee->user->employeeDetail->trimf ?? 0) }}" step="0.01">
-                                <span class="input-group-text">FCFA</span>
+                                <span class="input-group-text">Cote</span>
                             </div>
                             @error('trimf')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -142,7 +142,7 @@
                         </div>
 
                         {{-- RUBRIQUES --}}
-                        <h5 class="text-primary mt-4">Rubriques</h5>
+                        {{-- <h5 class="text-primary mt-4">Rubriques</h5>
                         <hr>
 
                         <div class="mb-3">
@@ -153,7 +153,7 @@
                         <div class="mb-3">
                             <label class="form-label">Rubriques Non Soumises</label>
                             <textarea name="rubrique_non_soumise" class="form-control" rows="2" placeholder="Ex : Allocation familiale, indemnités non imposables...">{{ old('rubrique_non_soumise', $employee->user->employeeDetail->rubrique_non_soumise ?? '') }}</textarea>
-                        </div>
+                        </div> --}}
 
                         {{-- DATE D’EFFET --}}
                         <div class="mb-4">

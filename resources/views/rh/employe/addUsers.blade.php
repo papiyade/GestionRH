@@ -61,7 +61,7 @@
                 </div>
                 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-gradient btn-lg text-white" style="background: linear-gradient(135deg, #ea6a09, #df4613); border: none;">
+                    <button type="submit" class="btn btn-gradient btn-lg text-white" style="background: linear-gradient(135deg, #902e65, #df4613); border: none;">
                         <i class="ti ti-circle-plus me-2"></i>Ajouter l'employé
                     </button>
                 </div>

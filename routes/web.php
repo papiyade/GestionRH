@@ -1,89 +1,63 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RhController;
-use App\Http\Controllers\SuperadminController;
-use App\Http\Controllers\EntrepriseController;
-use App\Http\Controllers\TeamController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CandidatureController;
+use App\Http\Controllers\ChefProjetcontroller;
+use App\Http\Controllers\CraController;
+use App\Http\Controllers\CustomMessagesController;
+use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\EmployeeDocumentController;
+use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\JobOfferController;
-use App\Http\Controllers\CandidatureController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\CustomMessagesController;
-use App\Http\Controllers\ChefProjetcontroller;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\TacheController;
-use App\Http\Controllers\EmployeController;
-use App\Http\Controllers\PublicJobOfferController;
-use App\Http\Controllers\PersonnelExportController;
-use App\Http\Controllers\RessourceController;
-use App\Http\Controllers\CraController;
-use App\Http\Controllers\PublicEmployeeController;
-use App\Http\Controllers\PublicRHController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\PersonnelExportController;
 use App\Http\Controllers\PrestataireController;
-
-
-
-
-
-
-
-
-
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PublicEmployeeController;
+use App\Http\Controllers\PublicJobOfferController;
+use App\Http\Controllers\PublicRHController;
+use App\Http\Controllers\RessourceController;
+use App\Http\Controllers\RhController;
+use App\Http\Controllers\SuperadminController;
+use App\Http\Controllers\TacheController;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\UserSettingController;
+use App\Http\Controllers\EntrepriseStatisticsController;
+use App\Http\Controllers\OtpController;
 use Illuminate\Support\Facades\Mail;
-
-
-
-
-
-
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-   if (Auth::check()) {
+    if (Auth::check()) {
 
         $user = Auth::user();
-
 
         if ($user->role == 'super_admin') {
             return redirect('/admin/dashboard');
         } elseif ($user->role == 'admin') {
             return redirect('admin_simple');
-        }
-        elseif($user->role == 'rh') {
+        } elseif ($user->role == 'rh') {
             return redirect('rh_dashboard');
-        }
-         elseif($user->role == 'chef_projet') {
+        } elseif ($user->role == 'chef_projet') {
             return redirect('/chef-projet/dashboard');
-        }
-        elseif($user->role == 'employe') {
+        } elseif ($user->role == 'employe') {
             return redirect('/my-dashboard');
         }
     }
-
 
     return view('welcome');
 });
 Route::get('/import-db', function () {
     $sql = file_get_contents(base_path('projet-rh.sql'));
     DB::unprepared($sql);
+
     return 'Import terminé !';
 });
 
 
-Route::get('/test-mail', function () {
-    Mail::raw('Ceci est un mail de test.', function ($message) {
-        $message->to('malickwane26@gmail.com')
-                ->subject('Test d\'envoi mail Laravel');
-    });
-
-    return 'Mail envoyé (ou erreur si ça coince)';
-});
-    Route::patch('/projets/{project}/taches/{tache}/changer-priorite', [EmployeController::class, 'changerPrioriteTache'])->name('projets.taches.changerPriorite');
-
+Route::patch('/projets/{project}/taches/{tache}/changer-priorite', [EmployeController::class, 'changerPrioriteTache'])->name('projets.taches.changerPriorite');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -94,15 +68,8 @@ Route::middleware('auth')->group(function () {
     // Route::post('/admin/add-admin', [SuperadminController::class, 'createUsers'])->name('add_admin');
     // Route::get('/admin/list-admin', [SuperadminController::class, 'adminList'])->name('list_admin');
 
-
-
-
     // Route::get('/admin/company/dashboard', [AdminController::class, 'index'])->name('admin_simple');
-        Route::get('/status', [SuperadminController::class, 'status'])->name('status');
-
-
-
-
+    Route::get('/status', [SuperadminController::class, 'status'])->name('status');
 
 });
 
@@ -111,62 +78,61 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/admin/add', [SuperadminController::class, 'addAdmin'])->name('add_admin_view');
     Route::post('/admin/add-admin', [SuperadminController::class, 'createUsers'])->name('add_admin');
     Route::get('/admin/list-admin', [SuperadminController::class, 'adminList'])->name('list_admin');
-  Route::post('/entreprises/{entreprise}/toggle-status', [EntrepriseController::class, 'toggleStatus'])->name('entreprise.toggleStatus');
-  Route::get('/entreprises/list', [EntrepriseController::class, 'index'])->name('entreprises.list');
-Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->name('entreprise.show');
+    Route::post('/entreprises/{entreprise}/toggle-status', [EntrepriseController::class, 'toggleStatus'])->name('entreprise.toggleStatus');
+    Route::get('/entreprises/list', [EntrepriseController::class, 'index'])->name('entreprises.list');
+    Route::get('/entreprises/{entreprise}', [EntrepriseController::class, 'show'])->name('entreprise.show');
 
 });
-    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
-    Route::get('/admin/entreprise/project', [AdminController::class, 'showProjects'])->name('admin.project.show');
-
+Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
+Route::get('/admin/entreprise/project', [AdminController::class, 'showProjects'])->name('admin.project.show');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
+    Route::get('/entreprises/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
-Route::get('/entreprises/employes', [EntrepriseController::class, 'index']);
-Route::get('/liste-employe', function() {
-    return 'Test OK';
-})->middleware(['auth','role:admin']);
+    Route::get('/entreprises/employes', [EntrepriseController::class, 'index']);
+    Route::get('/liste-employe', function () {
+        return 'Test OK';
+    })->middleware(['auth', 'role:admin']);
 
     Route::get('/admin/company/dashboard', [AdminController::class, 'index'])->name('admin_simple');
     Route::get('/admin/company', [AdminController::class, 'companyView'])->name('company');
-Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('entreprise.store');
-     Route::get('/entreprise/edit', [EntrepriseController::class, 'edit'])->name('entreprise.edit');
+    Route::post('/entreprise/store', [EntrepriseController::class, 'store'])->name('entreprise.store');
+    Route::get('/entreprise/edit', [EntrepriseController::class, 'edit'])->name('entreprise.edit');
     Route::put('/entreprise/update', [EntrepriseController::class, 'update'])->name('entreprise.update');
     Route::get('/entreprise/redirection', [EntrepriseController::class, 'redirectionEntreprise'])
-    ->name('entreprise.redirect');
+        ->name('entreprise.redirect');
 
     Route::get('/employes/create', [AdminController::class, 'formView'])->name('employe.create');
     Route::post('/employes/createe', [AdminController::class, 'createEmploye'])->name('create.employe');
-//    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
-       Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
-
+    //    Route::get('/admin/entreprise/teams', [AdminController::class, 'showTeams'])->name('admin.team.show');
+    Route::get('/entreprise/employes', [EntrepriseController::class, 'getEmployesPremiereEntreprise'])->name('entreprise.employes');
 
 });
-Route::middleware(['auth','role:rh'])->group(function(){
-    Route::get('/rh/dashboard',[RhController::class,'index'])->name('rh_dashboard');
+Route::middleware(['auth', 'role:rh'])->group(function () {
+    Route::get('/rh/dashboard', [RhController::class, 'index'])->name('rh_dashboard');
     Route::get('/rh/employe', [RhController::class, 'employeView'])->name('employeList');
     Route::get('/users/{id}/edit', [RhController::class, 'editUsers'])->name('rh.editUsers');
     Route::put('/users/{id}', [RhController::class, 'updateUsers'])->name('rh.updateUsers');
     Route::delete('/employes/{id}', [RhController::class, 'deleteUser'])->name('employe.delete');
-   Route::post('/team/create', [TeamController::class, 'store'])->name('teams.store');
+    Route::post('/team/create', [TeamController::class, 'store'])->name('teams.store');
     Route::get('/teams', [TeamController::class, 'index'])->name('teams');
     Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
     Route::post('/teams/{team}/description', [TeamController::class, 'updateDescription'])->name('teams.updateDescription');
     Route::post('/teams/{team}/add-member/{user}', [TeamController::class, 'addMember'])->name('teams.addMember');
     Route::post('/rh/users/create', [RhController::class, 'createUsers'])->name('rh.createUsers');
     Route::get('/employe/{id}/edit', [EmployeeDetailController::class, 'edit'])->name('employee_detail.edit');
-Route::put('/employe/{id}', [EmployeeDetailController::class, 'update'])->name('employee_detail.update');
+    Route::put('/employe/{id}', [EmployeeDetailController::class, 'update'])->name('employee_detail.update');
 
     Route::get('/rh/users/create', [RhController::class, 'createUserForm'])->name('rh.users.create');
     Route::delete('/teams/{team}/members/{user}', [TeamController::class, 'removeMember'])->name('teams.members.remove');
     Route::get('/employe/{id}', [RhController::class, 'show'])->name('employe.show');
-Route::get('/users/{id}', [EmployeeDetailController::class, 'show'])->name('users.show');
-Route::post('/employee-details', [EmployeeDetailController::class, 'store'])->name('employee-details.store');
-Route::post('/employee-details/{user_id}/bank', [EmployeeDetailController::class, 'storeBankInfo'])
-    ->name('employee-details.bank.store');
+    Route::get('/users/{id}', [EmployeeDetailController::class, 'show'])->name('users.show');
+    Route::post('/employee-details', [EmployeeDetailController::class, 'store'])->name('employee-details.store');
+    Route::post('/employee-details/{user_id}/bank', [EmployeeDetailController::class, 'storeBankInfo'])
+        ->name('employee-details.bank.store');
 
-    Route::get('/rh/fiche/pre/{employee}', [PublicRHController::class, 'previewFiche'])->name('rh.fiche.preview');
+    Route::get('/rh/fiche/pre/{employee}', [PublicRHController::class, 'previewFiche'])->middleware(['auth', 'check.otp'])->name('rh.fiche.preview');
+
 
 
     // Prestations
@@ -175,54 +141,45 @@ Route::post('/employee-details/{user_id}/bank', [EmployeeDetailController::class
     Route::post('prestataires/store', [PrestataireController::class, 'store'])->name('rh.prestataires.store');
     // Exports mensuels
     Route::get('prestataires/export/{mois}/{annee}', [PrestataireController::class, 'exportPrestations'])
-    ->name('rh.prestations.export');
-
+        ->name('rh.prestations.export');
 
     // Formulaire pour ajouter/modifier les prestations du mois
-Route::get('prestataires/prestations-mensuelles/create', [PrestataireController::class, 'createPrestations'])->name('rh.prestataires.prestations.create');
-Route::post('prestataires/prestations-mensuelles/store', [PrestataireController::class, 'storePrestations'])->name('rh.prestataires.prestations.store');
+    Route::get('prestataires/prestations-mensuelles/create', [PrestataireController::class, 'createPrestations'])->name('rh.prestataires.prestations.create');
+    Route::post('prestataires/prestations-mensuelles/store', [PrestataireController::class, 'storePrestations'])->name('rh.prestataires.prestations.store');
 
     Route::get('prestataires/prestations-mensuelles', [PrestataireController::class, 'prestationsMensuelles'])->name('rh.prestataires.prestations');
 
+    Route::post('/employee/document/store', [EmployeeDocumentController::class, 'storeDocument'])->name('employee.document.store');
+    Route::post('/employee/ressource/store', [RessourceController::class, 'store'])->name('employee.ressource.store');
+    Route::delete('/employee/ressource/destroy{ressource}', [RessourceController::class, 'destroy'])->name('ressource.destroy');
+    Route::delete('/employee-document/{id}', [EmployeeDocumentController::class, 'destroy'])->name('employee.document.destroy');
 
+    Route::get('/rh-dashboard/offres', [JobOfferController::class, 'index'])->name('offres.index');
 
-Route::post('/employee/document/store', [EmployeeDocumentController::class, 'storeDocument'])->name('employee.document.store');
-Route::post('/employee/ressource/store', [RessourceController::class, 'store'])->name('employee.ressource.store');
-Route::delete('/employee/ressource/destroy{ressource}', [RessourceController::class, 'destroy'])->name('ressource.destroy');
-Route::delete('/employee-document/{id}', [EmployeeDocumentController::class, 'destroy'])->name('employee.document.destroy');
+    Route::post('/offres', [JobOfferController::class, 'store'])->name('offres.store');
+    Route::get('/offres/{offre}/edit', [JobOfferController::class, 'edit'])->name('offres.edit');
 
-Route::get('/rh-dashboard/offres', [JobOfferController::class, 'index'])->name('offres.index');
+    Route::put('/offres/{offre}', [JobOfferController::class, 'update'])->name('offres.update');
 
-Route::post('/offres', [JobOfferController::class, 'store'])->name('offres.store');
-Route::get('/offres/{offre}/edit', [JobOfferController::class, 'edit'])->name('offres.edit');
+    Route::patch('/offres/{offre}/update-status', [JobOfferController::class, 'updateStatus'])->name('offres.updateStatus');
 
-Route::put('/offres/{offre}', [JobOfferController::class, 'update'])->name('offres.update');
+    Route::delete('/offres/{offre}', [JobOfferController::class, 'destroy'])->name('offres.destroy');
 
-Route::patch('/offres/{offre}/update-status', [JobOfferController::class, 'updateStatus'])->name('offres.updateStatus');
-
-Route::delete('/offres/{offre}', [JobOfferController::class, 'destroy'])->name('offres.destroy');
-
-
- Route::get('/rh/export-personnel-registry', [PersonnelExportController::class, 'exportPersonnelRegistry'])
+    Route::get('/rh/export-personnel-registry', [PersonnelExportController::class, 'exportPersonnelRegistry'])
         ->name('rh.export.personnel.registry');
 
+    Route::get('/rh/candidature/candidat/list-depot', [CandidatureController::class, 'index'])->name('candidatures.index');
 
+    Route::get('/rh/candidatures/{candidature}', [CandidatureController::class, 'show'])->name('rh.candidatures.show');
 
-Route::get('/rh/candidature/candidat/list-depot', [CandidatureController::class, 'index'])->name('candidatures.index');
-
-Route::get('/rh/candidatures/{candidature}', [CandidatureController::class, 'show'])->name('rh.candidatures.show');
-
-
-Route::post('/rh/candidatures/{candidature}/accepter', [CandidatureController::class, 'accept'])->name('rh.candidatures.accept');
-Route::post('/rh/candidatures/{candidature}/rejeter', [CandidatureController::class, 'reject'])->name('rh.candidatures.reject');
+    Route::post('/rh/candidatures/{candidature}/accepter', [CandidatureController::class, 'accept'])->name('rh.candidatures.accept');
+    Route::post('/rh/candidatures/{candidature}/rejeter', [CandidatureController::class, 'reject'])->name('rh.candidatures.reject');
 
 });
 
 Route::get('/unread-messages-count', [CustomMessagesController::class, 'unreadCount'])->name('messages.unread.count');
 
-
-
-Route::middleware(['auth','role:chef_projet'])->group(function(){
+Route::middleware(['auth', 'role:chef_projet'])->group(function () {
 
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
@@ -234,50 +191,40 @@ Route::middleware(['auth','role:chef_projet'])->group(function(){
     Route::delete('/projects/{project}/update-members', [ProjectController::class, 'updateMembers'])->name('projects.updateMembers');
     Route::get('/chef-projet/dashboard', [ChefProjetcontroller::class, 'index'])->name('chef_projet.dashboard');
 
-// Route pour ajouter un commentaire
-Route::post('/projects/{project}/comments', [ProjectController::class, 'storeComment'])->name('comments.store');
-// Route pour ajouter un fichier
-Route::post('projects/{project}/files', [ProjectController::class, 'storeFile'])->name('files.store');
-Route::post('/projects/{project}/tasks', [ProjectController::class, 'storeTask'])->name('tasks.store');
-Route::patch('/tasks/{task}', [ProjectController::class, 'updateTask'])->name('tasks.update');
-Route::post('/tasks/{task}/assign', [ProjectController::class, 'assignTask'])->name('tasks.assign');
-Route::delete('/tasks/{task}', [ProjectController::class, 'deleteTask'])->name('tasks.delete');
-Route::get('/my-tasks', [ProjectController::class, 'myTasks'])->name('tasks.myTasks');
-Route::delete('/files/{file}', [ProjectController::class, 'destroyFile'])->name('files.delete');
-Route::patch('/projects/{project}/members/{user}/toggle-lead', [ProjectController::class, 'toggleLead'])->name('projects.toggleLead');
-Route::get('/tasks/{task}', [ProjectController::class, 'showTask'])->name('tasks.show');
-Route::post('/tasks/{task}/comments', [ProjectController::class, 'storeTaskComment'])->name('tasks.comments.store');
-Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.delete');
-Route::post('/projects/{project}/members/{user}', [ProjectController::class, 'addMember'])->name('projects.addMember');
-Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember'])->name('projects.removeMember');
-
-
-
-
-
-
-
-
+    // Route pour ajouter un commentaire
+    Route::post('/projects/{project}/comments', [ProjectController::class, 'storeComment'])->name('comments.store');
+    // Route pour ajouter un fichier
+    Route::post('projects/{project}/files', [ProjectController::class, 'storeFile'])->name('files.store');
+    Route::post('/projects/{project}/tasks', [ProjectController::class, 'storeTask'])->name('tasks.store');
+    Route::patch('/tasks/{task}', [ProjectController::class, 'updateTask'])->name('tasks.update');
+    Route::post('/tasks/{task}/assign', [ProjectController::class, 'assignTask'])->name('tasks.assign');
+    Route::delete('/tasks/{task}', [ProjectController::class, 'deleteTask'])->name('tasks.delete');
+    Route::get('/my-tasks', [ProjectController::class, 'myTasks'])->name('tasks.myTasks');
+    Route::delete('/files/{file}', [ProjectController::class, 'destroyFile'])->name('files.delete');
+    Route::patch('/projects/{project}/members/{user}/toggle-lead', [ProjectController::class, 'toggleLead'])->name('projects.toggleLead');
+    Route::get('/tasks/{task}', [ProjectController::class, 'showTask'])->name('tasks.show');
+    Route::post('/tasks/{task}/comments', [ProjectController::class, 'storeTaskComment'])->name('tasks.comments.store');
+    Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.delete');
+    Route::post('/projects/{project}/members/{user}', [ProjectController::class, 'addMember'])->name('projects.addMember');
+    Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember'])->name('projects.removeMember');
 
 });
-Route::middleware(['auth','role:employe'])->group(function () {
+Route::middleware(['auth', 'role:employe'])->group(function () {
     Route::get('/mes-projets', [App\Http\Controllers\EmployeController::class, 'mesProjets'])->name('employe.projects');
     Route::get('/my-dashboard', [App\Http\Controllers\EmployeController::class, 'index'])->name('employe.dashboard');
     Route::get('/mes-projets/{project}', [App\Http\Controllers\EmployeController::class, 'voirProjet'])->name('employe.projects.show');
+        Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::patch('/mes-projets/taches/{task}/statut', [App\Http\Controllers\EmployeController::class, 'changerStatut'])->name('employe.tasks.changerStatut');
     Route::post('/mes-projets/taches/{task}/commentaire', [App\Http\Controllers\EmployeController::class, 'ajouterCommentaire'])->name('employe.tasks.commenter');
     Route::prefix('projets/{projet}')->group(function () {
-    Route::get('/taches', [TacheController::class, 'showTachesParProjet'])->name('projets.taches');
-    Route::patch('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
-    Route::post('/taches/{tache}/commentaire', [TacheController::class, 'ajouterCommentaire'])->name('projets.taches.ajouterCommentaire');
-Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorites');
-Route::post('/teams/{team}/assign-pilot/{user}', [TeamController::class, 'assignPilot'])
-     ->name('teams.assignPilot');
+        Route::get('/taches', [TacheController::class, 'showTachesParProjet'])->name('projets.taches');
+        Route::patch('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
+        Route::post('/taches/{tache}/commentaire', [TacheController::class, 'ajouterCommentaire'])->name('projets.taches.ajouterCommentaire');
+        Route::patch('/taches/{tache}/priorite', [TacheController::class, 'changerPriorite'])->name('projets.taches.changerPriorites');
+        Route::post('/teams/{team}/assign-pilot/{user}', [TeamController::class, 'assignPilot'])
+            ->name('teams.assignPilot');
 
-
-});
-
-
+    });
 
 });
 
@@ -304,8 +251,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-
-
 Route::prefix('projets/{project}')->group(function () {
     Route::get('/reunions', [MeetingController::class, 'index'])->name('meetings.index');
     Route::get('/reunions/create', [MeetingController::class, 'create'])->name('meetings.create');
@@ -314,11 +259,10 @@ Route::prefix('projets/{project}')->group(function () {
 Route::post('/reunions', [MeetingController::class, 'store'])->name('meetings.store');
 Route::get('/reunions/{id}', [MeetingController::class, 'show'])->name('meetings.show');
 
-
 Route::get('/offres/{entreprise}', [PublicJobOfferController::class, 'listByEntreprise'])
     ->name('public.offres.list');
 
-    Route::get('/rh/candidature/candidat/list/{entreprise_id}', [JobOfferController::class, 'list_offer'])->name('offres_candidat.index');
+Route::get('/rh/candidature/candidat/list/{entreprise_id}', [JobOfferController::class, 'list_offer'])->name('offres_candidat.index');
 Route::get('/rh/candidature/candidat/{id}/depot', [JobOfferController::class, 'depotform'])->name('offres.depot');
 
 Route::post('/candidature/{jobOffer}/store', [CandidatureController::class, 'store'])->name('candidatures.store');
@@ -335,10 +279,10 @@ Route::prefix('employees')->name('rh.')->group(function () {
         ->name('employees.store');
 
     // Liste des employés pour le RH
-    Route::get('/liste-des-employees', [PublicRHController::class, 'index'])
+    Route::get('/liste-des-employees', [PublicRHController::class, 'index'])->middleware(['auth', 'check.otp'])
         ->name('index');
     // Voir, éditer, supprimer un employé
-    Route::get('/employees/{employee}', [PublicRHController::class, 'show'])->name('show');
+    Route::get('/{employee}', [PublicRHController::class, 'show'])->middleware(['auth', 'check.otp'])->name('show');
     Route::get('/employees/{employee}/edit', [PublicRHController::class, 'edit'])->name('edit');
     Route::put('/employees/{employee}', [PublicRHController::class, 'update'])->name('update');
     Route::delete('/employees/{employee}', [PublicRHController::class, 'destroy'])->name('destroy');
@@ -349,19 +293,58 @@ Route::prefix('employees')->name('rh.')->group(function () {
 
     // Génération PDF
     Route::get('/employees/{employee}/bulletin', [PublicRHController::class, 'generateBulletin'])->name('bulletin.generate');
-    Route::get('/employees/{employee}/fiche', [PublicRHController::class, 'generateFiche'])->name('fiche.generate');
+    Route::get('/fiche-de-paie/{employee}/fiche', [PublicRHController::class, 'generateFiche'])->name('fiche.generate');
 
 });
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
+Route::get('/interface-RH', function () {
+    return view('test');
+})->name('test');
+
+    // Page paramètres
+    Route::get('/settings', [UserSettingController::class, 'edit'])->name('settings.edit');
+
+    // Mise à jour profil
+    Route::post('/settings/profile', [UserSettingController::class, 'updateProfile'])->name('settings.updateProfile');
+
+    // Mise à jour mot de passe
+    Route::post('/settings/password', [UserSettingController::class, 'updatePassword'])->name('settings.updatePassword');
+
+    // Préférences
+
+    Route::get('/settings/preferences', function() {
+        return view('settings.preferences');
+    })->name('settings.preferences');
+    
+    Route::put('/settings/preferences', [UserSettingController::class, 'updatePreferences'])->name('settings.preferences.update');
+    Route::put('/settings/notifications', [UserSettingController::class, 'updateNotifications'])->name('settings.notifications.update');
+    Route::put('/settings/privacy', [UserSettingController::class, 'updatePrivacy'])->name('settings.privacy.update');
+    Route::put('/settings/appearance', [UserSettingController::class, 'updateAppearance'])->name('settings.appearance.update');
+    
+    Route::delete('/settings/account', [UserSettingController::class, 'deleteAccount'])->name('settings.account.delete');
+
+    Route::get('/otp/request', [OtpController::class, 'requestOtp'])->name('otp.request');
+    Route::post('/otp/verify', [OtpController::class, 'verifyOtp'])->name('otp.verify');
+    Route::get('/otp/resend', [OtpController::class, 'resendOtp'])->name('otp.resend');
+
+    Route::get('/statistics', [EntrepriseStatisticsController::class, 'index'])
+        ->name('statistics.index');
+Route::get('/documentation', function () {
+    return view('documentation');
+})->name('documentation');
+   
 
 use Illuminate\Support\Facades\Artisan;
+
 Route::get('/run-migrations', function () {
     $migrations = [
-        'database/migrations/2025_10_22_133829_create_prestataires_table.php',
-        'database/migrations/2025_10_22_134012_create_prestations_table.php',
+        'database/migrations/2025_10_23_182903_add_fiche_paie_fields_to_employee_details_table.php',
+        'database/migrations/2025_10_24_155828_add_indemnite_transport_to_entreprises_table.php',
+        'database/migrations/2025_10_24_155902_remove_indemnite_fields_from_employee_details_table.php',
+        'database/migrations/2025_12_12_174106_create_otp_codes_table.php'
     ];
 
     foreach ($migrations as $migration) {
@@ -371,10 +354,7 @@ Route::get('/run-migrations', function () {
         ]);
     }
 
-    return 'Les deux migrations ont été exécutées avec succès !';
+    return 'Les nouvelles migrations ont été exécutées avec succès !';
 });
-
-
-
 
 require __DIR__.'/auth.php';

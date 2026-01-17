@@ -6,20 +6,14 @@
     <!-- Breadcrumb -->
     <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
         <div class="my-auto mb-2">
-            <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0"><a href="{{ route('employeList') }}">
+            <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0 retour"><a href="{{ route('employeList') }}">
                     <i class="ti ti-arrow-left me-2"></i>Retour à la liste</a>
             </h6>
         </div>
         <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
             <div class="mb-2">
                 <a href="{{ route('users.show', $user->id) }}" class="btn btn-primary d-flex align-items-center"><i
-                        class="ti ti-settings-cog me-2"></i>Modification</a>
-            </div>
-            <div class="head-icons ms-2">
-                <a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top"
-                    data-bs-original-title="Collapse" id="collapse-header">
-                    <i class="ti ti-chevrons-up"></i>
-                </a>
+                        class="icon-plus ti ti-settings-cog me-2"></i>Modification</a>
             </div>
         </div>
     </div>
@@ -72,7 +66,7 @@
                                 <div class="col-12">
                                     <div>
                                         <a href="#" class="btn btn-dark w-100" data-bs-toggle="modal"
-                                            data-bs-target="#edit_employee"><i class="ti ti-edit me-1"></i>Editer</a>
+                                            data-bs-target="#edit_employee"><i class="icon-plus ti ti-edit me-1"></i>Editer</a>
                                     </div>
                                 </div>
                             </div>
@@ -155,12 +149,8 @@
                                     <div class="accordion-button">
                                         <div class="d-flex align-items-center flex-fill">
                                             <h5>Informations bancaires</h5>
-                                            <a href="#" class="btn btn-sm btn-icon ms-auto" data-bs-toggle="modal"
-                                                data-bs-target="#bankInfoModal">
-                                                {{-- <i
-                                                    class="ti ti-{{ $user->employeeDetail && $user->employeeDetail->banque_nom ? 'edit' : 'plus' }}"></i> --}}
-                                            </a>
-                                            <a href="#" class="d-flex align-items-center collapsed collapse-arrow"
+
+                                            <a href="#" class="d-flex ms-auto align-items-end collapsed collapse-arrow"
                                                 data-bs-toggle="collapse" data-bs-target="#bankCollapse"
                                                 aria-expanded="false" aria-controls="bankCollapse">
                                                 <i class="ti ti-chevron-down fs-18"></i>
@@ -230,10 +220,7 @@
                                         <div class="d-flex align-items-center flex-fill">
                                             <h5>Détails RH de {{ $user->name }}</h5>
                                             </button>
-                                            <a href="#" class="btn btn-sm btn-icon ms-auto" data-bs-toggle="modal"
-                                                data-bs-target="#employeeDetailModal"><i
-                                                    class="ti ti-{{ $user->employeeDetail ? 'edit' : 'add' }}"></i></a>
-                                            <a href="#" class="d-flex align-items-center collapsed collapse-arrow"
+                                            <a href="#" class="d-flex align-items-center ms-auto collapsed collapse-arrow"
                                                 data-bs-toggle="collapse" data-bs-target="#primaryBorderTwo"
                                                 aria-expanded="false" aria-controls="primaryBorderTwo">
                                                 <i class="ti ti-chevron-down fs-18"></i>
@@ -355,12 +342,8 @@
                                         <div class="d-flex align-items-center justify-content-between flex-fill">
                                             <h5>Documents RH</h5>
                                             <div class="d-flex">
-                                                <a href="#" class="btn btn-icon btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#addDocumentModal"
-                                                    @if (!$user->employeeDetail) disabled title="Ajoutez d'abord un détail RH" @endif><i
-                                                        class="ti ti-edit"></i></a>
                                                 <a href="#"
-                                                    class="d-flex align-items-center collapsed collapse-arrow"
+                                                    class="d-flex align-items-center ms-auto collapsed collapse-arrow"
                                                     data-bs-toggle="collapse" data-bs-target="#primaryBorderThree"
                                                     aria-expanded="false" aria-controls="primaryBorderThree">
                                                     <i class="ti ti-chevron-down fs-18"></i>
@@ -382,16 +365,16 @@
                                                                     <a href="{{ asset($doc->file_path) }}"
                                                                         target="_blank" class="flex-shrink-0 me-2">
                                                                         @if (strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)) === 'pdf')
-                                                                            <img src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @elseif(in_array(strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)), ['doc', 'docx']))
-                                                                            <img src="{{ asset('assets/img/icons/file.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/file.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @elseif(in_array(strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)), ['xls', 'xlsx']))
-                                                                            <img src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @elseif(in_array(strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png']))
-                                                                            <img src="{{ asset('assets/img/icons/image.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/image.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @else
                                                                             <i
@@ -471,10 +454,8 @@
                                         <div class="d-flex align-items-center justify-content-between flex-fill">
                                             <h5>Ressources attribuées</h5>
                                             <div class="d-flex">
-                                                <a href="#" class="btn btn-icon btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#addRessourceModal"><i class="ti ti-edit"></i></a>
                                                 <a href="#"
-                                                    class="d-flex align-items-center collapsed collapse-arrow"
+                                                    class="d-flex align-items-center ms-auto collapsed collapse-arrow"
                                                     data-bs-toggle="collapse" data-bs-target="#primaryBorderOne"
                                                     aria-expanded="false" aria-controls="primaryBorderOne">
                                                     <i class="ti ti-chevron-down fs-18"></i>

@@ -15,18 +15,20 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$roles)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
-        $user = Auth::user();
-
-        if (!in_array($user->role, $roles)) {
-            abort(403, 'Accès non autorisé.');
-        }
-
-        return $next($request);
+public function handle(Request $request, Closure $next, ...$roles)
+{
+    if (!Auth::check()) {
+        return redirect()->route('login');
     }
+
+    $user = Auth::user();
+
+    if (!in_array($user->role, $roles)) {
+        // Message personnalisé selon le rôle
+        $rolesStr = implode(', ', $roles);
+        abort(403, "Cette page est réservée aux utilisateurs : {$rolesStr}");
+    }
+
+    return $next($request);
+}
 }

@@ -8,43 +8,43 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card shadow-lg border-0 rounded-4 mt-n4 mx-n4" style>
-            <div class="card-body rounded-4 p-4" style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%);">
+            <div class="card-body rounded-4 p-4" style="background: linear-gradient(135deg, #AE3D7D 0%, #6e1f4cff 100%);">
                 <div class="d-flex justify-content-between align-items-start mb-4">
                     <div class="d-flex align-items-center">
                         <div class="avatar-md me-4">
-                            <div class="avatar-title rounded-circle fs-24 text-white"
-                                 style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px;">
+                            <div class="avatar-title rounded-circle fs-24 text-primary"
+                                 style="background: #FFF; display: flex; align-items: center; justify-content: center; width: 56px; height: 56px;">
                                 {{ strtoupper(substr($team->name, 0, 1)) }} 
                             </div>
                         </div>
                         <div>
-                            <h3 class="fw-bold mb-1">{{ $team->name }}</h3>
+                            <h3 class="fw-bold mb-1 text-white title-team">{{ $team->name }}</h3>
                             <div class="text-muted d-flex flex-wrap gap-3">
-                                <span class="d-flex align-items-center"><i class="ri-group-line me-1"></i> Équipe</span>
-                                <span class="vr"></span>
-                                <span class="d-flex align-items-center"><i class="ri-calendar-line me-1"></i> Créée le : {{ $team->created_at->format('d M, Y') }}</span>
-                                <span class="vr"></span>
-                                <span class="d-flex align-items-center"><i class="ri-edit-line me-1"></i> Modifiée le : {{ $team->updated_at->format('d M, Y') }}</span>
+                                <span class="d-flex align-items-center text-white"><i class="ri-group-line me-1 text-white"></i> Équipe</span>
+                                <span class="vr text-white"></span>
+                                <span class="d-flex align-items-center text-white"><i class="ri-calendar-line me-1"></i> Créée le : {{ $team->created_at->format('d M, Y') }}</span>
+                                <span class="vr text-white"></span>
+                                <span class="d-flex align-items-center text-white"><i class="ri-edit-line me-1"></i> Modifiée le : {{ $team->updated_at->format('d M, Y') }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex gap-2">
                         @if($team->entreprise)
-                            <span class="btn btn-outline-dark btn-sm">
-                                <i class="ri-building-line me-1"></i> {{ $team->entreprise->entreprise_name }}
+                            <span class="btn btn-light btn-sm">
+                                <i class="ri-building-line me-1" style="color: #AE3D7D;"></i> {{ $team->entreprise->entreprise_name }}
                             </span>
                         @endif
                     </div>
                 </div>
 
-                <ul class="nav nav-pills nav-justified mt-4 border-bottom pb-2" role="tablist">
+                <ul class="nav nav-pills contact-grids-tab nav-justified mt-4 border-bottom pb-2" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active fw-semibold text-white" data-bs-toggle="tab" href="#team-overview" role="tab">
+                        <a class="tab-actif nav-link active fw-semibold" data-bs-toggle="tab" href="#team-overview" role="tab">
                             <i class="ri-dashboard-line me-1"></i> Aperçu
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#team-members" role="tab">
+                        <a class="tab-actif nav-link fw-semibold text-white" data-bs-toggle="tab" href="#team-members" role="tab">
                             <i class="ri-group-line me-1"></i> Membres
                         </a>
                     </li>
@@ -86,24 +86,24 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="card shadow-sm border-0 rounded-4 h-100">
-                            <div class="card-body rounded-4" style="background: linear-gradient(135deg, #f6ddab 0%, #f6e3d0 100%);">
-                                <h6 class="fw-semibold text-uppercase mb-3">Détails de l'équipe</h6>
+                            <div class="card-body rounded-4" style="background: linear-gradient(135deg, #AE3D7D 0%, #752753 100%);">
+                                <h6 class="fw-semibold text-uppercase mb-3 text-white">Détails de l'équipe</h6>
                                 <div class="vstack gap-2">
                                     <p class="mb-0 text-muted d-flex justify-content-between align-items-center">
-                                        <span>Date de Création :</span>
-                                        <span class="fw-medium text-dark">{{ $team->created_at->format('d, M Y') }}</span>
+                                        <span class="text-white">Date de Création :</span>
+                                        <span class="fw-medium text-light">{{ $team->created_at->format('d, M Y') }}</span>
                                     </p>
                                     <p class="mb-0 text-muted d-flex justify-content-between align-items-center">
-                                        <span>Dernière Modification :</span>
-                                        <span class="fw-medium text-dark">{{ $team->updated_at->format('d, M Y') }}</span>
+                                        <span class="text-white">Dernière Modification :</span>
+                                        <span class="fw-medium text-light">{{ $team->updated_at->format('d, M Y') }}</span>
                                     </p>
                                     <p class="mb-0 text-muted d-flex justify-content-between align-items-center">
-                                        <span>Effectif :</span>
-                                        <span class="badge  fs-12" style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%);">{{ $team->members->count() }} Membres</span>
+                                        <span class="text-white">Effectif :</span>
+                                        <span class="badge-effectif badge fs-12" style="background-color: #FFF; color: #AE3D7D;">{{ $team->members->count() }} Membres</span>
                                     </p>
                                     <p class="mb-0 text-muted d-flex justify-content-between align-items-center">
-                                        <span>Ressources :</span>
-                                        <span class="text-muted">Aucune ressource</span>
+                                        <span class="text-white">Ressources :</span>
+                                        <span class="text-light">Aucune ressource</span>
                                     </p>
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-light">
-                <h5 class="modal-title" id="createFolderModalLabel">@if ($team->description) Modifier la description @else Ajouter une description @endif</h5>
+                <h5 class="modal-title text-primary" id="createFolderModalLabel">@if ($team->description) Modifier la description @else Ajouter une description @endif</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -184,7 +184,7 @@
                     </div>
                     <div class="hstack gap-2 justify-content-end">
                         <button type="button" class="btn btn-ghost-dark" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-dark">Enregistrer</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
                     </div>
                 </form>
             </div>
@@ -192,50 +192,55 @@
     </div>
 </div>
 
-<div class="modal fade" id="inviteMembersModal" tabindex="-1" aria-labelledby="inviteMembersModalLabel" aria-hidden="true">
+<div class="modal fade" id="inviteMembersModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+
             <div class="modal-header p-3 bg-light">
-                <h5 class="modal-title" id="inviteMembersModalLabel">Inviter des Membres</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Inviter des Membres</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+
+            <div class="modal-body invite-modal-body">
+
+                <!-- Champ recherche (FIXE) -->
                 <div class="mb-4">
-                    <label for="search-members" class="form-label">Rechercher des utilisateurs :</label>
-                    <input type="text" class="form-control" id="search-members" placeholder="Nom de l'utilisateur...">
+                    <label class="form-label">Rechercher des utilisateurs :</label>
+                    <input type="text" class="form-control" placeholder="Nom de l'utilisateur...">
                 </div>
-                <div class="mx-n3 px-3" data-simplebar style="max-height: 250px;">
+
+                <!-- LISTE SCROLLABLE -->
+                <div class="invite-members-scroll" data-simplebar>
                     <div class="vstack gap-3">
                         @foreach ($users as $user)
                             <div class="d-flex align-items-center justify-content-between">
+
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar-xs flex-shrink-0 me-3">
-                                        @if ($user->profile_photo_path)
-                                            <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="" class="img-fluid rounded-circle">
-                                        @else
-                                            <div class="avatar-title rounded-circle fs-15 text-white"
-                                 style="background: linear-gradient(135deg, #FFD580 0%, #FF8800 100%); display: flex; align-items: center; justify-content: center; width: 25px; height: 25px;">
-                                                {{ strtoupper(substr($user->name, 0, 1)) }}
-                                            </div>
-                                        @endif
+                                    <div class="avatar-xs me-3">
+                                        <div class="avatar-title rounded-circle text-white"
+                                             style="background: linear-gradient(135deg,#FFD580,#FF8800);
+                                             width:25px;height:25px;display:flex;align-items:center;justify-content:center;">
+                                            {{ strtoupper(substr($user->name,0,1)) }}
+                                        </div>
                                     </div>
-                                    <div class="flex-grow-1">
-                                        <h5 class="fs-13 mb-0">
-                                            <a href="#" class="text-body d-block">{{ $user->name }}</a>
-                                        </h5>
+
+                                    <div>
+                                        <h6 class="fs-13 mb-0">{{ $user->name }}</h6>
                                     </div>
                                 </div>
-                                <div class="flex-shrink-0">
-                                    <form action="{{ route('teams.addMember', [$team->id, $user->id]) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary btn-sm">Ajouter</button>
-                                    </form>
-                                </div>
+
+                                <form method="POST" action="{{ route('teams.addMember', [$team->id, $user->id]) }}">
+                                    @csrf
+                                    <button class="btn btn-primary btn-sm">Ajouter</button>
+                                </form>
+
                             </div>
                         @endforeach
                     </div>
                 </div>
+
             </div>
+
         </div>
     </div>
 </div>

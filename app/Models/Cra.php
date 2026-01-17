@@ -113,24 +113,28 @@ public function team()
         /**
      * Retourne le pourcentage de complétude
      */
-    public function getCompletion()
-    {
-        $fields = [
-            'activites',
-            'bien_fonctionne',
-            'pas_bien_fonctionne',
-            'points_durs',
-            'next_steps',
-            'commentaires',
-        ];
+public function getCompletion(): int
+{
+    $fields = [
+        'activites',
+        'bien_fonctionne',
+        'pas_bien_fonctionne',
+        'points_durs',
+        'next_steps',
+        'commentaires',
+    ];
 
-        $filled = 0;
-        foreach ($fields as $field) {
-            if (!empty($this->$field)) {
-                $filled++;
-            }
+    $filled = 0;
+
+    foreach ($fields as $field) {
+        if (!blank($this->$field)) { // mieux que empty()
+            $filled++;
         }
-
-        return (int) ($filled / count($fields) * 100);
     }
+
+    $percent = ($filled / count($fields)) * 100;
+
+    return max(0, min(100, (int) round($percent)));
+}
+
 }

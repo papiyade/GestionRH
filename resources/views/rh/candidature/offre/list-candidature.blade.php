@@ -13,14 +13,14 @@
         color: #fff; /* Default text color for badges */
     }
     .badge-en_attente {
-        background-color: #ffc107; /* Warning color, yellow */
+        background-color: #DB6B0B; /* Warning color, orange */
         color: #343a40; /* Dark text for light background */
     }
     .badge-accepte {
-        background-color: #28a745; /* Success color, green */
+        background-color: #0E6922; /* Success color, green */
     }
     .badge-rejete {
-        background-color: #dc3545; /* Danger color, red */
+        background-color: #6E121A; /* Danger color, red */
     }
 
     .card-hover {
@@ -74,7 +74,7 @@
                         @php
                             $statusBadgeClass = '';
                             switch ($candidature->status_demande) {
-                                case 'en_attente': $statusBadgeClass = 'bg-warning text-dark'; break;
+                                case 'en_attente': $statusBadgeClass = 'bg-secondary text-dark'; break;
                                 case 'accepte': $statusBadgeClass = 'bg-success'; break;
                                 case 'rejete': $statusBadgeClass = 'bg-danger'; break;
                                 default: $statusBadgeClass = 'bg-secondary'; break;
@@ -229,7 +229,7 @@
                 <div class="d-flex flex-wrap gap-2">
                     <form id="acceptForm" method="POST" class="d-inline">
                         @csrf
-                        <button type="submit" class="btn btn-success btn-lg px-4 rounded-pill" id="btnAcceptCandidature">
+                        <button type="submit" class="btn btn-primary btn-lg px-4 rounded-pill" id="btnAcceptCandidature">
                             <i class="bi bi-check-circle me-2"></i> Accepter
                         </button>
                     </form>
@@ -320,7 +320,7 @@
             statusBadge.textContent = candidature.status_demande.replace('_', ' ');
             statusBadge.className = 'badge text-uppercase fw-normal py-2 px-3 rounded-pill fs-6'; // Reset classes
             switch (candidature.status_demande) {
-                case 'en_attente': statusBadge.classList.add('bg-warning', 'text-dark'); break;
+                case 'en_attente': statusBadge.classList.add('bg-secondary', 'text-dark'); break;
                 case 'accepte': statusBadge.classList.add('bg-success'); break;
                 case 'rejete': statusBadge.classList.add('bg-danger'); break;
                 default: statusBadge.classList.add('bg-secondary'); break;

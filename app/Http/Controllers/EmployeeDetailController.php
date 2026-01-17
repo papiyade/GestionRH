@@ -74,7 +74,10 @@ public function storeBankInfo(Request $request, $user_id)
     // Mise à jour des infos bancaires
     $detail->update($validated);
 
-    return redirect()->back()->with('success_bank', 'Informations bancaires mises à jour avec succès.');
+return redirect()
+    ->route('employe.show', $user_id)
+    ->with('success_bank', 'Informations bancaires mises à jour avec succès.');
+
 }
 
 

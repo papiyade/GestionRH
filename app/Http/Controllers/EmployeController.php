@@ -167,9 +167,9 @@ public function changerPrioriteTache(Request $request, Project $project, Task $t
     {
         $user = Auth::user();
 
-        if (!$project->isLead($user)) {
-            return back()->with('error', 'Vous n\'êtes pas autorisé à créer des tâches pour ce projet.');
-        }
+        // if (!$project->isLead($user)) {
+        //     return back()->with('error', 'Vous n\'êtes pas autorisé à créer des tâches pour ce projet.');
+        // }
 
         $request->validate([
             'title' => 'required|string|max:255',

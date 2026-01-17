@@ -5,8 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow">
-                <div class="card-header bg-warning">
-                    <h4 class="mb-0">Modifier la Fiche - {{ $employee->nom_complet }}</h4>
+                <div class="card-header bg-primary">
+                    <h4 class="mb-0 icon-plus">Modifier la Fiche - {{ $employee->nom_complet }}</h4>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('rh.update', $employee) }}" method="POST">

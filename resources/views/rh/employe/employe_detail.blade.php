@@ -245,16 +245,16 @@
                                                                     <a href="{{ asset($doc->file_path) }}"
                                                                         target="_blank" class="flex-shrink-0 me-2">
                                                                         @if (strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)) === 'pdf')
-                                                                            <img src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @elseif(in_array(strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)), ['doc', 'docx']))
-                                                                            <img src="{{ asset('assets/img/icons/file.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/file.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @elseif(in_array(strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)), ['xls', 'xlsx']))
-                                                                            <img src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/pdf-icon.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @elseif(in_array(strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png']))
-                                                                            <img src="{{ asset('assets/img/icons/image.svg') }}"
+                                                                            <img class="img-resources" src="{{ asset('assets/img/icons/image.svg') }}"
                                                                                 alt="img" class="mb-3">
                                                                         @else
                                                                             <i
@@ -403,7 +403,7 @@
                                         </ul>
                                     </div>
                                     <div class="tab-content" id="myTabContent3">
-                                        {{-- <div class="tab-pane fade show active" id="basic-info2" role="tabpanel"
+                                        <div class="tab-pane fade show active" id="basic-info2" role="tabpanel"
                                             aria-labelledby="info-tab2" tabindex="0">
                                             <div class="row">
                                                 <div class="col-md-6 d-flex">
@@ -412,7 +412,7 @@
                                                             <div class="d-flex align-items-center pb-3 mb-3 border-bottom">
                                                                 <a href="https://smarthr.co.in/demo/html/template/project-details.html"
                                                                     class="flex-shrink-0 me-2">
-                                                                    <img src="https://smarthr.co.in/demo/html/template/assets/img/social/project-03.svg"
+                                                                    <img class="img-resources" src="https://smarthr.co.in/demo/html/template/assets/img/social/project-03.svg"
                                                                         alt="Img">
                                                                 </a>
                                                                 <div>
@@ -439,7 +439,7 @@
                                                                         <span class="mb-1 d-block">Project Lead</span>
                                                                         <a href="#"
                                                                             class="fw-normal d-flex align-items-center">
-                                                                            <img class="avatar avatar-sm rounded-circle me-2"
+                                                                            <img  class="avatar avatar-sm rounded-circle me-2"
                                                                                 src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg"
                                                                                 alt="Img">
                                                                             Leona
@@ -456,7 +456,7 @@
                                                             <div class="d-flex align-items-center pb-3 mb-3 border-bottom">
                                                                 <a href="https://smarthr.co.in/demo/html/template/project-details.html"
                                                                     class="flex-shrink-0 me-2">
-                                                                    <img src="https://smarthr.co.in/demo/html/template/assets/img/social/project-01.svg"
+                                                                    <img class="img-resources" src="https://smarthr.co.in/demo/html/template/assets/img/social/project-01.svg"
                                                                         alt="Img">
                                                                 </a>
                                                                 <div>
@@ -499,140 +499,142 @@
                                         <div class="tab-pane fade" id="address2" role="tabpanel"
                                             aria-labelledby="address-tab2" tabindex="0">
                                             <div class="row">
-                                                <div class="col-md-12 d-flex">
-                                                    <div class="card flex-fill">
-                                                        <div class="card-body">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-md-8">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <a href="https://smarthr.co.in/demo/html/template/project-details.html"
-                                                                            class="flex-shrink-0 me-2">
-                                                                            <img src="https://smarthr.co.in/demo/html/template/assets/img/products/product-05.jpg"
-                                                                                class="img-fluid rounded-circle"
-                                                                                alt="img">
-                                                                        </a>
-                                                                        <div>
-                                                                            <h6 class="mb-1"><a
-                                                                                    href="https://smarthr.co.in/demo/html/template/project-details.html">Dell
-                                                                                    Laptop - #343556656</a></h6>
-                                                                            <div class="d-flex align-items-center">
-                                                                                <p><span class="text-primary">AST - 001<i
-                                                                                            class="ti ti-point-filled text-primary mx-1"></i></span>Assigned
-                                                                                    on 22 Nov, 2022 10:32AM </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div>
-                                                                        <span class="mb-1 d-block">Assigned by</span>
-                                                                        <a href="#"
-                                                                            class="fw-normal d-flex align-items-center">
-                                                                            <img class="avatar avatar-sm rounded-circle me-2"
-                                                                                src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg"
-                                                                                alt="Img">
-                                                                            Andrew Symon
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-1">
-                                                                    <div class="dropdown ms-2">
-                                                                        <a href="javascript:void(0);"
-                                                                            class="d-inline-flex align-items-center"
-                                                                            data-bs-toggle="dropdown"
-                                                                            aria-expanded="false">
-                                                                            <i class="ti ti-dots-vertical"></i>
-                                                                        </a>
-                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                            <li>
-                                                                                <a href="javascript:void(0);"
-                                                                                    class="dropdown-item rounded-1"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#asset_info">View
-                                                                                    Info</a>
-                                                                            </li>
-                                                                            <li>
-                                                                                <a href="javascript:void(0);"
-                                                                                    class="dropdown-item rounded-1"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#refuse_msg">Raise
-                                                                                    Issue </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 d-flex">
-                                                    <div class="card flex-fill mb-0">
-                                                        <div class="card-body">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-md-8">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <a href="https://smarthr.co.in/demo/html/template/project-details.html"
-                                                                            class="flex-shrink-0 me-2">
-                                                                            <img src="https://smarthr.co.in/demo/html/template/assets/img/products/product-06.jpg"
-                                                                                class="img-fluid rounded-circle"
-                                                                                alt="img">
-                                                                        </a>
-                                                                        <div>
-                                                                            <h6 class="mb-1"><a
-                                                                                    href="https://smarthr.co.in/demo/html/template/project-details.html">Bluetooth
-                                                                                    Mouse - #478878</a></h6>
-                                                                            <div class="d-flex align-items-center">
-                                                                                <p><span class="text-primary">AST - 001<i
-                                                                                            class="ti ti-point-filled text-primary mx-1"></i></span>Assigned
-                                                                                    on 22 Nov, 2022 10:32AM </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div>
-                                                                        <span class="mb-1 d-block">Assigned by</span>
-                                                                        <a href="#"
-                                                                            class="fw-normal d-flex align-items-center">
-                                                                            <img class="avatar avatar-sm rounded-circle me-2"
-                                                                                src="https://smarthr.co.in/demo/html/template/assets/img/profiles/avatar-01.jpg"
-                                                                                alt="Img">
-                                                                            Andrew Symon
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-1">
-                                                                    <div class="dropdown ms-2">
-                                                                        <a href="javascript:void(0);"
-                                                                            class="d-inline-flex align-items-center"
-                                                                            data-bs-toggle="dropdown"
-                                                                            aria-expanded="false">
-                                                                            <i class="ti ti-dots-vertical"></i>
-                                                                        </a>
-                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                            <li>
-                                                                                <a href="javascript:void(0);"
-                                                                                    class="dropdown-item rounded-1"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#asset_info">View
-                                                                                    Info</a>
-                                                                            </li>
-                                                                            <li>
-                                                                                <a href="javascript:void(0);"
-                                                                                    class="dropdown-item rounded-1"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#refuse_msg">Raise
-                                                                                    Issue </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+<div class="col-md-12 d-flex flex-column gap-3">
+
+    {{-- RESSOURCES --}}
+    @foreach ($user->ressources as $ressource)
+    <div class="card flex-fill">
+        <div class="card-body">
+            <div class="row align-items-center">
+
+                {{-- Infos principales --}}
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center">
+                        <span class="avatar avatar-md rounded-circle bg-light text-primary me-3">
+                            <i class="ti ti-device-laptop"></i>
+                        </span>
+
+                        <div>
+                            <h6 class="mb-1">{{ $ressource->nom }}</h6>
+                            <p class="mb-0 text-muted">
+                                <span class="text-primary">{{ $ressource->categorie }}</span>
+                                <i class="ti ti-point-filled mx-1"></i>
+                                {{ $ressource->description }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Meta --}}
+                <div class="col-md-3">
+                    <span class="mb-1 d-block">Attribuée le</span>
+                    <span class="text-muted">
+                        {{ $ressource->created_at->format('d M Y') }}
+                    </span>
+                </div>
+
+                {{-- Actions --}}
+                <div class="col-md-1 text-end">
+                    <div class="dropdown">
+                        <a href="#" data-bs-toggle="dropdown">
+                            <i class="ti ti-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <form action="{{ route('ressource.destroy', $ressource->id) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Retirer cette ressource ?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="dropdown-item text-danger">
+                                        <i class="ti ti-trash me-1"></i> Retirer
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+
+    {{-- DOCUMENTS --}}
+    @foreach ($user->employeeDocuments as $doc)
+    <div class="card flex-fill">
+        <div class="card-body">
+            <div class="row align-items-center">
+
+                {{-- Infos principales --}}
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center">
+                        <a href="{{ asset($doc->file_path) }}" target="_blank" class="me-3">
+                            @php
+                                $ext = strtolower(pathinfo($doc->file_path, PATHINFO_EXTENSION));
+                            @endphp
+
+                            @if ($ext === 'pdf')
+                                <img src="{{ asset('assets/img/icons/pdf-icon.svg') }}" class="img-resources">
+                            @elseif (in_array($ext, ['doc','docx']))
+                                <img src="{{ asset('assets/img/icons/file.svg') }}" class="img-resources">
+                            @elseif (in_array($ext, ['jpg','jpeg','png']))
+                                <img src="{{ asset('assets/img/icons/image.svg') }}" class="img-resources">
+                            @else
+                                <i class="ti ti-file fs-24 text-secondary"></i>
+                            @endif
+                        </a>
+
+                        <div>
+                            <h6 class="mb-1">
+                                <a href="{{ asset($doc->file_path) }}" target="_blank">
+                                    {{ $doc->type_document }}
+                                </a>
+                            </h6>
+                            <p class="mb-0 text-muted">
+                                <span class="text-primary">Document</span>
+                                <i class="ti ti-point-filled mx-1"></i>
+                                {{ $doc->created_at->format('d M Y') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Meta --}}
+                <div class="col-md-3">
+                    <span class="mb-1 d-block">Ajouté par</span>
+                    <span class="text-muted">
+                        Vous
+                    </span>
+                </div>
+
+                {{-- Actions --}}
+                <div class="col-md-1 text-end">
+                    <div class="dropdown">
+                        <a href="#" data-bs-toggle="dropdown">
+                            <i class="ti ti-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{{ asset($doc->file_path) }}" target="_blank">
+                                    <i class="ti ti-eye me-1"></i> Voir
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+</div>
+
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

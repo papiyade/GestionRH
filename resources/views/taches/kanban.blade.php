@@ -3,180 +3,460 @@
 @section('title', 'Projets')
 @section('page-title', 'Détail projet')
 @section('content')
+
 @php
-    $priorites = [
-        'high' => ['label' => 'Haute', 'color' => 'danger', 'icon' => 'bi-arrow-up-circle-fill'],
-        'medium' => ['label' => 'Moyenne', 'color' => 'warning', 'icon' => 'bi-dash-circle-fill'],
-        'low' => ['label' => 'Basse', 'color' => 'success', 'icon' => 'bi-arrow-down-circle-fill'],
+    $priorityConfig = [
+        'high' => ['label' => 'Haute', 'gradient' => 'linear-gradient(135deg, #dc3545, #c82333)', 'icon' => 'ic ti-arrow-up'],
+        'medium' => ['label' => 'Moyenne', 'gradient' => 'linear-gradient(135deg, #ffc107, #e0a800)', 'icon' => 'ti-minus'],
+        'low' => ['label' => 'Basse', 'gradient' => 'linear-gradient(135deg, #28a745, #218838)', 'icon' => 'ti-arrow-down'],
     ];
 
     $tasksByStatus = $projet->tasks->groupBy('status');
 
-    $statuts = [
-        'not_started' => ['label' => 'Non débuté', 'icon' => '⏳', 'tasks' => $tasksByStatus->get('not_started', collect())],
-        'in_progress' => ['label' => 'En cours', 'icon' => '⚡', 'tasks' => $tasksByStatus->get('in_progress', collect())],
-        'completed' => ['label' => 'Terminée', 'icon' => '✅', 'tasks' => $tasksByStatus->get('completed', collect())],
+    $statusConfig = [
+        'not_started' => [
+            'label' => 'Non débuté',
+            'icon' => 'ti-clock',
+            'color' => '#6c757d',
+            'tasks' => $tasksByStatus->get('not_started', collect())
+        ],
+        'in_progress' => [
+            'label' => 'En cours',
+            'icon' => 'ti-bolt',
+            'color' => '#E46E2F',
+            'tasks' => $tasksByStatus->get('in_progress', collect())
+        ],
+        'completed' => [
+            'label' => 'Terminée',
+            'icon' => 'ti-circle-check',
+            'color' => '#28a745',
+            'tasks' => $tasksByStatus->get('completed', collect())
+        ],
     ];
 @endphp
 
-<div class="container mx-auto max-w-7xl px-4">
+<style>
+    .kanban-header-gradient {
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(174, 61, 125, 0.3);
+    }
+
+    .search-box-modern {
+        background: white;
+        border-radius: 16px;
+        border: 2px solid #e9ecef;
+        padding: 0.75rem 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-box-modern:focus {
+        border-color: #E46E2F;
+        box-shadow: 0 0 0 0.2rem rgba(228, 110, 47, 0.15);
+        outline: none;
+    }
+
+    .stat-card-modern {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 2px solid #f0f0f0;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card-modern:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(174, 61, 125, 0.15);
+        border-color: #E46E2F;
+    }
+
+    .stat-icon-modern {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        margin: 0 auto 0.75rem;
+    }
+
+    .kanban-column {
+        background: white;
+        border-radius: 16px;
+        border: 2px solid #f0f0f0;
+        min-height: 500px;
+        transition: all 0.3s ease;
+    }
+
+    .kanban-column-header {
+        padding: 1.25rem;
+        border-bottom: 3px solid;
+        border-radius: 14px 14px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .kanban-column-body {
+        padding: 1rem;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .kanban-column-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .kanban-column-body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .kanban-column-body::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #AE3D7D 0%, #E46E2F 100%);
+        border-radius: 10px;
+    }
+
+    .task-card-modern {
+        background: white;
+        border: 2px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .task-card-modern:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(174, 61, 125, 0.15);
+        border-color: #E46E2F;
+    }
+
+    .priority-badge-modern {
+        padding: 0.4rem 0.85rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .user-badge-modern {
+        background: linear-gradient(135deg, rgba(174, 61, 125, 0.1), rgba(228, 110, 47, 0.1));
+        color: #AE3D7D;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .comment-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    .comment-item {
+        background: white;
+        border-radius: 8px;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .btn-gradient-primary {
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        border: none;
+        color: white !important;
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gradient-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(174, 61, 125, 0.4);
+        color: white !important;
+    }
+
+    .btn-gradient-primary i,
+    .btn-gradient-primary span,
+    .btn-gradient-primary * {
+        color: white !important;
+    }
+
+    .btn-outline-gradient {
+        background: white;
+        border: 2px solid #AE3D7D;
+        color: #AE3D7D;
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-gradient:hover {
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .modal-gradient .modal-header {
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        color: white;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .form-control-modern,
+    .form-select-modern {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-modern:focus,
+    .form-select-modern:focus {
+        border-color: #E46E2F;
+        box-shadow: 0 0 0 0.2rem rgba(228, 110, 47, 0.15);
+        outline: none;
+    }
+
+    .empty-state-kanban {
+        padding: 3rem 1rem;
+        text-align: center;
+        color: #adb5bd;
+    }
+
+    .empty-state-kanban i {
+        font-size: 3rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+
+    .late-badge {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    details summary {
+        cursor: pointer;
+        user-select: none;
+        color: #6c757d;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    details summary:hover {
+        color: #E46E2F;
+    }
+
+    details[open] summary {
+        color: #AE3D7D;
+        font-weight: 600;
+    }
+
+    .ic {
+        font-size: 1.2rem;
+        color: #fff;
+    }
+</style>
+
+<div class="container-fluid px-4 py-4">
     @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
-
-@if($errors->any())
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="text-2xl font-semibold text-dark d-flex align-items-center gap-2">
-                <i class="bi bi-kanban text-black"></i> {{ $projet->title }}
-            </h1>
-            <p class="text-muted">Gestion des tâches du projet</p>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="ti ti-check me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-        <div class="d-flex gap-2">
-            <button type="button" class="btn btn-black" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-                <i class="bi bi-plus-circle me-1"></i> Nouvelle tâche
-            </button>
-            <a href="{{ route('projects.index') }}" class="btn btn-outline-black">
-                <i class="bi bi-arrow-left me-1"></i> Retour aux projets
-            </a>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="ti ti-alert-circle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    <!-- Header -->
+    <div class="kanban-header-gradient">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="display-6 fw-bold mb-2" style="color: #fff !important;">
+                    <i class="ti ti-layout-kanban me-2 icon-plus"></i>{{ $projet->title }}
+                </h1>
+                <p class="mb-0 opacity-90 " style="color: #fff !important;">Gestion des tâches en mode Kanban</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-gradient-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                    <i class="ti ti-plus me-1"></i>Nouvelle tâche
+                </button>
+                <a href="{{ route('projects.index') }}" class="btn btn-light">
+                    <i class="ti ti-arrow-left me-1"></i>Retour
+                </a>
+            </div>
         </div>
     </div>
 
+    <!-- Search Bar -->
     <div class="mb-4">
-        <input type="text" id="taskSearch" class="form-control" placeholder="🔍 Rechercher une tâche par titre...">
+        <input type="text" id="taskSearch" class="form-control search-box-modern" placeholder="🔍 Rechercher une tâche par titre...">
     </div>
 
-    <div class="row mb-4">
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
         @foreach([
-            ['text'=>'Total tâches','count'=>$projet->tasks->count(),'icon'=>'bi-list-task','color'=>'black'],
-            ['text'=>'Non débuté','count'=>$statuts['not_started']['tasks']->count(),'icon'=>'bi-clock','color'=>'secondary'],
-            ['text'=>'En cours','count'=>$statuts['in_progress']['tasks']->count(),'icon'=>'bi-play-circle','color'=>'info'],
-            ['text'=>'Terminées','count'=>$statuts['completed']['tasks']->count(),'icon'=>'bi-check-circle','color'=>'success'],
+            ['text' => 'Total', 'count' => $projet->tasks->count(), 'icon' => 'ic ti ti-border-all'],
+            ['text' => 'Non débuté', 'count' => $statusConfig['not_started']['tasks']->count(), 'icon' => 'ic ti ti-progress-x'],
+            ['text' => 'En cours', 'count' => $statusConfig['in_progress']['tasks']->count(), 'icon' => 'ic ti ti-progress'],
+            ['text' => 'Terminées', 'count' => $statusConfig['completed']['tasks']->count(), 'icon' => 'ic ti ti-progress-check'],
         ] as $stat)
-            <div class="col-md-3 mb-3">
-                <div class="p-4 border rounded-xl bg-white shadow-sm text-center">
-                    <i class="{{ $stat['icon'] }} fs-4 text-{{ $stat['color'] }} mb-2"></i>
-                    <p class="text-2xl font-semibold">{{ $stat['count'] }}</p>
-                    <small class="text-muted">{{ $stat['text'] }}</small>
+            <div class="col-md-3">
+                <div class="stat-card-modern">
+                    <div class="stat-icon-modern"><i class="{{ $stat['icon'] }}"></i></div>
+                    <h3 class="text-center fw-bold mb-1">{{ $stat['count'] }}</h3>
+                    <p class="text-center text-muted mb-0 small">{{ $stat['text'] }}</p>
                 </div>
             </div>
         @endforeach
     </div>
 
+    <!-- Kanban Columns -->
     <div class="row g-3">
-        @foreach($statuts as $keyStatut => $statut)
+        @foreach($statusConfig as $statusKey => $status)
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm" style="min-height:500px;">
-                    <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0 d-flex align-items-center gap-2">
-                            {{ $statut['icon'] }} {{ $statut['label'] }}
+                <div class="kanban-column">
+                    <div class="kanban-column-header" style="border-color: {{ $status['color'] }};">
+                        <h5 class="mb-0 fw-bold d-flex align-items-center gap-2">
+                            <i class="ti {{ $status['icon'] }}" style="color: {{ $status['color'] }};"></i>
+                            {{ $status['label'] }}
                         </h5>
-                        <span class="badge bg-dark rounded-pill">{{ $statut['tasks']->count() }}</span>
+                        <span class="badge" style="background: {{ $status['color'] }};">{{ $status['tasks']->count() }}</span>
                     </div>
-                    <div class="card-body overflow-auto" style="max-height:70vh;">
-                        @forelse($statut['tasks']->sortByDesc('priority') as $task)
+
+                    <div class="kanban-column-body">
+                        @forelse($status['tasks']->sortByDesc('priority') as $task)
                             @php
-                                $prio = $priorites[$task->priority] ?? ['label'=>'Inconnue','color'=>'secondary','icon'=>'bi-circle'];
+                                $priority = $priorityConfig[$task->priority] ?? ['label' => 'Inconnue', 'gradient' => '#6c757d', 'icon' => 'ti-circle'];
                             @endphp
-                            <div class="card mb-3 border-0 shadow-sm task-card" data-titre="{{ strtolower($task->title) }}">
-                                <div class="card-body p-3">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h6 class="card-title fw-semibold mb-0" style="flex:1;">{{ $task->title }}</h6>
-                                        <span class="badge bg-{{ $prio['color'] }} d-flex align-items-center">
-                                            <i class="{{ $prio['icon'] }} me-1"></i> {{ $prio['label'] }}
-                                        </span>
-                                    </div>
-                                    @if($task->description)
-                                        <p class="text-muted small mb-2">{{ Str::limit($task->description, 80) }}</p>
-                                    @endif
-                                    @if($task->deadline)
-                                        <small class="text-muted d-block mb-2">
-                                            📅 {{ $task->deadline->format('d/m/Y') }}
-                                            @if($task->deadline->isPast() && $task->status!=='completed')
-                                                <span class="badge bg-danger ms-1">En retard</span>
-                                            @endif
-                                        </small>
-                                    @endif
-                                    <div class="mb-3 d-flex flex-wrap gap-2">
-                                        @forelse($task->users as $user)
-                                            <span class="badge bg-light text-dark fw-semibold">{{ $user->name }}</span>
-                                        @empty
-                                            <span class="text-muted">Non assigné</span>
-                                        @endforelse
-                                    </div>
 
-                                    <div class="row g-2 mb-3">
-                                        <div class="col-6">
-                                            <form action="{{ route('projets.taches.changerPriorite', ['project'=>$projet,'tache'=>$task]) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <select name="priority" class="form-select form-select-sm" onchange="this.form.submit()">
-    <option value="low" {{ $task->priority === 'low' ? 'selected' : '' }}>Basse</option>
-    <option value="medium" {{ $task->priority === 'medium' ? 'selected' : '' }}>Moyenne</option>
-    <option value="high" {{ $task->priority === 'high' ? 'selected' : '' }}>Haute</option>
-</select>
+                            <div class="task-card-modern" data-titre="{{ strtolower($task->title) }}">
+                                <!-- Header -->
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="fw-bold mb-0 flex-grow-1">{{ $task->title }}</h6>
+                                    <span class="priority-badge-modern" style="background: {{ $priority['gradient'] }};">
+                                        <i class="ti {{ $priority['icon'] }}"></i>
+                                        {{ $priority['label'] }}
+                                    </span>
+                                </div>
 
-                                            </form>
-                                        </div>
-                                        <div class="col-6">
-                                            <form action="{{ route('projets.taches.changerStatut', ['projet'=>$projet,'tache'=>$task]) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                                                    @foreach($statuts as $sKey=>$sLabel)
-                                                        <option value="{{ $sKey }}" {{ $task->status===$sKey?'selected':'' }}>{{ $sLabel['label'] }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </form>
-                                        </div>
+                                <!-- Description -->
+                                @if($task->description)
+                                    <p class="text-muted small mb-2">{{ Str::limit($task->description, 80) }}</p>
+                                @endif
+
+                                <!-- Deadline -->
+                                @if($task->deadline)
+                                    <div class="small text-muted mb-2">
+                                        <i class="ti ti-calendar me-1"></i>{{ $task->deadline->format('d/m/Y') }}
+                                        @if($task->deadline->isPast() && $task->status !== 'completed')
+                                            <span class="late-badge ms-1">En retard</span>
+                                        @endif
                                     </div>
+                                @endif
 
-                                    <details class="mb-2">
-                                        <summary class="small text-muted cursor-pointer">
-                                            💬 Commentaires ({{ $task->comments->count() }})
-                                        </summary>
-                                        <div class="mt-2" style="max-height:120px; overflow-y:auto;">
+                                <!-- Assigned Users -->
+                                <div class="mb-3">
+                                    @forelse($task->users as $user)
+                                        <span class="user-badge-modern me-1">{{ $user->name }}</span>
+                                    @empty
+                                        <span class="text-muted small">Non assigné</span>
+                                    @endforelse
+                                </div>
+
+                                <!-- Action Selects - COMMENTÉ POUR ÉVITER AUTO-REFRESH -->
+                                <div class="row g-2 mb-3">
+                                    {{-- <div class="col-6"> --}}
+                                        <!--
+                                        ⚠️ AUTO-SUBMIT DÉSACTIVÉ - Décommentez si besoin
+                                        <form action="{{ route('projets.taches.changerPriorite', ['project'=>$projet,'tache'=>$task]) }}" method="POST">
+                                            {{-- @csrf @method('PATCH') --}}
+                                            <select name="priority" class="form-select-modern form-select-sm" onchange="this.form.submit()">
+                                        -->
+                                        {{-- <select class="form-select-modern form-select-sm" disabled>
+                                            <option value="low" {{ $task->priority === 'low' ? 'selected' : '' }}>Basse</option>
+                                            <option value="medium" {{ $task->priority === 'medium' ? 'selected' : '' }}>Moyenne</option>
+                                            <option value="high" {{ $task->priority === 'high' ? 'selected' : '' }}>Haute</option>
+                                        </select> --}}
+                                        <!-- </form> -->
+                                    {{-- </div> --}}
+                                    {{-- <div class="col-6"> --}}
+                                        <!--
+                                        ⚠️ AUTO-SUBMIT DÉSACTIVÉ - Décommentez si besoin
+                                        <form action="{{ route('projets.taches.changerStatut', ['projet'=>$projet,'tache'=>$task]) }}" method="POST">
+                                            @csrf @method('PATCH')
+                                            <select name="status" class="form-select-modern form-select-sm" onchange="this.form.submit()">
+                                        -->
+                                        {{-- <select class="form-select-modern form-select-sm" disabled>
+                                            @foreach($statusConfig as $sKey => $sInfo)
+                                                <option value="{{ $sKey }}" {{ $task->status === $sKey ? 'selected' : '' }}>
+                                                    {{ $sInfo['label'] }}
+                                                </option>
+                                            @endforeach
+                                        </select> --}}
+                                        <!-- </form> -->
+                                    {{-- </div> --}}
+                                </div>
+
+                                <!-- Comments Section -->
+                                <details class="mb-2">
+                                    <summary class="small">
+                                        <i class="ti ti-message-circle me-1"></i>
+                                        Commentaires ({{ $task->comments->count() }})
+                                    </summary>
+                                    <div class="comment-section mt-2">
+                                        <div style="max-height: 120px; overflow-y: auto;">
                                             @forelse($task->comments as $comment)
-                                                <div class="small bg-light rounded p-2 mb-1">
-                                                    <strong>{{ $comment->user->name??'Anonyme' }}:</strong>
-                                                    <div>{{ $comment->content }}</div>
+                                                <div class="comment-item">
+                                                    <strong class="text-dark">{{ $comment->user->name ?? 'Anonyme' }}</strong>
+                                                    <p class="mb-0 small">{{ $comment->content }}</p>
                                                 </div>
                                             @empty
-                                                <p class="text-muted small">Aucun commentaire pour cette tâche.</p>
+                                                <p class="text-muted small mb-0">Aucun commentaire</p>
                                             @endforelse
                                         </div>
-                                    </details>
+                                    </div>
+                                </details>
 
-                                    <form action="{{ route('projets.taches.ajouterCommentaire', ['projet'=>$projet, 'tache'=>$task]) }}" method="POST">
-                                        @csrf
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name="content" class="form-control border-0 bg-light" placeholder="Ajouter un commentaire..." required>
-                                            <button class="btn btn-black" type="submit"><i class="bi bi-send"></i></button>
-                                        </div>
-                                    </form>
-                                </div>
+                                <!-- Add Comment Form -->
+                                <form action="{{ route('projets.taches.ajouterCommentaire', ['projet' => $projet, 'tache' => $task]) }}" method="POST">
+                                    @csrf
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="content" class="form-control form-control-modern border-end-0" placeholder="Ajouter un commentaire..." required>
+                                        <button class="btn btn-gradient-primary" type="submit">
+                                            <i class="ti ti-send"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         @empty
-                            <div class="text-center py-5 text-muted">
-                                <i class="bi bi-inbox fs-1"></i>
-                                <p class="mt-2">Aucune tâche dans cette colonne</p>
+                            <div class="empty-state-kanban">
+                                <i class="ti ti-inbox"></i>
+                                <p class="mb-0">Aucune tâche</p>
                             </div>
                         @endforelse
                     </div>
@@ -186,40 +466,41 @@
     </div>
 </div>
 
-<div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+<!-- Modal: Nouvelle Tâche -->
+<div class="modal fade modal-gradient" id="addTaskModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-black text-white">
-                <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Créer une nouvelle tâche</h5>
+        <div class="modal-content" style="border-radius: 16px;">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="ti ti-plus me-2"></i>Créer une nouvelle tâche</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('tasks.store', $projet) }}" method="POST">
                 @csrf
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label fw-semibold">Titre *</label>
-                            <input type="text" name="title" class="form-control" required>
+                            <input type="text" name="title" class="form-control form-control-modern" required>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold">Description</label>
-                            <textarea name="description" class="form-control" rows="3"></textarea>
+                            <textarea name="description" class="form-control form-control-modern" rows="3"></textarea>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Priorité *</label>
-                            <select name="priority" class="form-select" required>
-                                @foreach(App\Models\Task::priorities() as $pKey=>$pLabel)
-                                    <option value="{{ $pKey }}" {{ $pKey==='medium'?'selected':'' }}>{{ ucfirst($pLabel) }}</option>
-                                @endforeach
+                            <select name="priority" class="form-select form-select-modern" required>
+                                <option value="low">Basse</option>
+                                <option value="medium" selected>Moyenne</option>
+                                <option value="high">Haute</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Date limite</label>
-                            <input type="date" name="deadline" class="form-control" min="{{ date('Y-m-d') }}">
+                            <input type="date" name="deadline" class="form-control form-control-modern" min="{{ date('Y-m-d') }}">
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold">Assigner à</label>
-                            <select name="user_id" class="form-select">
+                            <select name="user_id" class="form-select form-select-modern">
                                 <option value="">Sélectionner un membre</option>
                                 @foreach($projet->members as $member)
                                     <option value="{{ $member->id }}">{{ $member->name }}</option>
@@ -229,55 +510,29 @@
                     </div>
                 </div>
                 <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-outline-black" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-black">Créer</button>
+                    <button type="button" class="btn btn-outline-gradient" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-gradient-primary">Créer la tâche</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<style>
-.btn-black {
-    background-color: #000;
-    color: #fff;
-    border: none;
-    transition: background-color 0.2s ease;
-}
-.btn-black:hover {
-    background-color: #222;
-    color: #fff;
-}
-.btn-outline-black {
-    border: 1px solid #000;
-    color: #000;
-    transition: all 0.2s ease;
-}
-.btn-outline-black:hover {
-    background-color: #000;
-    color: #fff;
-}
-.task-card:hover { transform: translateY(-2px); box-shadow:0 4px 15px rgba(0,0,0,0.15)!important; }
-.card-header { border-bottom:1px solid rgba(0,0,0,0.08); }
-details summary { transition: color 0.2s ease; }
-details summary:hover { color:#0d6efd!important; cursor:pointer; }
-.input-group .form-control:focus { box-shadow:none; border-color:#86b7fe; }
-.modal-content { border-radius:0.5rem; }
-</style>
-
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Recherche tâche
     const searchInput = document.getElementById('taskSearch');
-    const taskCards = document.querySelectorAll('.task-card');
+    const taskCards = document.querySelectorAll('.task-card-modern');
+
     searchInput.addEventListener('input', function() {
         const query = this.value.trim().toLowerCase();
         taskCards.forEach(card => {
-            card.style.display = card.getAttribute('data-titre').includes(query) ? '' : 'none';
+            const title = card.getAttribute('data-titre');
+            card.style.display = title.includes(query) ? '' : 'none';
         });
     });
 });
 </script>
 @endpush
+
 @endsection

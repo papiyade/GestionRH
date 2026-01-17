@@ -11,7 +11,7 @@
 						<nav>
 							<ol class="breadcrumb mb-0">
 								<li class="breadcrumb-item">
-									<a href="https://smarthr.co.in/demo/html/template/index.html"><i class="ti ti-smart-home"></i></a>
+									<a href="/"><i class="ti ti-smart-home"></i></a>
 								</li>
 								<li class="breadcrumb-item">
 									RH

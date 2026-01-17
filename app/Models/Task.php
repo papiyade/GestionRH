@@ -19,8 +19,6 @@ class Task extends Model
     protected $casts = [
     'deadline' => 'datetime',
 ];
-
-
     // Priorités disponibles
     public const PRIORITY_HIGH = 'high';
     public const PRIORITY_MEDIUM = 'medium';
@@ -66,6 +64,11 @@ class Task extends Model
             self::STATUS_COMPLETED => 'success',
         ][$this->status] ?? 'light';
     }
+    public function getStatusLabelAttribute()
+{
+    return self::statuses()[$this->status] ?? '—';
+}
+
 
     public function project()
     {
@@ -81,12 +84,12 @@ class Task extends Model
 
     public function files()
     {
-        return $this->hasMany(File::class, 'task_id', 'id'); // task_id sur files
+        return $this->hasMany(File::class, 'task_id', 'id'); 
     }
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'task_id', 'id'); // task_id sur comments
+        return $this->hasMany(Comment::class, 'task_id', 'id'); 
     }
 
 }

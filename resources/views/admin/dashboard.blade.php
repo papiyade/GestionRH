@@ -11,11 +11,11 @@
             <strong>Bienvenue !</strong> C’est votre première connexion.<br>
             <ul class="mt-2 mb-0">
                 <li>
-                    🔐 <strong><a href="#" class="text-decoration-underline text-info">Changez votre mot de
+                    <strong><a href="#" class="text-decoration-underline text-info">Changez votre mot de
                             passe</a></strong> — c’est important pour votre sécurité.
                 </li>
                 <li>
-                    🏢 <strong><a href="{{ route('company') }}" class="text-decoration-underline text-info">Configurez votre
+                    <strong><a href="{{ route('company') }}" class="text-decoration-underline text-info">Configurez votre
                             entreprise</a></strong> — pour commencer à l’utiliser pleinement.
                 </li>
             </ul>
