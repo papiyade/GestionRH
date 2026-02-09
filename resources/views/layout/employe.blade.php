@@ -147,6 +147,101 @@
     font-size: 0.9rem;
     color: #4a1f3a;
 }
+
+
+/* Animation pour le badge */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.notification-status-dot {
+    animation: pulse 2s infinite;
+}
+
+/* Styles pour les items de notification */
+.notif-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 0.75rem;
+    align-items: start;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid transparent;
+}
+
+.notif-item:hover {
+    background: #f8f9fa;
+}
+
+.notif-item.unread {
+    background: linear-gradient(90deg, rgba(174, 61, 125, 0.05) 0%, rgba(228, 110, 47, 0.05) 100%);
+    border-left-color: #E46E2F;
+}
+
+.notif-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.notif-icon.today {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+}
+
+.notif-icon.tomorrow {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+}
+
+.notif-icon.overdue {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.notif-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.notif-text {
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.notif-time {
+    color: #adb5bd;
+    font-size: 0.75rem;
+}
+
+.empty-notif {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: #adb5bd;
+}
+
+.empty-notif i {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.3;
+}
+
 </style>
 
 </head>
@@ -203,136 +298,42 @@
 								<a href="#" class="btn btn-menubar me-1" data-bs-toggle="dropdown">
 									<i class="ti ti-layout-grid"></i>
 								</a>
-								<div class="dropdown-menu dropdown-lg dropdown-menu-start">
-									<div class="card mb-0 border-0 shadow-none">
-										<div class="card-header">
-											<h4>CRM</h4>
-										</div>
-										<div class="card-body pb-1">
-											<div class="row">
-												<div class="col-sm-6">
-													<a href="https://smarthr.co.in/demo/html/template/contacts.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
-														<span class="d-flex align-items-center me-3">
-															<i class="ti ti-user-shield text-default me-2"></i>Contacts
-														</span>
-														<i class="ti ti-arrow-right"></i>
-													</a>
-													<a href="https://smarthr.co.in/demo/html/template/deals-grid.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
-														<span class="d-flex align-items-center me-3">
-															<i class="ti ti-heart-handshake text-default me-2"></i>Deals
-														</span>
-														<i class="ti ti-arrow-right"></i>
-													</a>
-
-												</div>
-												<div class="col-sm-6">
-													<a href="https://smarthr.co.in/demo/html/template/companies-grid.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
-														<span class="d-flex align-items-center me-3">
-															<i class="ti ti-building text-default me-2"></i>Companies
-														</span>
-														<i class="ti ti-arrow-right"></i>
-													</a>
-													<a href="https://smarthr.co.in/demo/html/template/leads-grid.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
-														<span class="d-flex align-items-center me-3">
-															<i class="ti ti-user-check text-default me-2"></i>Leads
-														</span>
-														<i class="ti ti-arrow-right"></i>
-													</a>
-													<a href="https://smarthr.co.in/demo/html/template/activity.html" class="d-flex align-items-center justify-content-between p-2 crm-link mb-3">
-														<span class="d-flex align-items-center me-3">
-															<i class="ti ti-activity text-default me-2"></i>Activities
-														</span>
-														<i class="ti ti-arrow-right"></i>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
 							</div>
-							<a href="https://smarthr.co.in/demo/html/template/profile-settings.html" class="btn btn-menubar">
-								<i class="ti ti-settings-cog"></i>
-							</a>
 						</div>
 						<div class="d-flex align-items-center">
-							<div class="me-1">
-								<a href="#" class="btn btn-menubar btnFullscreen">
-									<i class="ti ti-maximize"></i>
-								</a>
-							</div>
-							<div class="dropdown me-1">
-								<a href="#" class="btn btn-menubar" data-bs-toggle="dropdown">
-									<i class="ti ti-layout-grid-remove"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-end">
-									<div class="card mb-0 border-0 shadow-none">
-										<div class="card-header">
-											<h4>Applications</h4>
-										</div>
-										<div class="card-body">
-											<a href="https://smarthr.co.in/demo/html/template/calendar.html" class="d-block pb-2">
-												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-calendar text-gray-9"></i></span>Calendar
-											</a>
-											<a href="https://smarthr.co.in/demo/html/template/todo.html" class="d-block py-2">
-												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-subtask text-gray-9"></i></span>To Do
-											</a>
-											<a href="https://smarthr.co.in/demo/html/template/notes.html" class="d-block py-2">
-												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-notes text-gray-9"></i></span>Notes
-											</a>
-											<a href="https://smarthr.co.in/demo/html/template/file-manager.html" class="d-block py-2">
-												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-folder text-gray-9"></i></span>File Manager
-											</a>
-											<a href="https://smarthr.co.in/demo/html/template/kanban-view.html" class="d-block py-2">
-												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-layout-kanban text-gray-9"></i></span>Kanban
-											</a>
-											<a href="https://smarthr.co.in/demo/html/template/invoices.html" class="d-block py-2 pb-0">
-												<span class="avatar avatar-md bg-transparent-dark me-2"><i class="ti ti-file-invoice text-gray-9"></i></span>Invoices
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="me-1 notification_item">
-								<a href="#" class="btn btn-menubar position-relative me-1" id="notification_popup"
-									data-bs-toggle="dropdown">
-									<i class="ti ti-bell"></i>
-									<span class="notification-status-dot"></span>
-								</a>
-								<div class="dropdown-menu dropdown-menu-end notification-dropdown p-4">
-									<div class="d-flex align-items-center justify-content-between border-bottom p-0 pb-3 mb-3">
-										<h4 class="notification-title">Notifications</h4>
-										<div class="d-flex align-items-center">
-											<a href="#" class="text-primary fs-15 me-3 lh-1">Tout marquer comme lue</a>
-											<div class="dropdown">
-												<a href="javascript:void(0);" class="bg-white dropdown-toggle"
-													data-bs-toggle="dropdown">
-													<i class="ti ti-calendar-due me-1"></i>Aujourd'hui
-												</a>
-												<ul class="dropdown-menu mt-2 p-3">
-													<li>
-														<a href="javascript:void(0);" class="dropdown-item rounded-1">
-															This Week
-														</a>
-													</li>
-													<li>
-														<a href="javascript:void(0);" class="dropdown-item rounded-1">
-															Last Week
-														</a>
-													</li>
-													<li>
-														<a href="javascript:void(0);" class="dropdown-item rounded-1">
-															Last Month
-														</a>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-									<div class="d-flex p-0">
-										<a href="#" class="btn btn-light w-100 me-2">Fermer</a>
-									</div>
-								</div>
-							</div>
+                            <div class="me-1">
+                                <!-- Theme Toggle -->
+                                <div class="theme-toggle d-flex align-items-center ms-3" id="themeToggle"
+                                    role="button">
+                                    <i class="ti ti-sun theme-icon theme-light"></i>
+                                    <i class="ti ti-moon theme-icon theme-dark d-none"></i>
+                                </div>
+                            </div>
+                            <!-- Dropdown Notifications -->
+<div class="me-1 notification_item">
+    <a href="#" class="btn btn-menubar position-relative me-1" id="notificationBell"
+        data-bs-toggle="dropdown">
+        <i class="ti ti-bell"></i>
+        <span class="notification-status-dot" id="notificationBadge" style="display: none;"></span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end notification-dropdown p-4" id="notificationMenu">
+        <div class="d-flex align-items-center justify-content-between border-bottom p-0 pb-3 mb-3">
+            <h4 class="notification-title">Notifications <span id="notificationCount" class="badge bg-danger ms-2" style="display: none;">0</span></h4>
+            <div class="d-flex align-items-center">
+                <a href="#" class="text-primary fs-15 lh-1" id="markAllRead">Tout marquer comme lue</a>
+            </div>
+        </div>
+
+        <!-- Liste des notifications -->
+        <div id="notificationList" style="max-height: 400px; overflow-y: auto;">
+            <!-- Les notifications seront chargées ici -->
+        </div>
+
+        <div class="d-flex p-0 mt-3">
+            <button class="btn btn-light w-100" data-bs-dismiss="dropdown">Fermer</button>
+        </div>
+    </div>
+</div>
 							<div class="dropdown profile-dropdown">
 								<a href="javascript:void(0);" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
 									<span class="avatar avatar-sm online">
@@ -487,12 +488,16 @@
 						<li>
 							<ul>
 								<li>
-									<a href="{{ route('employe.projects') }}" class="{{ request()->routeIs('employe.projects') ? 'active' : '' }}">
+									<a href="{{ route('employe.projects') }}" 
+                                    class="{{ request()->routeIs('employe.projects*') ? 'active' : '' }}"
+                                    >
 										<i class="ti ti-activity"></i><span>Mes projets</span>
 									</a>
 								</li>
                                 <li>
-									<a href="">
+									<a href="{{ route('tasks.my-tasks') }}"
+                                     class="{{ request()->routeIs('tasks.my-tasks*') ? 'active' : '' }}"
+                                    >
 										<i class="ti ti-activity"></i><span> Mes taches </span>
 									</a>
 								</li>
@@ -579,6 +584,202 @@
 	<!-- Custom JS -->
 	<script src="{{asset('assets/js/theme-colorpicker.js')}}"></script>
 	<script src="{{asset('assets/js/script.js')}}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bell = document.getElementById('notificationBell');
+    const menu = document.getElementById('notificationMenu');
+    const badge = document.getElementById('notificationBadge');
+    const countBadge = document.getElementById('notificationCount');
+    const list = document.getElementById('notificationList');
+    const markAllBtn = document.getElementById('markAllRead');
+
+    // Charger les notifications quand on ouvre le dropdown
+    bell.addEventListener('click', function() {
+        setTimeout(() => loadNotifications(), 100);
+    });
+
+    // Charger les notifications
+    function loadNotifications() {
+        fetch('{{ route("notifications.unread") }}')
+            .then(response => response.json())
+            .then(data => {
+                updateBadge(data.count);
+                displayNotifications(data.notifications);
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    // Mettre à jour le badge
+    function updateBadge(count) {
+        if (count > 0) {
+            badge.style.display = 'block';
+            countBadge.textContent = count > 99 ? '99+' : count;
+            countBadge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+            countBadge.style.display = 'none';
+        }
+    }
+
+    // Afficher les notifications
+    function displayNotifications(notifications) {
+        if (notifications.length === 0) {
+            list.innerHTML = `
+                <div class="empty-notif">
+                    <i class="ti ti-bell-off d-block"></i>
+                    <p class="mb-0">Aucune nouvelle notification</p>
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = notifications.map(notif => {
+            return `
+                <div class="notif-item unread" data-id="${notif.id}" data-url="${notif.url}">
+                    <div class="notif-icon ${notif.type}">
+                        ${notif.icon}
+                    </div>
+                    <div class="notif-content">
+                        <div class="notif-title">${notif.task_title}</div>
+                        <div class="notif-text">${notif.message}</div>
+                        <div class="notif-text"><i class="ti ti-folder me-1"></i>${notif.project_title}</div>
+                        <div class="notif-time">${formatDate(notif.deadline)}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Ajouter les événements de clic
+        document.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const url = this.dataset.url;
+                markAsRead(id, url);
+            });
+        });
+    }
+
+    // Marquer comme lu
+    function markAsRead(id, url) {
+        fetch(`/notifications/${id}/read`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(() => {
+            window.location.href = url;
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Marquer tout comme lu
+    markAllBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        fetch('{{ route("notifications.readAll") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(() => {
+            loadNotifications();
+        })
+        .catch(error => console.error('Erreur:', error));
+    });
+
+    // Formater la date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+
+        if (date.toDateString() === now.toDateString()) {
+            return `Aujourd'hui ${date.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}`;
+        }
+
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        if (date.toDateString() === tomorrow.toDateString()) {
+            return `Demain ${date.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}`;
+        }
+
+        if (date < now) {
+            const days = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+            return `Il y a ${days} jour${days > 1 ? 's' : ''}`;
+        }
+
+        return date.toLocaleDateString('fr-FR');
+    }
+
+    // Charger au démarrage
+    loadNotifications();
+
+    // Recharger toutes les minutes
+    setInterval(loadNotifications, 60000);
+});
+</script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const themeToggle = document.getElementById('themeToggle');
+            const sunIcon = themeToggle.querySelector('.theme-light');
+            const moonIcon = themeToggle.querySelector('.theme-dark');
+
+            const defaultTheme = '{{ Auth::user()->preferences['appearance']['theme'] ?? 'light' }}';
+            let currentTheme = localStorage.getItem('userTheme') || defaultTheme;
+
+            applyTheme(currentTheme);
+            updateIcons();
+
+            themeToggle.addEventListener('click', function() {
+                currentTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+                localStorage.setItem('userTheme', currentTheme);
+                applyTheme(currentTheme);
+                updateIcons();
+            });
+
+            function applyTheme(theme) {
+                const body = document.body;
+
+                if (theme === 'dark') {
+                    body.classList.add('dark-mode');
+                    body.classList.remove('light-mode');
+                } else if (theme === 'light') {
+                    body.classList.add('light-mode');
+                    body.classList.remove('dark-mode');
+                } else if (theme === 'auto') {
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    body.classList.toggle('dark-mode', prefersDark);
+                    body.classList.toggle('light-mode', !prefersDark);
+                }
+            }
+
+            function updateIcons() {
+                const isDark = document.body.classList.contains('dark-mode');
+
+                sunIcon.classList.toggle('d-none', isDark);
+                moonIcon.classList.toggle('d-none', !isDark);
+            }
+
+            // Auto mode watcher
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    const savedTheme = localStorage.getItem('userTheme');
+                    if (savedTheme === 'auto') {
+                        applyTheme('auto');
+                        updateIcons();
+                    }
+                });
+            }
+
+        });
+    </script>
+
 
 </body>
 

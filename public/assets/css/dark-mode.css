@@ -64,7 +64,11 @@ body.dark-mode .table-light,
 body.dark-mode .tfoot
  {
     background: linear-gradient(145deg, #0e0e11 0%, #0e0e11 55%, #2a1620 72%, #4a1f3a 85%, #b6456f 100%) !important;
-    /* border: 1px #690D3B; */
+}
+
+body.dark-mode  .progress-bar-gradient {
+    background: linear-gradient(90deg, #AE3D7D 0%, #E46E2F 100%);
+    border-radius: 10px;
 }
 
 /* === Buttons & Badges === */
@@ -79,7 +83,6 @@ body.dark-mode .badge-custom,
 body.dark-mode .action-btn{
     background: rgba(255,255,255,0.08) !important;
     color: #f1f1f1 !important;
-    /* border: 1px solid #2e0519; */
 }
 
 body.dark-mode .btn-light:hover {
@@ -92,7 +95,8 @@ body.dark-mode .badge-soft-dark:focus {
 }
 
 body.dark-mode .badge-md,
-body.dark-mode .badge-text {
+body.dark-mode .badge-text,
+body.dark-mode .back {
     background-color: #4a1f3a !important;
     color: #fff !important;
 }
@@ -122,7 +126,6 @@ body.dark-mode{
     background: linear-gradient(145deg, #0e0e11 0%, #0e0e11 55%, #2a1620 72%, #4a1f3a 85%, #b6456f 100%);
     box-shadow: 0 4px 12px rgba(124, 124, 124, 0.04);
     color: #f6f6f6;
-    /* border: 1px solid #260619 !important; */
 }
 
 body.dark-mode .bodyInterface{
@@ -132,7 +135,6 @@ body.dark-mode .bodyInterface{
 body.dark-mode .element-light {
     background: rgba(255,255,255,0.08) !important;
     color: #f1f1f1 !important;
-    /* border: 1px solid #2e0519; */
 }
 
 body.dark-mode .danger-zone {
@@ -395,7 +397,7 @@ body.dark-mode .custom-accordion-items .alert {
 body.dark-mode .custom-accordion-items .card {
     background-color: #1b1b1b !important;
     color: #e0e0e0 !important;
-    border: 1px solid #2c2c2c !important;
+    /* border: 1px solid #2c2c2c !important; */
 }
 
 body.dark-mode .custom-accordion-items .nav-tabs .nav-link {
@@ -574,6 +576,11 @@ body.light-mode .nom-span {
     background-clip: text;
 }
 
+body.light-mode  .progress-bar-gradient {
+    background: linear-gradient(90deg, #AE3D7D 0%, #E46E2F 100%);
+    border-radius: 10px;
+}
+
 
 /* === Header & Footer - Light Mode === */
 body:not(.dark-mode) .header,
@@ -631,7 +638,6 @@ body:not(.dark-mode) .nav {
     /* color: #2a1620; */
         /* border: 0.6px solid rgba(240, 239, 240, 0.08); */
     box-shadow: 0 4px 12px rgba(124, 124, 124, 0.04);
-    /* border-bottom: 1px solid #4a1f3a; */
 }
 
 body.light-mode .contact-grids-tab .nav-link {

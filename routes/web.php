@@ -26,6 +26,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserSettingController;
 use App\Http\Controllers\EntrepriseStatisticsController;
 use App\Http\Controllers\OtpController;
+use App\Helpers\NotificationHelper;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -70,6 +71,26 @@ Route::middleware('auth')->group(function () {
 
     // Route::get('/admin/company/dashboard', [AdminController::class, 'index'])->name('admin_simple');
     Route::get('/status', [SuperadminController::class, 'status'])->name('status');
+
+
+        Route::get('/notifications/unread', function () {
+        $notifications = NotificationHelper::getTaskNotifications(auth()->id());
+        return response()->json([
+            'count' => count($notifications),
+            'notifications' => $notifications
+        ]);
+    })->name('notifications.unread');
+
+    Route::post('/notifications/{id}/read', function ($id) {
+        NotificationHelper::markAsRead($id);
+        return response()->json(['success' => true]);
+    })->name('notifications.read');
+
+    Route::post('/notifications/read-all', function () {
+        $notifications = NotificationHelper::getTaskNotifications(auth()->id());
+        NotificationHelper::markAllAsRead($notifications);
+        return back()->with('success', 'Toutes les notifications ont été marquées comme lues');
+    })->name('notifications.readAll');
 
 });
 
@@ -186,8 +207,9 @@ Route::middleware(['auth', 'role:chef_projet'])->group(function () {
     Route::patch('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
 
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
-    Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+        Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::delete('/projects/{project}/update-members', [ProjectController::class, 'updateMembers'])->name('projects.updateMembers');
     Route::get('/chef-projet/dashboard', [ChefProjetcontroller::class, 'index'])->name('chef_projet.dashboard');
 
@@ -209,13 +231,16 @@ Route::middleware(['auth', 'role:chef_projet'])->group(function () {
     Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember'])->name('projects.removeMember');
 
 });
-Route::middleware(['auth', 'role:employe'])->group(function () {
+Route::middleware(['auth', 'role:employe,chef_projet'])->group(function () {
     Route::get('/mes-projets', [App\Http\Controllers\EmployeController::class, 'mesProjets'])->name('employe.projects');
     Route::get('/my-dashboard', [App\Http\Controllers\EmployeController::class, 'index'])->name('employe.dashboard');
     Route::get('/mes-projets/{project}', [App\Http\Controllers\EmployeController::class, 'voirProjet'])->name('employe.projects.show');
         Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::patch('/mes-projets/taches/{task}/statut', [App\Http\Controllers\EmployeController::class, 'changerStatut'])->name('employe.tasks.changerStatut');
     Route::post('/mes-projets/taches/{task}/commentaire', [App\Http\Controllers\EmployeController::class, 'ajouterCommentaire'])->name('employe.tasks.commenter');
+Route::get('/my-tasks', [ProjectController::class, 'myTasks'])
+    ->name('tasks.my-tasks');
+
     Route::prefix('projets/{projet}')->group(function () {
         Route::get('/taches', [TacheController::class, 'showTachesParProjet'])->name('projets.taches');
         Route::patch('/taches/{tache}/statut', [TacheController::class, 'changerStatut'])->name('projets.taches.changerStatut');
@@ -269,7 +294,6 @@ Route::post('/candidature/{jobOffer}/store', [CandidatureController::class, 'sto
 Route::get('/job-offers/{id}/details', [JobOfferController::class, 'showDetails']);
 
 Route::prefix('employees')->name('rh.')->group(function () {
-    // Formulaire public avec slug
 
     // Formulaire public pour un employé rattaché à une entreprise
     Route::get('/renseignement-infos/{id}', [PublicEmployeeController::class, 'create'])
@@ -279,8 +303,7 @@ Route::prefix('employees')->name('rh.')->group(function () {
         ->name('employees.store');
 
     // Liste des employés pour le RH
-    Route::get('/liste-des-employees', [PublicRHController::class, 'index'])->middleware(['auth', 'check.otp'])
-        ->name('index');
+    Route::get('/liste-des-employees', [PublicRHController::class, 'index'])->name('index');
     // Voir, éditer, supprimer un employé
     Route::get('/{employee}', [PublicRHController::class, 'show'])->middleware(['auth', 'check.otp'])->name('show');
     Route::get('/employees/{employee}/edit', [PublicRHController::class, 'edit'])->name('edit');
@@ -318,12 +341,12 @@ Route::get('/interface-RH', function () {
     Route::get('/settings/preferences', function() {
         return view('settings.preferences');
     })->name('settings.preferences');
-    
+
     Route::put('/settings/preferences', [UserSettingController::class, 'updatePreferences'])->name('settings.preferences.update');
     Route::put('/settings/notifications', [UserSettingController::class, 'updateNotifications'])->name('settings.notifications.update');
     Route::put('/settings/privacy', [UserSettingController::class, 'updatePrivacy'])->name('settings.privacy.update');
     Route::put('/settings/appearance', [UserSettingController::class, 'updateAppearance'])->name('settings.appearance.update');
-    
+
     Route::delete('/settings/account', [UserSettingController::class, 'deleteAccount'])->name('settings.account.delete');
 
     Route::get('/otp/request', [OtpController::class, 'requestOtp'])->name('otp.request');
@@ -335,7 +358,7 @@ Route::get('/interface-RH', function () {
 Route::get('/documentation', function () {
     return view('documentation');
 })->name('documentation');
-   
+
 
 use Illuminate\Support\Facades\Artisan;
 

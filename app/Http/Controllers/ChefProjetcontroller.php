@@ -36,4 +36,6 @@ $projects = Project::with(['users', 'tasks'])
         });
         return view('dashboardchef_projet', compact('projectCount', 'teamCount', 'userCount', 'projects'));
         }
+
+        
 }

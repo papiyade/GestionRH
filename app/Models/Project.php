@@ -81,5 +81,11 @@ public function lead()
         return $this->hasMany(File::class);
     }
 
+    public function getRouteKeyName()
+{
+    return 'title';
+}
+
+
     
 }

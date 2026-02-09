@@ -151,17 +151,20 @@
         font-weight: 600;
     }
 
-    .progress-modern {
-        height: 8px;
-        background: #f0f0f0;
-        border-radius: 10px;
-        overflow: hidden;
-    }
+.progress-modern {
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
 
-    .progress-bar-gradient {
-        background: linear-gradient(90deg, #AE3D7D 0%, #E46E2F 100%);
-        border-radius: 10px;
-    }
+.progress-bar-gradient {
+    height: 100%;
+    background-color: #fcd34d;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
+
 
     .empty-state-modern {
         padding: 3rem;
@@ -272,7 +275,7 @@
 
                 <div class="text-center">
                     <div class="badge-gradient mb-3 d-inline-block">
-                        <i class="ti ti-{{ $statusInfo['icon'] }} me-2"></i>{{ $statusInfo['text'] }}
+                        <i class="ti ti-{{ $statusInfo['icon'] }} me-2 icon-plus"></i>{{ $statusInfo['text'] }}
                     </div>
 
                     <div class="mb-2">
@@ -284,7 +287,7 @@
                         <div class="progress-bar progress-bar-gradient" style="width: {{ $progress }}%"></div>
                     </div>
 
-                    <a href="{{ route('projets.taches', $project->id) }}" class="btn btn-light btn-lg mt-3 rounded-pill">
+                    <a href="{{ route('projets.taches', $project) }}" class="btn btn-light btn-lg mt-3 rounded-pill">
                         <i class="ti ti-list me-2"></i>Voir les tâches
                     </a>
                 </div>
@@ -296,7 +299,7 @@
         <!-- Sidebar -->
         <div class="col-xl-4">
             <!-- Équipe -->
-            <div class="project-card mb-4">
+            <div class="project-card mb-4 card">
                 <div class="card-header-gradient d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 fw-bold"><i class="ti ti-users text-warning me-2"></i>Équipe ({{ $project->members->count() }})</h5>
                     <button class="btn btn-sm btn-gradient-primary" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
@@ -305,7 +308,7 @@
                 </div>
                 <div class="p-3">
                     @forelse($project->members as $member)
-                        <div class="member-item">
+                        <div class="member-item card">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="member-avatar">{{ strtoupper(substr($member->name, 0, 1)) }}</div>
@@ -320,7 +323,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="empty-state-modern">
+                        <div class="empty-state-modern card">
                             <i class="ti ti-users-off"></i>
                             <p class="text-muted mb-0">Aucun membre</p>
                         </div>
@@ -329,11 +332,11 @@
             </div>
 
             <!-- Fichiers Récents -->
-            <div class="project-card">
+            <div class="project-card card">
                 <div class="card-header-gradient">
-                    <h5 class="mb-0 fw-bold"><i class="ti ti-paperclip text-info me-2"></i>Fichiers ({{ $project->files->count() }})</h5>
+                    <h5 class="mb-0 fw-bold"><i class="ti ti-paperclip  me-2"></i>Fichiers ({{ $project->files->count() }})</h5>
                 </div>
-                <div class="p-3">
+                <div class="p-3 card">
                     @forelse($project->files->take(5) as $file)
                         @php
                             $ext = pathinfo($file->file_name, PATHINFO_EXTENSION);
@@ -342,8 +345,8 @@
                                      'xlsx' => 'ti-file-spreadsheet text-success'];
                             $icon = $icons[$ext] ?? 'ti-file text-secondary';
                         @endphp
-                        <div class="file-item d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-2">
+                        <div class="file-item d-flex align-items-center justify-content-between back">
+                            <div class="d-flex align-items-center gap-2 back">
                                 <i class="ti {{ $icon }} fs-4"></i>
                                 <div>
                                     <div class="small fw-semibold">{{ Str::limit($file->file_name, 25) }}</div>
@@ -355,7 +358,7 @@
                             </a>
                         </div>
                     @empty
-                        <div class="empty-state-modern">
+                        <div class="empty-state-modern back">
                             <i class="ti ti-folder-off"></i>
                             <p class="text-muted mb-0">Aucun fichier</p>
                         </div>
@@ -366,7 +369,7 @@
 
         <!-- Main Content -->
         <div class="col-xl-8">
-            <div class="project-card">
+            <div class="project-card card">
                 <div class="p-4">
                     <!-- Tabs Navigation -->
                     <ul class="nav nav-pills nav-pills-gradient mb-4" role="tablist">
@@ -393,7 +396,7 @@
                         <div class="tab-pane fade show active" id="tab-comments">
                             <div style="max-height: 500px; overflow-y: auto;" class="mb-3">
                                 @forelse($comments as $comment)
-                                    <div class="comment-bubble">
+                                    <div class="comment-bubble card">
                                         <div class="d-flex gap-3">
                                             <div class="member-avatar">{{ strtoupper(substr($comment->user->name, 0, 1)) }}</div>
                                             <div class="flex-grow-1">
@@ -406,7 +409,7 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div class="empty-state-modern">
+                                    <div class="empty-state-modern back">
                                         <i class="ti ti-message-off"></i>
                                         <p class="text-muted mb-0">Aucun commentaire</p>
                                     </div>
@@ -432,7 +435,7 @@
                             </div>
 
                             @forelse($project->tasks as $task)
-                                <div class="member-item">
+                                <div class="member-item card">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
                                             <h6 class="fw-bold mb-1">{{ $task->title }}</h6>
@@ -447,7 +450,7 @@
                                     </div>
                                 </div>
                             @empty
-                                <div class="empty-state-modern">
+                                <div class="empty-state-modern back">
                                     <i class="ti ti-clipboard-off"></i>
                                     <p class="text-muted mb-0">Aucune tâche</p>
                                 </div>
@@ -468,17 +471,17 @@
                             </div>
 
                             @forelse($project->files as $file)
-                                <div class="file-item d-flex justify-content-between align-items-center">
+                                <div class="file-item d-flex justify-content-between align-items-center back">
                                     <div>
                                         <div class="fw-semibold">{{ $file->file_name }}</div>
                                         <small class="text-muted">{{ $file->created_at->format('d/m/Y') }}</small>
                                     </div>
                                     <a href="{{ asset('storage/' . $file->path) }}" class="btn btn-sm btn-gradient-primary" download>
-                                        <i class="ti ti-download "></i>
+                                        <i class="ti ti-download icon-plus"></i>
                                     </a>
                                 </div>
                             @empty
-                                <div class="empty-state-modern">
+                                <div class="empty-state-modern back">
                                     <i class="ti ti-folder-off"></i>
                                     <p class="text-muted mb-0">Aucun fichier</p>
                                 </div>
@@ -501,7 +504,7 @@
             </div>
             <div class="modal-body p-4">
                 @foreach($members as $member)
-                    <div class="member-item d-flex justify-content-between align-items-center">
+                    <div class="member-item d-flex justify-content-between align-items-center back">
                         <div class="d-flex align-items-center gap-2">
                             <div class="member-avatar">{{ strtoupper(substr($member->name, 0, 1)) }}</div>
                             <div>
@@ -515,7 +518,7 @@
                                 <button type="submit" class="btn btn-sm btn-danger">Retirer</button>
                             </form>
                         @else
-                            <form action="{{ route('projects.addMember', [$project->id, $member->id]) }}" method="POST">
+                            <form action="{{ route('projects.addMember', [$project, $member]) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-gradient-primary">Ajouter</button>
                             </form>

@@ -6,28 +6,28 @@
 
 @php
     $priorityConfig = [
-        'high' => ['label' => 'Haute', 'gradient' => 'linear-gradient(135deg, #dc3545, #c82333)', 'icon' => 'ic ti-arrow-up'],
+        'high' => ['label' => 'Haute', 'gradient' => 'linear-gradient(135deg, #dc3545, #c82333)', 'icon' => 'ti-arrow-up'],
         'medium' => ['label' => 'Moyenne', 'gradient' => 'linear-gradient(135deg, #ffc107, #e0a800)', 'icon' => 'ti-minus'],
         'low' => ['label' => 'Basse', 'gradient' => 'linear-gradient(135deg, #28a745, #218838)', 'icon' => 'ti-arrow-down'],
     ];
 
     $tasksByStatus = $projet->tasks->groupBy('status');
-
+    
     $statusConfig = [
         'not_started' => [
-            'label' => 'Non débuté',
+            'label' => 'Non débuté', 
             'icon' => 'ti-clock',
             'color' => '#6c757d',
             'tasks' => $tasksByStatus->get('not_started', collect())
         ],
         'in_progress' => [
-            'label' => 'En cours',
+            'label' => 'En cours', 
             'icon' => 'ti-bolt',
             'color' => '#E46E2F',
             'tasks' => $tasksByStatus->get('in_progress', collect())
         ],
         'completed' => [
-            'label' => 'Terminée',
+            'label' => 'Terminée', 
             'icon' => 'ti-circle-check',
             'color' => '#28a745',
             'tasks' => $tasksByStatus->get('completed', collect())
@@ -174,6 +174,13 @@
         font-size: 0.85rem;
     }
 
+    .search-icon-modern {
+        font-size: 1rem;
+        color: #adb5bd;
+        pointer-events: none;
+        margin-left: 0.5rem;
+    }
+
     .btn-gradient-primary {
         background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
         border: none;
@@ -222,7 +229,7 @@
     .form-select-modern {
         border: 2px solid #e9ecef;
         border-radius: 10px;
-        padding: 1rem 1rem;
+        padding: 0.65rem 1rem;
         transition: all 0.3s ease;
     }
 
@@ -270,11 +277,6 @@
         color: #AE3D7D;
         font-weight: 600;
     }
-
-    .ic {
-        font-size: 1.2rem;
-        color: #fff;
-    }
 </style>
 
 <div class="container-fluid px-4 py-4">
@@ -296,10 +298,10 @@
     <div class="kanban-header-gradient">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
-                <h1 class="display-6 fw-bold mb-2" style="color: #fff !important;">
+                <h1 class="display-6 fw-bold mb-2">
                     <i class="ti ti-layout-kanban me-2 icon-plus"></i>{{ $projet->title }}
                 </h1>
-                <p class="mb-0 opacity-90 " style="color: #fff !important;">Gestion des tâches en mode Kanban</p>
+                <p class="mb-0 opacity-90">Gestion des tâches en mode Kanban</p>
             </div>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-gradient-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
@@ -314,20 +316,22 @@
 
     <!-- Search Bar -->
     <div class="mb-4">
-        <input type="text" id="taskSearch" class="form-control search-box-modern" placeholder="🔍 Rechercher une tâche par titre...">
+        {{-- Icone de recherche --}}
+        <i class="ti ti-search position-absolute search-icon-modern mt-2"></i>
+        <input type="text" id="taskSearch" class="form-control search-box-modern" placeholder=" Rechercher une tâche par titre...">
     </div>
 
     <!-- Stats Cards -->
     <div class="row g-3 mb-4">
         @foreach([
-            ['text' => 'Total', 'count' => $projet->tasks->count(), 'icon' => 'ic ti ti-border-all'],
-            ['text' => 'Non débuté', 'count' => $statusConfig['not_started']['tasks']->count(), 'icon' => 'ic ti ti-progress-x'],
-            ['text' => 'En cours', 'count' => $statusConfig['in_progress']['tasks']->count(), 'icon' => 'ic ti ti-progress'],
-            ['text' => 'Terminées', 'count' => $statusConfig['completed']['tasks']->count(), 'icon' => 'ic ti ti-progress-check'],
+            ['text' => 'Total', 'count' => $projet->tasks->count(), 'icon' => 'ti ti-list-check'],
+            ['text' => 'Non débuté', 'count' => $statusConfig['not_started']['tasks']->count(), 'icon' => 'ti ti-clock'],
+            ['text' => 'En cours', 'count' => $statusConfig['in_progress']['tasks']->count(), 'icon' => 'ti ti-bolt'],
+            ['text' => 'Terminées', 'count' => $statusConfig['completed']['tasks']->count(), 'icon' => 'ti ti-circle-check'],
         ] as $stat)
             <div class="col-md-3">
-                <div class="stat-card-modern">
-                    <div class="stat-icon-modern"><i class="{{ $stat['icon'] }}"></i></div>
+                <div class="stat-card-modern card">
+                    <div class="stat-icon-modern"><i class="{{ $stat['icon'] }} icon-plus"></i></div>
                     <h3 class="text-center fw-bold mb-1">{{ $stat['count'] }}</h3>
                     <p class="text-center text-muted mb-0 small">{{ $stat['text'] }}</p>
                 </div>
@@ -339,7 +343,7 @@
     <div class="row g-3">
         @foreach($statusConfig as $statusKey => $status)
             <div class="col-lg-4">
-                <div class="kanban-column">
+                <div class="kanban-column card">
                     <div class="kanban-column-header" style="border-color: {{ $status['color'] }};">
                         <h5 class="mb-0 fw-bold d-flex align-items-center gap-2">
                             <i class="ti {{ $status['icon'] }}" style="color: {{ $status['color'] }};"></i>
@@ -347,14 +351,14 @@
                         </h5>
                         <span class="badge" style="background: {{ $status['color'] }};">{{ $status['tasks']->count() }}</span>
                     </div>
-
+                    
                     <div class="kanban-column-body">
                         @forelse($status['tasks']->sortByDesc('priority') as $task)
                             @php
                                 $priority = $priorityConfig[$task->priority] ?? ['label' => 'Inconnue', 'gradient' => '#6c757d', 'icon' => 'ti-circle'];
                             @endphp
-
-                            <div class="task-card-modern" data-titre="{{ strtolower($task->title) }}">
+                            
+                            <div class="task-card-modern card-body" data-titre="{{ strtolower($task->title) }}">
                                 <!-- Header -->
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <h6 class="fw-bold mb-0 flex-grow-1">{{ $task->title }}</h6>
@@ -388,38 +392,55 @@
                                     @endforelse
                                 </div>
 
-                                <!-- Action Selects - COMMENTÉ POUR ÉVITER AUTO-REFRESH -->
-                                <div class="row g-2 mb-3">
-                                    {{-- <div class="col-6"> --}}
-                                        <!--
-                                        ⚠️ AUTO-SUBMIT DÉSACTIVÉ - Décommentez si besoin
-                                        <form action="{{ route('projets.taches.changerPriorite', ['project'=>$projet,'tache'=>$task]) }}" method="POST">
-                                            {{-- @csrf @method('PATCH') --}}
-                                            <select name="priority" class="form-select-modern form-select-sm" onchange="this.form.submit()">
-                                        -->
-                                        {{-- <select class="form-select-modern form-select-sm" disabled>
-                                            <option value="low" {{ $task->priority === 'low' ? 'selected' : '' }}>Basse</option>
-                                            <option value="medium" {{ $task->priority === 'medium' ? 'selected' : '' }}>Moyenne</option>
-                                            <option value="high" {{ $task->priority === 'high' ? 'selected' : '' }}>Haute</option>
-                                        </select> --}}
-                                        <!-- </form> -->
-                                    {{-- </div> --}}
-                                    {{-- <div class="col-6"> --}}
-                                        <!--
-                                        ⚠️ AUTO-SUBMIT DÉSACTIVÉ - Décommentez si besoin
-                                        <form action="{{ route('projets.taches.changerStatut', ['projet'=>$projet,'tache'=>$task]) }}" method="POST">
-                                            @csrf @method('PATCH')
-                                            <select name="status" class="form-select-modern form-select-sm" onchange="this.form.submit()">
-                                        -->
-                                        {{-- <select class="form-select-modern form-select-sm" disabled>
-                                            @foreach($statusConfig as $sKey => $sInfo)
-                                                <option value="{{ $sKey }}" {{ $task->status === $sKey ? 'selected' : '' }}>
-                                                    {{ $sInfo['label'] }}
-                                                </option>
-                                            @endforeach
-                                        </select> --}}
-                                        <!-- </form> -->
-                                    {{-- </div> --}}
+                                <!-- Changer Priorité et Statut - Avec bouton de validation -->
+                                <div class="mb-3">
+                                    <div class="row g-2">
+                                        <!-- Changer Priorité -->
+                                        <div class="col-12">
+                                            <label class="small text-muted mb-1 d-flex align-items-center gap-1">
+                                                <i class="ti ti-flag"></i>
+                                                Priorité
+                                            </label>
+                                            <form action="{{ route('projets.taches.changerPriorite', ['project'=>$projet,'tache'=>$task]) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <div class="d-flex gap-2">
+                                                    <select name="priority" class="form-select-modern form-select-sm flex-grow-1">
+                                                        <option value="low" {{ $task->priority === 'low' ? 'selected' : '' }}>Basse</option>
+                                                        <option value="medium" {{ $task->priority === 'medium' ? 'selected' : '' }}>Moyenne</option>
+                                                        <option value="high" {{ $task->priority === 'high' ? 'selected' : '' }}>Haute</option>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-gradient-primary btn-sm">
+                                                        <i class="ti ti-check"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        
+                                        <!-- Changer Statut -->
+                                        <div class="col-12">
+                                            <label class="small text-muted mb-1 d-flex align-items-center gap-1">
+                                                <i class="ti ti-switch-horizontal"></i>
+                                                Statut
+                                            </label>
+                                            <form action="{{ route('projets.taches.changerStatut', ['projet'=>$projet,'tache'=>$task]) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <div class="d-flex gap-2">
+                                                    <select name="status" class="form-select-modern form-select-sm flex-grow-1">
+                                                        @foreach($statusConfig as $sKey => $sInfo)
+                                                            <option value="{{ $sKey }}" {{ $task->status === $sKey ? 'selected' : '' }}>
+                                                                {{ $sInfo['label'] }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <button type="submit" class="btn btn-gradient-primary btn-sm">
+                                                        <i class="ti ti-check"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Comments Section -->
@@ -428,10 +449,10 @@
                                         <i class="ti ti-message-circle me-1"></i>
                                         Commentaires ({{ $task->comments->count() }})
                                     </summary>
-                                    <div class="comment-section mt-2">
+                                    <div class="comment-section mt-2 card">
                                         <div style="max-height: 120px; overflow-y: auto;">
                                             @forelse($task->comments as $comment)
-                                                <div class="comment-item">
+                                                <div class="comment-item card">
                                                     <strong class="text-dark">{{ $comment->user->name ?? 'Anonyme' }}</strong>
                                                     <p class="mb-0 small">{{ $comment->content }}</p>
                                                 </div>
@@ -523,7 +544,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('taskSearch');
     const taskCards = document.querySelectorAll('.task-card-modern');
-
+    
     searchInput.addEventListener('input', function() {
         const query = this.value.trim().toLowerCase();
         taskCards.forEach(card => {

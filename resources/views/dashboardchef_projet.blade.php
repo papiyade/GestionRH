@@ -1,516 +1,524 @@
 @extends('layouts.chef_projet')
 
 @section('content')
-    {{-- <div class="container mx-auto px-4 py-6">
-        <!-- Page Header -->
+
+<style>
+    .dashboard-gradient-header {
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(174, 61, 125, 0.3);
+    }
+
+    .stat-card-dashboard {
+        background: white;
+        border-radius: 16px;
+        padding: 1.75rem;
+        border: 2px solid #f0f0f0;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .stat-card-dashboard:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(174, 61, 125, 0.15);
+        border-color: #E46E2F;
+    }
+
+    .stat-icon-dashboard {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.75rem;
+        box-shadow: 0 4px 12px rgba(174, 61, 125, 0.3);
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+    }
+
+    .table-card-modern {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #727272;
+        overflow: hidden;
+        shadow: 0 4px 12px rgba(98, 98, 98, 0.1);
+    }
+
+    .table-card-header {
+        background: linear-gradient(90deg, rgba(174, 61, 125, 0.05) 0%, rgba(228, 110, 47, 0.05) 100%);
+        border-bottom: 2px solid #E46E2F;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .table-modern {
+        margin: 0;
+    }
+
+    .table-modern thead {
+        background: #f8f9fa;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .table-modern thead th {
+        padding: 1rem 1.25rem;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.9rem;
+        border: none;
+    }
+
+    .table-modern tbody td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .table-modern tbody tr:hover {
+        background: linear-gradient(90deg, rgba(174, 61, 125, 0.02) 0%, rgba(228, 110, 47, 0.02) 100%);
+    }
+
+    .avatar-modern {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.8rem;
+        /* border: 0px solid white; */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .avatar-group-modern {
+        display: flex;
+        align-items: center;
+    }
+
+    .avatar-group-modern .avatar-modern {
+        margin-left: -8px;
+    }
+
+    .avatar-group-modern .avatar-modern:first-child {
+        margin-left: 0;
+    }
+
+    .progress-modern {
+        height: 8px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-bar-gradient {
+        background: linear-gradient(90deg, #AE3D7D 0%, #E46E2F 100%);
+        border-radius: 10px;
+    }
+
+    .badge-status {
+        padding: 0.4rem 0.85rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .badge-not-started {
+        background: linear-gradient(135deg, rgba(108, 117, 125, 0.1), rgba(108, 117, 125, 0.05));
+        color: #6c757d;
+    }
+
+    .badge-in-progress {
+        background: linear-gradient(135deg, rgba(228, 110, 47, 0.1), rgba(228, 110, 47, 0.05));
+        color: #E46E2F;
+    }
+
+    .badge-completed {
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+        color: #28a745;
+    }
+
+    .pagination-modern {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        background: #f8f9fa;
+        border-radius: 0 0 14px 14px;
+    }
+
+    .pagination-modern .page-link {
+        background: white;
+        border: 2px solid #e9ecef;
+        color: #AE3D7D;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .pagination-modern .page-link:hover:not(.disabled) {
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .pagination-modern .page-link.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+        color: #adb5bd;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-gradient-primary {
+        background: linear-gradient(135deg, #AE3D7D 0%, #E46E2F 100%);
+        border: none;
+        color: white !important;
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gradient-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(174, 61, 125, 0.4);
+        color: white !important;
+    }
+</style>
+
+<div class="container-fluid px-4 py-4">
+    <!-- Header -->
+    <div class="dashboard-gradient-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="h3 fw-bold mb-2">Bienvenue, {{ Auth::user()->name }} !</h1>
+                <p class="mb-0 opacity-90">Suivez l'évolution de vos projets et tâches en temps réel</p>
+            </div>
+            <div class="text-end">
+                <div class="small opacity-75 mb-1">Aujourd'hui</div>
+                <div class="h5 mb-0">{{ now()->format('d M Y') }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card-dashboard card">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="stat-icon-dashboard">
+                        <i class="ti ti-folders icon-plus"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="small text-muted text-uppercase mb-1">Projets</div>
+                        <div class="stat-value">{{ $projectCount }}</div>
+                    </div>
+                </div>
+                <p class="text-muted mb-0 small">Nombre total de projets</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card-dashboard card">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="stat-icon-dashboard">
+                        <i class="ti ti-users icon-plus"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="small text-muted text-uppercase mb-1">Équipes</div>
+                        <div class="stat-value">{{ $teamCount }}</div>
+                    </div>
+                </div>
+                <p class="text-muted mb-0 small">Nombre total d'équipes</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card-dashboard card">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="stat-icon-dashboard">
+                        <i class="ti ti-user-check icon-plus"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="small text-muted text-uppercase mb-1">Utilisateurs</div>
+                        <div class="stat-value">{{ $userCount }}</div>
+                    </div>
+                </div>
+                <p class="text-muted mb-0 small">Nombre total d'utilisateurs</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables Row -->
+    <div class="row g-4">
+        <!-- Projects Table -->
+        <div class="col-lg-7">
+            <div class="table-card-modern">
+                <div class="table-card-header card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="ti ti-layout-board-split me-2 text-primary"></i>
+                            Aperçu des Projets
+                        </h5>
+                        <button class="btn btn-gradient-primary btn-sm">
+                            <i class="ti ti-download me-1 icon-plus"></i>Exporter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive table-light">
+                    <table class="table table-modern table-light">
+                        <thead>
+                            <tr>
+                                <th>Projet</th>
+                                <th>Lead</th>
+                                <th>Progression</th>
+                                <th>Équipe</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectTableBody">
+                            @forelse($projects as $project)
+                                <tr class="project-row">
+                                    <td class="fw-semibold">{{ $project->title }}</td>
+                                    <td>
+                                        @php
+                                            $lead = $project->members->where('pivot.is_lead', true)->first() ?? $project->members->first();
+                                            $leadInitials = $lead ? collect(explode(' ', $lead->name))->map(fn($n) => strtoupper(substr($n,0,1)))->join('') : 'NA';
+                                        @endphp
+                                        @if($lead)
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar-modern">{{ $leadInitials }}</div>
+                                                <span class="small">{{ Str::limit($lead->name, 15) }}</span>
+                                            </div>
+                                        @else
+                                            <span class="text-muted small">Aucun</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @php
+                                            $total = $project->tasks->count();
+                                            $completed = $project->tasks->where('status', 'completed')->count();
+                                            $progress = $total > 0 ? round(($completed / $total) * 100) : 0;
+                                        @endphp
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="flex-grow-1">
+                                                <div class="progress-modern">
+                                                    <div class="progress-bar-gradient" style="width: {{ $progress }}%"></div>
+                                                </div>
+                                            </div>
+                                            <span class="small text-muted">{{ $progress }}%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="avatar-group-modern">
+                                            @foreach($project->members->take(3) as $member)
+                                                @php
+                                                    $initials = collect(explode(' ', $member->name))->map(fn($n) => strtoupper(substr($n,0,1)))->join('');
+                                                @endphp
+                                                <div class="avatar-modern" title="{{ $member->name }}">{{ $initials }}</div>
+                                            @endforeach
+                                            @if($project->members->count() > 3)
+                                                <div class="avatar-modern">+{{ $project->members->count() - 3 }}</div>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @php
+                                            $statusClasses = [
+                                                'not_started' => 'badge-not-started',
+                                                'in_progress' => 'badge-in-progress',
+                                                'completed' => 'badge-completed'
+                                            ];
+                                            $statusLabels = [
+                                                'not_started' => 'Non débuté',
+                                                'in_progress' => 'En cours',
+                                                'completed' => 'Terminé'
+                                            ];
+                                        @endphp
+                                        <span class="badge-status {{ $statusClasses[$project->status] ?? 'badge-not-started' }}">
+                                            {{ $statusLabels[$project->status] ?? 'N/A' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="empty-state card">
+                                            <i class="ti ti-folder-off"></i>
+                                            <h5>Aucun projet</h5>
+                                            <p class="text-muted">Commencez par créer votre premier projet</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                @if($projects->count() > 0)
+                    <div class="pagination-modern table-light">
+                        <div class="text-muted small">
+                            Affichage de <span id="currentRange">1-{{ min(4, $projects->count()) }}</span>
+                            sur <span id="totalResults">{{ $projects->count() }}</span> résultats
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="javascript:void(0);" class="page-link disabled btn-light" id="prevPage" onclick="changePage(-1)">
+                                <i class="ti ti-chevron-left"></i>
+                            </a>
+                            <a href="javascript:void(0);" class="page-link btn btn-sm btn-light" id="nextPage" onclick="changePage(1)">
+                                <i class="ti ti-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
 
         <!-- Tasks Table -->
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                <!-- Teams Count Box -->
-                <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md flex items-center">
-                    <div class="mr-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-3-3h-4a3 3 0 00-3 3v2h5zM9 20H4v-2a3 3 0 013-3h4a3 3 0 013 3v2H9zM16 11a4 4 0 11-8 0 4 4 0 018 0zM12 7a4 4 0 100-8 4 4 0 000 8z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold">{{ Auth::user()->teams->count() }}</div>
-                        <div class="text-sm">Team(s) associé(s)</div>
-                    </div>
+        <div class="col-lg-5">
+            <div class="table-card-modern table-light">
+                <div class="table-card-header">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="ti ti-list-check me-2 text-primary"></i>
+                        Tâches Récentes
+                    </h5>
                 </div>
 
-                <!-- Projects Count Box -->
-                <div class="bg-green-500 text-white p-4 rounded-lg shadow-md flex items-center">
-                    <div class="mr-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 7h18M3 12h18M3 17h18"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold">0</div>
-                        <div class="text-sm">Projects associés</div>
-                    </div>
-                </div>
-
-                <!-- Tasks Count Box -->
-                <div class="bg-yellow-500 text-white p-4 rounded-lg shadow-md flex items-center">
-                    <div class="mr-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold">{{ Auth::user()->tasks->count() }}</div>
-                        <div class="text-sm">Tâches assignées</div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-modern">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Deadline</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $allTasks = $projects->flatMap->tasks->sortByDesc('created_at')->take(8);
+                            @endphp
+                            @forelse($allTasks as $task)
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">{{ Str::limit($task->title, 25) }}</div>
+                                        <small class="text-muted">{{ $task->project->title ?? 'N/A' }}</small>
+                                    </td>
+                                    <td>
+                                        @if($task->deadline)
+                                            <div class="small">{{ \Carbon\Carbon::parse($task->deadline)->format('d M Y') }}</div>
+                                            @if(\Carbon\Carbon::parse($task->deadline)->isPast() && $task->status !== 'completed')
+                                                <span class="badge bg-danger small">Retard</span>
+                                            @endif
+                                        @else
+                                            <span class="text-muted small">N/A</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @php
+                                            $taskStatusClasses = [
+                                                'not_started' => 'badge-not-started',
+                                                'in_progress' => 'badge-in-progress',
+                                                'completed' => 'badge-completed'
+                                            ];
+                                            $taskStatusLabels = [
+                                                'not_started' => 'À faire',
+                                                'in_progress' => 'En cours',
+                                                'completed' => 'Terminée'
+                                            ];
+                                        @endphp
+                                        <span class="badge-status {{ $taskStatusClasses[$task->status] ?? 'badge-not-started' }}">
+                                            {{ $taskStatusLabels[$task->status] ?? 'N/A' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="empty-state py-5">
+                                            <i class="ti ti-clipboard-off"></i>
+                                            <h6>Aucune tâche</h6>
+                                            <p class="text-muted small mb-0">Les tâches apparaîtront ici</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-
-
         </div>
-    </div> --}}
+    </div>
+</div>
 
-    <!-- Recent Activities Section -->
-    {{-- <div class="mt-8">
-        <h2 class="text-2xl font-bold ml-4">Activités récentes</h2>
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <ul>
-                @if (Auth::user()->activities && Auth::user()->activities->isNotEmpty())
-                    @foreach (Auth::user()->activities as $activity)
-                        <li class="border-b border-gray-200 p-4 hover:bg-gray-100 transition duration-300">
-                            <div class="flex items-center">
-                                <div class="mr-4">
-                                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-semibold">{{ $activity->description }}</div>
-                                    <div class="text-xs text-gray-500">{{ $activity->created_at->diffForHumans() }}</div>
-                                </div>
-                            </div>
-                        </li>
-                    @endforeach
-                @else
-                    <li class="border-b border-gray-200 p-4">
-                        <div class="text-sm text-gray-500">Aucune activité récente</div>
-                    </li>
-                @endif
-            </ul>
-        </div>
-    </div> --}}
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const rowsPerPage = 4;
+    let currentPage = 1;
+    const tableBody = document.getElementById("projectTableBody");
+    const rows = Array.from(tableBody?.getElementsByClassName("project-row") || []);
 
-    <!-- Notifications Section -->
-    {{-- <div class="mt-8">
-        <h2 class="text-2xl font-bold ml-4">Notifications</h2>
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <ul>
-                @if (Auth::user()->notifications && Auth::user()->notifications->isNotEmpty())
-                    @foreach (Auth::user()->notifications as $notification)
-                        <li class="border-b border-gray-200 p-4 hover:bg-gray-100 transition duration-300">
-                            <div class="flex items-center">
-                                <div class="mr-4">
-                                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 16h-1v-4h-1m1-4h.01M12 18.5a1.5 1.5 0 001.5-1.5h-3a1.5 1.5 0 001.5 1.5z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-semibold">{{ $notification->data['message'] }}</div>
-                                    <div class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</div>
-                                </div>
-                            </div>
-                        </li>
-                    @endforeach
-                @else
-                    <li class="border-b border-gray-200 p-4">
-                        <div class="text-sm text-gray-500">Aucune nouvelle notification</div>
-                    </li>
-                @endif
-            </ul>
-        </div>
-    </div> --}}
-    <div class="col">
+    if (rows.length === 0) return;
 
-        <div class="h-100">
-            <div class="row mb-3 pb-1">
-                <div class="col-12">
-                    <div class="d-flex align-items-lg-center flex-lg-row flex-column">
-                        <div class="flex-grow-1">
-                            <h4 class="fs-16 mb-1">Salut, {{ Auth::user()->name }}!</h4>
-                            <p class="text-muted mb-0">Observez l'évolution de vos projets et de vos
-                                tâches à faire dès maintenant !</p>
-                        </div>
-                        <div class="mt-3 mt-lg-0">
-                            <form action="javascript:void(0);">
-                                <div class="row g-3 mb-0 align-items-center">
-                                    <div class="col-sm-auto">
-                                        <div class="input-group">
-                                            <input type="date" value="{{ now()->format('Y-m-d') }}"
-                                                class="form-control border-0 minimal-border dash-filter-picker shadow"
-                                                data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y">
-                                            <div class="input-group-text bg-primary border-primary text-white">
-                                                <i class="ri-calendar-2-line"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-soft-success material-shadow-none"><i
-                                                class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-auto">
-                                        <button type="button"
-                                            class="btn btn-soft-info btn-icon waves-effect material-shadow-none waves-light layout-rightside-btn"><i
-                                                class="ri-pulse-line"></i></button>
-                                    </div>
-                                    <!--end col-->
-                                </div>
-                                <!--end row-->
-                            </form>
-                        </div>
-                    </div><!-- end card header -->
-                </div>
-                <!--end col-->
-            </div>
-            <!--end row-->
-            <div class="row project-wrapper">
-                <div class="col-xxl-8">
-                    <div class="row">
-                        <div class="col-xl-4">
-                            <div class="card card-animate">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-sm flex-shrink-0">
-                                            <span class="avatar-title bg-primary-subtle text-primary rounded-2 fs-2">
-                                                <i data-feather="briefcase" class="text-primary"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1 overflow-hidden ms-3">
-                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Projets</p>
-                                            <div class="d-flex align-items-center mb-3">
-                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value"
-                                                        data-target="{{ $projectCount }}">0</span></h4>
-                                                <span class="badge bg-danger-subtle text-danger fs-12"><i
-                                                        class="ri-arrow-down-s-line fs-13 align-middle me-1"></i>5.02
-                                                    %</span>
-                                            </div>
-                                            <p class="text-muted text-truncate mb-0">Nombre total des projets</p>
-                                        </div>
-                                    </div>
-                                </div><!-- end card body -->
-                            </div>
-                        </div><!-- end col -->
+    function displayRows() {
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
 
-                        <div class="col-xl-4">
-                            <div class="card card-animate">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-sm flex-shrink-0">
-                                            <span class="avatar-title bg-warning-subtle text-warning rounded-2 fs-2">
-                                                <i data-feather="award" class="text-warning"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <p class="text-uppercase fw-medium text-muted mb-3">Equipes</p>
-                                            <div class="d-flex align-items-center mb-3">
-                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value"
-                                                        data-target="{{ $teamCount }}">0</span></h4>
-                                                <span class="badge bg-success-subtle text-success fs-12"><i
-                                                        class="ri-arrow-up-s-line fs-13 align-middle me-1"></i>3.58 %</span>
-                                            </div>
-                                            <p class="text-muted mb-0">Nombre total des équipes</p>
-                                        </div>
-                                    </div>
-                                </div><!-- end card body -->
-                            </div>
-                        </div><!-- end col -->
-
-                        <div class="col-xl-4">
-                            <div class="card card-animate">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-sm flex-shrink-0">
-                                            <span class="avatar-title bg-info-subtle text-info rounded-2 fs-2">
-                                                <i data-feather="users" class="text-info"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1 overflow-hidden ms-3">
-                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Utilisateurs
-                                            </p>
-                                            <div class="d-flex align-items-center mb-3">
-                                                <h4 class="fs-4 flex-grow-1 mb-0"><span class="counter-value"
-                                                        data-target="{{ $userCount }}">0</span></h4>
-                                                <span class="badge bg-danger-subtle text-danger fs-12"><i
-                                                        class="ri-arrow-down-s-line fs-13 align-middle me-1"></i>10.35
-                                                    %</span>
-                                            </div>
-                                            <p class="text-muted text-truncate mb-0">Nombre total d'utilisateurs</p>
-                                        </div>
-                                    </div>
-                                </div><!-- end card body -->
-                            </div>
-                        </div><!-- end col -->
-                    </div><!-- end row -->
-                </div><!-- end col -->
-            </div><!-- end row -->
-
-            <div class="row">
-                <div class="col-xl-7">
-                    <div class="card card-height-100">
-                        <div class="card-header d-flex align-items-center">
-                            <h4 class="card-title flex-grow-1 mb-0">Overview des projets</h4>
-                            <div class="flex-shrink-0">
-                                <a href="javascript:void(0);"
-                                    class="btn btn-soft-info btn-sm material-shadow-none">Exporter</a>
-                            </div>
-                        </div><!-- end cardheader -->
-                        <div class="card-body">
-                            <div class="table-responsive table-card">
-                                <table class="table table-nowrap table-centered align-middle">
-                                    <thead class="bg-light text-muted">
-                                        <tr>
-                                            <th scope="col">Nom du projet</th>
-                                            <th scope="col">Lead</th>
-                                            <th scope="col">Progression</th>
-                                            <th scope="col">Membres</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col" style="width: 10%;">Créé le</th>
-                                        </tr><!-- end tr -->
-                                    </thead><!-- thead -->
-
-                                    <tbody id="projectTableBody">
-                                        @foreach ($projects as $project)
-                                            <tr class="project-row">
-                                                <td class="fw-medium">{{ $project->title }}</td>
-                                                <td>
-                                                    @if ($project->lead)
-                                                        @if ($project->lead->profile_photo_path)
-                                                            <img src="{{ asset('storage/' . $project->lead->profile_photo_path) }}"
-                                                                class="avatar-xxs rounded-circle me-1 material-shadow"
-                                                                alt="Lead" data-bs-toggle="tooltip"
-                                                                data-bs-original-title="{{ $project->lead->name }}">
-                                                        @else
-                                                            <div class="avatar-xs">
-                                                                <span
-                                                                    class="avatar-title rounded-circle bg-primary text-white font-size-16">
-                                                                    {{ strtoupper(substr($project->lead->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $project->lead->name)[1] ?? '', 0, 1)) }}
-                                                                </span>
-                                                            </div>
-                                                        @endif
-                                                    @else
-                                                        <span class="text-muted">Aucun lead</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-1 text-muted fs-13">
-                                                            {{ round($project->progress) }}%</div>
-                                                        <div class="progress progress-sm  flex-grow-1"
-                                                            style="width: 68%;">
-                                                            <div class="progress-bar bg-primary rounded"
-                                                                role="progressbar"
-                                                                style="width: {{ $project->progress }}%"
-                                                                aria-valuenow="53" aria-valuemin="0" aria-valuemax="100">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="avatar-group d-flex flex-nowrap">
-                                                        @foreach ($project->members as $member)
-                                                            <div class="avatar-group-item position-relative">
-                                                                <a href="javascript:void(0);" class="d-inline-block"
-                                                                    data-bs-toggle="tooltip"
-                                                                    data-bs-original-title="{{ $member->name }}">
-                                                                    @if ($member->profile_photo_path)
-                                                                        <img src="{{ asset('storage/' . $member->profile_photo_path) }}"
-                                                                            alt=""
-                                                                            class="rounded-circle avatar-xxs material-shadow border border-white">
-                                                                    @else
-                                                                        <div class="avatar-xs bg-primary text-white rounded-circle d-flex align-items-center justify-content-center border border-white"
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <span class=" text-uppercase">
-                                                                                {{ strtoupper(substr($member->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $member->name)[1] ?? '', 0, 1)) }}
-                                                                            </span>
-                                                                        </div>
-                                                                    @endif
-                                                                </a>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-
-                                                </td>
-                                                <td>
-                                                    @if ($project->status == 'not_started')
-                                                        <span class="badge bg-danger-subtle text-danger">Non débuté</span>
-                                                    @elseif($project->status == 'in_progress')
-                                                        <span class="badge bg-warning-subtle text-warning">En cours</span>
-                                                    @else
-                                                        <span class="badge bg-success-subtle text-success">Terminé</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-muted">{{ $project->created_at->format('d, M Y') }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-
-                                </table><!-- end table -->
-                            </div>
-
-                            <div class="align-items-center mt-xl-3 mt-4 justify-content-between d-flex">
-                                <div class="flex-shrink-0">
-                                    <div class="text-muted">Affichage de <span id="currentRange">1-4</span> sur <span
-                                            id="totalResults"></span> résultats</div>
-                                </div>
-                                <ul class="pagination pagination-separated pagination-sm mb-0" id="pagination">
-                                    <li class="page-item disabled" id="prevPage">
-                                        <a href="javascript:void(0);" class="page-link" onclick="changePage(-1)">←</a>
-                                    </li>
-                                    <li class="page-item" id="nextPage">
-                                        <a href="javascript:void(0);" class="page-link" onclick="changePage(1)">→</a>
-                                    </li>
-                                </ul>
-
-                            </div>
-
-
-                        </div><!-- end card body -->
-                    </div><!-- end card -->
-                </div><!-- end col -->
-
-                <div class="col-xl-5">
-                    <div class="card card-height-100">
-                        <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1 py-1">Overview des taches</h4>
-                            <div class="flex-shrink-0">
-                                <div class="dropdown card-header-dropdown">
-                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <span class="text-muted">Tout <i class="mdi mdi-chevron-down ms-1"></i></span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">Tout</a>
-                                        <a class="dropdown-item" href="#">Completée </a>
-                                        <a class="dropdown-item" href="#">En cours</a>
-                                        <a class="dropdown-item" href="#">Non débuté</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- end card header -->
-                        <div class="card-body">
-                            <div class="table-responsive table-card">
-                                <table class="table table-borderless table-nowrap table-centered align-middle mb-0">
-                                    <thead class="table-light text-muted">
-                                        <tr>
-                                            <th scope="col">Titre</th>
-                                            <th scope="col">Deadline</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Assignée à</th>
-                                        </tr>
-                                    </thead><!-- end thead -->
-
-                                    <tbody>
-                                        @forelse($projects as $project)
-                                            @foreach ($project->tasks as $task)
-                                                <tr>
-                                                    <td>{{ $task->title }}</td>
-                                                    <td>{{ $task->deadline ? \Carbon\Carbon::parse($task->deadline)->format('d, M Y') : 'Aucune' }}
-                                                    </td>
-                                                    <td>
-                                                        @if ($task->status == 'completed')
-                                                            <span class="badge bg-success">Complétée</span>
-                                                        @elseif($task->status == 'in_progress')
-                                                            <span class="badge bg-warning-subtle text-warning">En
-                                                                cours</span>
-                                                        @else
-                                                            <span class="badge bg-secondary">Non débutée</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if ($task->user)
-                                                            <div class="d-flex align-items-center">
-                                                                @if ($task->user->profile_photo_path)
-                                                                    <img src="{{ asset('storage/' . $task->user->profile_photo_path) }}"
-                                                                        class="avatar-xxs rounded-circle me-1 material-shadow"
-                                                                        alt="Assigné à">
-                                                                @else
-                                                                    <span
-                                                                        class="avatar-title rounded-circle bg-primary text-white">
-                                                                        {{ strtoupper(substr($task->user->name, 0, 1)) }}
-                                                                    </span>
-                                                                @endif
-                                                                <span>{{ $task->user->name }}</span>
-                                                            </div>
-                                                        @else
-                                                            <span class="text-muted">Non assignée</span>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @empty
-                                            <tr>
-                                                <td colspan="4" class="text-center">
-                                                    <img src="{{ asset('assets/images/illustrator/task.svg') }}"
-                                                        alt="" class="img-fluid" style="max-width: 220px;">
-                                                    <h4 class="mt-4">Aucune tâche à afficher</h4>
-                                                    <p class="text-muted">Il n'y a pas de tâche à afficher pour le moment.
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-
-                                </table>
-                            </div>
-                            <div class="mt-3 text-center">
-                                <a href="javascript:void(0);" class="text-muted text-decoration-underline">Charger</a>
-                            </div>
-                        </div><!-- end card body -->
-                    </div>
-                </div><!-- end col -->
-            </div><!-- end row -->
-        </div> <!-- end .h-100-->
-
-    </div> <!-- end col -->
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const rowsPerPage = 4;
-            let currentPage = 1;
-
-            const tableBody = document.getElementById("projectTableBody");
-            const rows = Array.from(tableBody.getElementsByClassName("project-row"));
-            const totalResults = document.getElementById("totalResults");
-            const currentRange = document.getElementById("currentRange");
-
-            function displayRows() {
-                let start = (currentPage - 1) * rowsPerPage;
-                let end = start + rowsPerPage;
-
-                rows.forEach((row, index) => {
-                    row.style.display = (index >= start && index < end) ? "" : "none";
-                });
-
-                currentRange.textContent = `${start + 1}-${Math.min(end, rows.length)}`;
-                updatePaginationButtons();
-            }
-
-            function changePage(direction) {
-                const totalPages = Math.ceil(rows.length / rowsPerPage);
-
-                if ((direction === -1 && currentPage > 1) || (direction === 1 && currentPage < totalPages)) {
-                    currentPage += direction;
-                    displayRows();
-                }
-            }
-
-            function updatePaginationButtons() {
-                const totalPages = Math.ceil(rows.length / rowsPerPage);
-                document.getElementById("prevPage").classList.toggle("disabled", currentPage === 1);
-                document.getElementById("nextPage").classList.toggle("disabled", currentPage === totalPages);
-            }
-
-            totalResults.textContent = rows.length;
-            displayRows();
-
-            // Rendre la fonction accessible globalement
-            window.changePage = changePage;
+        rows.forEach((row, index) => {
+            row.style.display = (index >= start && index < end) ? "" : "none";
         });
-    </script>
 
+        document.getElementById("currentRange").textContent = `${start + 1}-${Math.min(end, rows.length)}`;
+        updatePaginationButtons();
+    }
+
+    window.changePage = function(direction) {
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        if ((direction === -1 && currentPage > 1) || (direction === 1 && currentPage < totalPages)) {
+            currentPage += direction;
+            displayRows();
+        }
+    };
+
+    function updatePaginationButtons() {
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        const prevBtn = document.getElementById("prevPage");
+        const nextBtn = document.getElementById("nextPage");
+
+        prevBtn.classList.toggle("disabled", currentPage === 1);
+        nextBtn.classList.toggle("disabled", currentPage === totalPages);
+    }
+
+    displayRows();
+});
+</script>
+@endpush
 
 @endsection

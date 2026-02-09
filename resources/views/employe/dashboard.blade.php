@@ -259,7 +259,7 @@
         }
     </style>
 
-    <div class="dashboard-modern">
+    <div class="dashboard-modern bodyInterface">
         <!-- Header -->
         <div class="header-gradient">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -334,7 +334,7 @@
         </div>
 
         <!-- Recent Tasks -->
-        <div class="section-card">
+        <div class="section-card card">
             <div class="section-header">
                 <h5 class="section-title mb-0">
                     <i class="ti ti-clock-hour-4"></i>
@@ -345,7 +345,7 @@
             </div>
 
             @forelse($recentTasks as $task)
-                <div class="task-card">
+                <div class="task-card card">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <div class="flex-grow-1">
                             <h6 class="mb-1 fw-bold">{{ $task->title }}</h6>
@@ -384,15 +384,15 @@
                     </div>
                 </div>
             @empty
-                <div class="empty-state">
+                <div class="empty-state card">
                     <i class="ti ti-clipboard-off"></i>
-                    <p class="mb-0">Aucune tâche récente</p>
+                    <p class="mb-0 info-label">Aucune tâche récente</p>
                 </div>
             @endforelse
         </div>
 
         <!-- Projects -->
-        <div class="section-card">
+        <div class="section-card card">
             <div class="section-header">
                 <h5 class="section-title mb-0">
                     <i class="ti ti-briefcase"></i>
@@ -401,15 +401,16 @@
             </div>
 
             @if ($projects->isEmpty())
-                <div class="empty-state">
+                <div class="empty-state card">
                     <i class="ti ti-folder-off"></i>
-                    <p class="mb-0">Aucun projet pour le moment</p>
+                    <p class="mb-0 info-label" style="color:#5f5f5f !important;"
+                    >Aucun projet pour le moment</p>
                 </div>
             @else
                 <div class="row g-3">
                     @foreach ($projects as $project)
                         <div class="col-md-4">
-                            <div class="project-card">
+                            <div class="project-card card">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <span class="btn btn-sm btn-gradient">
                                         @if ($project->status === 'not_started')
@@ -427,7 +428,8 @@
                                 </div>
                                 <h6 class="fw-bold mb-2">{{ $project->title }}</h6>
                                 <p class="text-muted small mb-3">{{ Str::limit($project->description ?? '', 80) }}</p>
-                                <a href="{{ route('projects.show', $project->id) }}"
+                                <a href="{{ route('projects.show', $project) }}"
+                                {{ $project->title }}
                                     class="btn btn-gradient text-white btn-sm w-100">
                                     <i class="ti ti-eye me-1"></i>Voir le projet
                                 </a>
